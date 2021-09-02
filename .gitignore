@@ -1,0 +1,6 @@
+#compiled
+*.pyc
+__pycache__
+
+#setup directory
+Cython/
