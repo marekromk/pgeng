@@ -1,6 +1,7 @@
 #compiled
 *.pyc
+*.pyd
 __pycache__
 
-#setup directory
+#cython setup
 Cython/
