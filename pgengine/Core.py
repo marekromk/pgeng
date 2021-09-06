@@ -24,7 +24,7 @@ def LoadAnimation(Path, FrameDurations, Colourkey=None, FileType=None):
 	Example:
 		FileType='.png'
 
-	Return: List'''
+	Returns: List'''
 	if not os.path.exists(Path):
 		raise FileNotFoundError(f'Folder or file \'{Path}\' does not exist')
 	global AnimationFrames
@@ -58,12 +58,12 @@ def SetAnimationAction(ActionVariable, NewAction, ActionFrame):
 #SETANIMATIONACTION
 
 #CLIPIMAGE
-def ClipSurface(Surface, RectX, RectY, Width, Height):
+def ClipSurface(Surface, Location, Size):
 	'''Creates a new Surface from the part of another Surface
 
 	Returns: pygame.Surface'''
 	NewSurface = Surface.copy()
-	ClipRect = pygame.Rect(RectX, RectY, Width, Height)
+	ClipRect = pygame.Rect(Location, Size)
 	NewSurface.set_clip(ClipRect)
 	Image = Surface.subsurface(NewSurface.get_clip())
 	return Image
