@@ -56,6 +56,6 @@ except ImportError:
 #VISUALEFFECTS
 
 #MESSAGE
-print('''\nDo help(pgngine.<Function>) to get the documentation of the function (or possibly class)
-Or do help(pgengine.<Package Content>) to get the documentation of the functions or classes in a file\n''')
+print('''\nDo help(pgeng.<Function>) to get the documentation of the function (or possibly class)
+Or do help(pgeng.<Package Content>) to get the documentation of the functions or classes in a file\n''')
 #MESSAGE

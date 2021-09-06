@@ -1,7 +1,6 @@
 #compiled
 *.pyc
-*.pyd
 __pycache__
 
-#cython setup
-Cython/
+#setup
+PyPI/
