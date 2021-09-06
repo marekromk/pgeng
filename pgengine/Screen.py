@@ -53,6 +53,7 @@ class Screen:
 	#SCREENSHOT
 	def ScreenShot(self, Alpha=None):
 		'''Making a screenshot of the pygame display
+		The alpha will be set with the Alpha variable
 		Only works if this class is used as the main display/screen
 
 		Return: pygame.Surface'''

@@ -70,7 +70,7 @@ def ClipSurface(Surface, Location, Size):
 #CLIPIMAGE
 
 #LOADIMAGE
-def LoadImage(File, Colourkey=None, Alpha=255):
+def LoadImage(File, Colourkey=None, Alpha=None):
 	'''Load an image for pygame that will be converted
 	You can set a Colourkey and Alpha as well
 
