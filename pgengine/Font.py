@@ -43,7 +43,7 @@ class Font:
 		for X in range(self.FontImage.get_width()):
 			Colour = self.FontImage.get_at((X, 0))
 			if Colour[0] == BorderColour: #IF THE TEXT COLOR[0] = 127, CHANGE BORDERCOLOR
-				CharacterImage = ClipSurface(self.FontImage, X - CurrentWidth, 0, CurrentWidth, self.FontImage.get_height()) #CLIP EVERY CHARACTER OUT OF THE FONT IMAGE
+				CharacterImage = ClipSurface(self.FontImage, (X - CurrentWidth, 0), (CurrentWidth, self.FontImage.get_height())) #CLIP EVERY CHARACTER OUT OF THE FONT IMAGE
 				self.Characters[CharacterOrder[CharacterCount]] = CharacterImage
 				CharacterCount += 1
 				CurrentWidth = 0
