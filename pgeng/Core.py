@@ -1,4 +1,4 @@
-'''Many core functions for pgengine'''
+'''Many core functions for pgeng'''
 #IMPORTS
 import pygame, os
 from collections import Counter
