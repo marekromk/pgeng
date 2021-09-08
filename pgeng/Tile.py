@@ -28,10 +28,7 @@ class Tile:
 	#RECT
 	@property
 	def rect(self):
-		'''Return a pygame.Rect object of the tile
-		Used by the PhysicsObject class
-
-		Returns: pygame.Rect'''
+		'''Returns a pygame.Rect object of the tile'''
 		return pygame.Rect(self.Location[0], self.Location[1], self.Size, self.Size)
 	#RECT
 #TILE
