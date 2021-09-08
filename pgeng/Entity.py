@@ -13,7 +13,21 @@ def CollisionTest(RectObject, CollisionList):
 class Entity:
 	'''A physics object with a function for movement and collision
 	It needs a position and a width and height for the pygame.Rect object
-	Use self.Location[0] and self.Location[1] instead of self.rect.x and self.rect.y'''
+	Use self.Location[0] and self.Location[1] instead of self.rect.x and self.rect.y
+
+	Attributes:
+
+	Alpha
+
+	Flips
+
+	Location
+
+	rect
+
+	Rotation
+
+	Scale'''
 	#__INIT__
 	def __init__(self, Location, Size):
 		'''Initialising an Entity Object'''
@@ -29,6 +43,7 @@ class Entity:
 	#CENTER
 	@property
 	def Center(self):
+		'''Returns the center location of the Entity'''
 		return [self.Location[0] + self.rect.w / 2, self.Location[1] + self.rect.h / 2]
 	#CENTER
 
@@ -70,18 +85,11 @@ class Entity:
 		'''This sets the scale for the image
 		It can be a list or tuple with the scale for the width and the scale for the height
 		If it is a number, than it will be set for the width and height'''
-		if type(Scale) == list or type(Scale) == tuple:
+		if type(Scale) is list or type(Scale) is tuple:
 			self.Scale = list(Scale)
 		else:
 			self.Scale = [Scale, Scale]
 	#SETSCALE
-
-	#SETFLIPS
-	def SetFlips(self, Horizontal, Vertical):
-		'''This sets the flips for the image
-		Horizontal and Vertical should be booleans'''
-		self.Flips = [Horizontal, Vertical]
-	#SETFLIPS
 
 	#TRANSFORMIMAGE
 	def TransformImage(self, Surface):
@@ -154,21 +162,25 @@ class Entity:
 		for Ramp in RampTiles:
 			RampHitBox = Ramp.rect
 			if self.rect.colliderect(RampHitBox):
-				RelativeX = self.Location[0] - RampHitBox.x
-				if Ramp.Ramp == 1 or Ramp.Ramp == 3:
-					HeightPosition = RelativeX + self.rect.w
-				elif Ramp.Ramp == 2 or Ramp.Ramp == 4:
+				RelativeX = self.rect.x - RampHitBox.x
+				if Ramp.Ramp == 1 or Ramp.Ramp == 4:
 					HeightPosition = Ramp.Size - RelativeX
+				else:
+					HeightPosition = RelativeX + self.rect.w
 
 				HeightPosition = min(HeightPosition, Ramp.Size)
 				HeightPosition = max(HeightPosition, 0)
-				YPosition = RampHitBox.y + Ramp.Size - HeightPosition
 
-				if Ramp.Ramp == 3 or Ramp.Ramp == 4 and self.rect.bottom > YPosition:
+				if Ramp.Ramp == 1 or Ramp.Ramp == 2:
+					YPosition = RampHitBox.y + HeightPosition
+				else:
+					YPosition = RampHitBox.y + Ramp.Size - HeightPosition
+
+				if (Ramp.Ramp == 3 or Ramp.Ramp == 4) and self.rect.bottom > YPosition:
 					self.rect.bottom = YPosition
 					self.Location[1] = self.rect.y
 					CollisionTypes['Bottom'] = True
-				elif Ramp.Ramp == 1 or Ramp.Ramp == 2 and self.rect.top < YPosition:
+				elif (Ramp.Ramp == 1 or Ramp.Ramp == 2) and self.rect.top < YPosition:
 					self.rect.top = YPosition
 					self.Location[1] = self.rect.y
 					CollisionTypes['Top'] = True

@@ -162,7 +162,7 @@ def StringNumber(String, ReturnIndex=None, IntMode=False):
 				Digits = []
 			if String[i].isdigit() and i == len(String) - 1: #IF THE NUMBER IS THE LAST CHARACTER OF THE STRING
 				Numbers.append(''.join(Digits))
-		if type(ReturnIndex) != list and type(ReturnIndex) != tuple:
+		if type(ReturnIndex) is not list and type(ReturnIndex) is not tuple:
 			ReturnIndex = [i for i in range(len(Numbers))]
 		if ReturnIndex and min(ReturnIndex) < -len(Numbers) or max(ReturnIndex) > len(Numbers) - 1:
 			raise IndexError('Index in ReturnIndex is not possible')

@@ -12,7 +12,27 @@ class Screen:
 	The default flag is pygame.SCALED
 	Use GetDisplay to get the display from the class
 
-	For more information about the parameters, go to https://www.pygame.org/docs/ref/display.html#pygame.display.set_mode'''
+	For more information about the parameters, go to https://www.pygame.org/docs/ref/display.html#pygame.display.set_mode
+
+	Attributes:
+
+	Depth
+
+	Display
+
+	Flags
+
+	Fullscreen
+
+	FullscreenSize
+
+	PygameDisplay
+
+	Size
+
+	VSync
+
+	Window'''
 	#__INIT__
 	def __init__(self, Size, Flags=pygame.SCALED, Depth=0, Display=0, VSync=1, Fullscreen=False):
 		'''Initialising the class, it should only be done once'''
@@ -38,7 +58,7 @@ class Screen:
 
 		Returns: pygame.Surface'''
 		self.Fullscreen = not self.Fullscreen
-		if type(ManualSet) == bool:
+		if type(ManualSet) is bool:
 			self.Fullscreen = ManualSet
 		if self.Fullscreen:
 			self.PygameDisplay = pygame.display.set_mode(self.Size, pygame.SCALED | pygame.NOFRAME | pygame.FULLSCREEN, self.Depth, self.Display, self.VSync)
@@ -46,7 +66,7 @@ class Screen:
 			pygame.display.toggle_fullscreen()
 			self.PygameDisplay = pygame.display.set_mode(self.Size, self.Flags, self.Depth, self.Display, self.VSync)
 			self.Window = Window.from_display_module()
-			self.Window.position = (self.FullscreenSize[i] / 2 - self.Window.size[i] / 2 for i in range(2))
+			self.Window.position = (self.FullscreenSize[0] / 2 - self.Window.size[0] / 2, self.FullscreenSize[1] / 2 - self.Window.size[1] / 2)
 		return self.PygameDisplay
 	#TOGGLEFULLSCREEN
 
@@ -56,7 +76,7 @@ class Screen:
 		The alpha will be set with the Alpha variable
 		Only works if this class is used as the main display/screen
 
-		Return: pygame.Surface'''
+		Returns: pygame.Surface'''
 		ScreenShot = self.PygameDisplay.copy()
 		ScreenShot.set_alpha(Alpha)
 		return ScreenShot
@@ -66,7 +86,7 @@ class Screen:
 	def GetDisplay(self):
 		'''Used to return the display/screen
 
-		Return: pygame.Surface'''
+		Returns: pygame.Surface'''
 		return self.PygameDisplay
 	#GETDISPLAY
 #SCREEN
