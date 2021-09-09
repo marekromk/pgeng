@@ -10,8 +10,6 @@ def PaletteSwap(Surface, Colours):
 	Colours = {OldColour: NewColour, OldColour: NewColour}
 
 	Returns: pygame.Surface'''
-	for Colour in Colours:
-		Colours[Colour] = tuple(Colours[Colour])
 	NewSurface = Surface.copy()
 	for Y in range(NewSurface.get_height()):
 		for X in range(NewSurface.get_width()):
