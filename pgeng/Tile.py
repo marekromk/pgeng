@@ -16,7 +16,15 @@ class Tile:
 	Ramp 1 = top left
 	Ramp 2 = top right
 	Ramp 3 = bottom right
-	Ramp 4 = bottom left'''
+	Ramp 4 = bottom left
+
+	Attributes:
+
+	Location
+
+	Size
+
+	Ramp'''
 	#__INIT__
 	def __init__(self, Location, Size, Ramp=0):
 		'''Initialising a tile'''
