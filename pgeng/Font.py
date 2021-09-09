@@ -18,9 +18,13 @@ Path = Path( __file__ ).parent.resolve()
 def CreateFont(Colour):
 	'''A function to create a large and small Font object
 	Colour will be the colour of the text
-	First value in the tuple is the SmallFont and the second value is the LargeFont
+	First value in the returned tuple is the SmallFont and the second value is the LargeFont
 
 	Returns: Tuple'''
+	if tuple(Colour) == (127, 127, 127):
+		SmallFontImage = PaletteSwap(LoadImage(f'{Path}/Font/SmallFont.png'), {(255, 0, 0): Colour, (127, 127, 127): (128, 128, 128)})
+		LargeFontImage = PaletteSwap(LoadImage(f'{Path}/Font/LargeFont.png'), {(255, 0, 0): Colour, (127, 127, 127): (128, 128, 128)})
+		return Font(SmallFontImage, 128), Font(LargeFontImage, 128)
 	SmallFontImage = PaletteSwap(LoadImage(f'{Path}/Font/SmallFont.png'), {(255, 0, 0): Colour})
 	LargeFontImage = PaletteSwap(LoadImage(f'{Path}/Font/LargeFont.png'), {(255, 0, 0): Colour})
 	return Font(SmallFontImage), Font(LargeFontImage)
@@ -29,20 +33,29 @@ def CreateFont(Colour):
 #FONT
 class Font:
 	'''A class to create a pixel art font
-	It will get all the letters out of the image and render them'''
+	It will get all the letters out of the image and render them
+
+	Attributes:
+
+	Characters
+
+	FontImage
+
+	SpaceWidth
+
+	Width'''
 	#__INIT__
 	def __init__(self, FontImage, BorderColour=127):
 		'''Initialising a font object'''
 		self.FontImage = FontImage
-		self.TextXOffset = 0 #TO GET WIDTH OF TEXT
-		self.Texts = {}
+		self.Width = 0
 		self.Characters = {}
 		CurrentWidth = 0
 		CharacterCount = 0
 		CharacterOrder = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','.','-',',',':','+','\'','!','?','0','1','2','3','4','5','6','7','8','9','(',')','/','_','=','\\','[',']','*','"','<','>',';']
 		for X in range(self.FontImage.get_width()):
 			Colour = self.FontImage.get_at((X, 0))
-			if Colour[0] == BorderColour: #IF THE TEXT COLOR[0] = 127, CHANGE BORDERCOLOR
+			if Colour[:-1] == (BorderColour, BorderColour, BorderColour): #IF THE TEXT COLOR[0] = 127, CHANGE BORDERCOLOR
 				CharacterImage = ClipSurface(self.FontImage, (X - CurrentWidth, 0), (CurrentWidth, self.FontImage.get_height())) #CLIP EVERY CHARACTER OUT OF THE FONT IMAGE
 				self.Characters[CharacterOrder[CharacterCount]] = CharacterImage
 				CharacterCount += 1
@@ -54,15 +67,14 @@ class Font:
 
 	#RENDERTEXT
 	def RenderText(self, Surface, Text, Location):
-		'''Render a string on a surface at a location
-		Print self.TextXOffset to get the width of the text'''
-		self.TextXOffset = 0
+		'''Render a string on a surface at a location'''
+		self.Width = 0
 		for Character in Text:
 			if Character != ' ':
-				Surface.blit(self.Characters[Character], (Location[0] + self.TextXOffset, Location[1]))
-				self.TextXOffset += self.Characters[Character].get_width() + 1 #+ 1 FOR SPACING
+				Surface.blit(self.Characters[Character], (Location[0] + self.Width, Location[1]))
+				self.Width += self.Characters[Character].get_width() + 1 #+ 1 FOR SPACING
 			else:
-				self.TextXOffset += self.SpaceWidth + 1 #+ 1 FOR SPACING
+				self.Width += self.SpaceWidth + 1 #+ 1 FOR SPACING
 	#RENDERTEXT
 #FONT
 
@@ -70,7 +82,17 @@ class Font:
 class TextButton:
 	'''A string of text that is also a button
 	The collide function is to collide with the mouse and clicks
-	It also needs a font size, it has to be either 'Small'  or 'Large\''''
+	It also needs a font size, it has to be either 'Small'  or 'Large\
+
+	Attributes:
+
+	rect
+
+	TestFont
+
+	Text
+
+	Width'''
 	#__INIT__
 	def __init__(self, Text, Location, FontSize):
 		if FontSize != 'Small' and FontSize != 'Large':
