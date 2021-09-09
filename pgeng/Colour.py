@@ -40,7 +40,7 @@ def GrayShade(Surface, Shades=16):
 	The amount of shades must be between 2 and 256
 
 	Returns: pygame.Surface'''
-	if 2 < Shades > 256:
+	if not 2 < Shades < 256:
 		raise ValueError(f'{Shades} Shades not supported, the amount must be between 2 and 256')
 	Conversion = 255 / (Shades - 1)
 	NewSurface = Surface.copy()
