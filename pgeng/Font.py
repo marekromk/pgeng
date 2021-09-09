@@ -1,4 +1,4 @@
-'''A classes and functions for creating fonts and text buttons '''
+'''A classes and functions for creating fonts and text buttons'''
 #IMPORTS
 import pygame
 from .Core import ClipSurface, LoadImage
