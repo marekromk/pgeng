@@ -20,7 +20,7 @@ class Tile:
 	#__INIT__
 	def __init__(self, Location, Size, Ramp=0):
 		'''Initialising a tile'''
-		self.Location = Location
+		self.Location = list(Location)
 		self.Size = Size
 		self.Ramp = Ramp
 	#__INIT__

@@ -23,7 +23,7 @@ class Particle:
 	#__INIT__
 	def __init__(self, Location, Momentum, Size, Colour):
 		'''Initialising a particle'''
-		self.Location = Location
+		self.Location = list(Location)
 		self.Momentum = Momentum
 		self.Size = Size
 		self.Colour = Colour
@@ -35,6 +35,7 @@ class Particle:
 		'''Move the location of the particle and change the size
 		If the size is smaller or equal to 0, it will no longer be alive
 		It also has gravity (YMomentum)'''
+		self.Location = list(self.Location)
 		self.Momentum[1] += YMomentum * DeltaTime
 		self.Location[0] += self.Momentum[0] * DeltaTime
 		self.Location[1] += self.Momentum[1] * DeltaTime
@@ -62,7 +63,7 @@ class ShockWave:
 	#__INIT__
 	def __init__(self, Location, Colour, Radius, Width):
 		'''Initialising a shockwave'''
-		self.Location = Location
+		self.Location = list(Location)
 		self.Colour = Colour
 		self.Radius = Radius
 		self.Width = Width
@@ -89,7 +90,7 @@ class Spark:
 	def __init__(self, Location, Angle, Speed, Size, Colour):
 		'''Initialising a spark
 		It will change the angle to radians'''
-		self.Location = Location
+		self.Location = list(Location)
 		self.Angle = math.radians(Angle) #ANGLE IS IN RADIANS
 		self.Speed = Speed
 		self.Size = Size
@@ -102,6 +103,7 @@ class Spark:
 		'''A function to move the spark normal
 		It will decrease the speed and if it is lower or equal to 0, it is no longer alive
 		AngleChange will change the angly by that amount every time this runs'''
+		self.Location = list(self.Location)
 		self.Location[0] += math.cos(self.Angle) * self.Speed * DeltaTime
 		self.Location[1] += math.sin(self.Angle) * self.Speed * DeltaTime
 		self.Speed -= SpeedChange * DeltaTime
@@ -115,6 +117,7 @@ class Spark:
 		'''A function to move the particle, but it also includes gravity
 		It will change the angle a little bit down every frame
 		It will decrease the speed and if it is lower or equal to 0, it is no longer alive'''
+		self.Location = list(self.Location)
 		Momentum = [math.cos(self.Angle) * self.Speed * DeltaTime, math.sin(self.Angle) * self.Speed * DeltaTime]
 		self.Location[0] += Momentum[0]
 		self.Location[1] += Momentum[1]
