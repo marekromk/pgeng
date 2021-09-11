@@ -17,7 +17,7 @@ Path = Path( __file__ ).parent.resolve()
 #CREATEFONT
 def CreateFont(Colour):
 	'''A function to create a large and small Font object
-	Colour will be the colour of the text
+	Colour will be the colour of the text, if Colour is (127, 127, 127), the font border will be automatically fixed
 	First value in the returned tuple is the SmallFont and the second value is the LargeFont
 
 	Returns: Tuple'''
