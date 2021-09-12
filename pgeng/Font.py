@@ -146,6 +146,6 @@ class TextButton:
 	#RENDER
 	def Render(self, Surface, Font):
 		'''Renders the text from the button'''
-		Font.RenderText(Surface, self.Text, self.rect.topleft)
+		Font.Render(Surface, self.Text, self.rect.topleft)
 	#RENDER
 #TEXTBUTTON
