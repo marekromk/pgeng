@@ -40,7 +40,7 @@ class Particle:
 		self.Location[0] += self.Momentum[0] * DeltaTime
 		self.Location[1] += self.Momentum[1] * DeltaTime
 		self.Size -= SizeChange * DeltaTime
-		if self.Size <= 0:
+		if self.Size < 1:
 			self.Alive = False
 	#MOVE
 
@@ -50,7 +50,7 @@ class Particle:
 		Scroll is position of the camera, it will render it at the location of the Particle minus the scroll
 		It can also render a lighting circle around the particle with a pygame.BLEND_RGBA_ADD flag'''
 		if self.Alive:
-			pygame.draw.circle(Surface, self.Colour, (self.Location[0] - Scroll[0], self.Location[1] - Scroll[1]), int(self.Size))
+			pygame.draw.circle(Surface, self.Colour, (self.Location[0] - Scroll[0], self.Location[1] - Scroll[1]), self.Size)
 			if LightingColour:
 				LightingRadius = self.Size * 2
 				Surface.blit(CircleLighting(LightingRadius, LightingColour), (self.Location[0] - LightingRadius - Scroll[0], self.Location[1] - LightingRadius - Scroll[1]), special_flags=pygame.BLEND_RGBA_ADD)
