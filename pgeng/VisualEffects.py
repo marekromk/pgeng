@@ -45,8 +45,9 @@ class Particle:
 	#MOVE
 
 	#RENDER
-	def Render(self, Surface, Scroll=[0, 0], LightingColour=None):
+	def Render(self, Surface, Scroll=(0, 0), LightingColour=None):
 		'''Render the particle
+		Scroll is position of the camera, it will render it at the location of the Particle minus the scroll
 		It can also render a lighting circle around the particle with a pygame.BLEND_RGBA_ADD flag'''
 		if self.Alive:
 			pygame.draw.circle(Surface, self.Colour, (self.Location[0] - Scroll[0], self.Location[1] - Scroll[1]), int(self.Size))
@@ -71,8 +72,10 @@ class ShockWave:
 	#__INIT__
 
 	#UPDATE
-	def Update(self, Surface, RadiusChange, WidthChange, Scroll=[0, 0], DeltaTime=1):
-		'''The move and render function of the shockwave if the width is smaller or 1, it will no longer be alive'''
+	def Update(self, Surface, RadiusChange, WidthChange, Scroll=(0, 0), DeltaTime=1):
+		'''The move and render function of the shockwave
+		If the width is smaller or the same as 1, it will no longer be alive
+		Scroll is position of the camera, it will render it at the location of the ShockWave minus the scroll'''
 		self.Radius += RadiusChange * DeltaTime
 		self.Width -= WidthChange * DeltaTime
 		if self.Width <= 1:
@@ -129,10 +132,11 @@ class Spark:
 	#GRAVITYMOVEMENT
 
 	#RENDER
-	def Render(self, Surface, Scroll=[0, 0], LightingColour=None):
+	def Render(self, Surface, Scroll=(0, 0), LightingColour=None):
 		'''A function to render the spark
 		It will calculate every point for the polygon (there are 4 points) it looks like a rhombus, but the back one is longer
-		If LightingColour is turned on, it will blit a bigger polygon on top of it with BLEND_RGBA_ADD'''
+		Scroll is position of the camera, it will render it at the location of the Spark minus Scroll
+		If LightingColour is turned on, it will blit a bigger polygon with a specific colour on top of it with BLEND_RGBA_ADD'''
 		if self.Alive:
 			Points = [[self.Location[0] + math.cos(self.Angle) * self.Speed * self.Size, self.Location[1] + math.sin(self.Angle) * self.Speed * self.Size], #FRONT POINT
 			[self.Location[0] + math.cos(self.Angle + math.pi / 2) * self.Speed * self.Size * 0.4, self.Location[1] + math.sin(self.Angle + math.pi / 2) * self.Speed * self.Size * 0.4], #RIGHT POINT
