@@ -59,8 +59,7 @@ class Particle:
 
 #SHOCKWAVE
 class ShockWave:
-	'''A shockwave to get smaller or bigger
-	The radius needs to be decreased'''
+	'''A shockwave that gets smaller or bigger'''
 	#__INIT__
 	def __init__(self, Location, Colour, Radius, Width):
 		'''Initialising a shockwave'''
