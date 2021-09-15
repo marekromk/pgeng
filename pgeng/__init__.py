@@ -42,7 +42,6 @@ except ImportError as e:
 try:
 	from .Tile import *
 except ImportError as e:
-	print(type(e.name))
 	FailedImports.append(e.name)
 #TILE
 
