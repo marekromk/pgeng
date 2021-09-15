@@ -63,4 +63,5 @@ except ImportError as e:
 print('''\nDo help(pgeng.<Function>) to get the documentation of the function (or possibly class)
 Or do help(pgeng.<Package Content>) to get the documentation of the functions or classes in a file\n''')
 print(f'Failed to import {", ".join([Import.split(".")[1] for Import in FailedImports])} from pgeng') if FailedImports else None
+del FailedImports
 #MESSAGES
