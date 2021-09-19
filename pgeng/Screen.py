@@ -7,7 +7,7 @@ from pygame._sdl2.video import Window
 
 #SCREEN
 class Screen:
-	'''A class for the display/screen
+	'''A class for the display
 	It can also set the display fullscreen on all platforms
 	The default flag is pygame.SCALED
 	Use GetDisplay to get the display from the class
@@ -16,77 +16,72 @@ class Screen:
 
 	Attributes:
 
-	Depth
+	depth
 
-	Display
+	display
 
-	Flags
+	flags
 
-	Fullscreen
+	fullscreen_size
 
-	FullscreenSize
+	pygame_display
 
-	PygameDisplay
+	size
 
-	Size
+	vsync
 
-	VSync
-
-	Window'''
+	window'''
 	#__INIT__
-	def __init__(self, Size, Flags=pygame.SCALED, Depth=0, Display=0, VSync=1, Fullscreen=False):
+	def __init__(self, size, flags=pygame.SCALED, depth=0, display=0, vsync=1, fullscreen=False):
 		'''Initialising the class, it should only be done once'''
-		self.FullscreenSize = (pygame.display.Info().current_w, pygame.display.Info().current_h)
-		self.Size = Size
-		self.Flags = Flags
-		self.Depth = Depth
-		self.Display = Display
-		self.VSync = VSync
-		self.Fullscreen = Fullscreen
-		if Fullscreen:
-			self.ToggleFullscreen(ManualSet=Fullscreen)
+		self.fullscreen_size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
+		self.size = size
+		self.flags = flags
+		self.depth = depth
+		self.display = display
+		self.vsync = vsync
+		self.fullscreen = fullscreen
+		if fullscreen:
+			self.toggle_fullscreen(manual=fullscreen)
 		else:
-			self.PygameDisplay = pygame.display.set_mode(Size, Flags, Depth, Display, VSync)
-		self.Window = Window.from_display_module()
+			self.pygame_display = pygame.display.set_mode(size, flags, depth, display, vsync)
+		self.window = Window.from_display_module()
 	#__INIT__
 
-	#TOGGLEFULLSCREEN
-	def ToggleFullscreen(self, ManualSet=None):
+	#TOGGLE_FULLSCREEN
+	def toggle_fullscreen(self, manual=None):
 		'''Toggle the display to fullscreen or from fullscreen
-		ManualSet can be used if you don't want to toggle it, but set it to fullscreen or exit fullscreen manually
-		Then ManualSet has to be True (set fullscreen) or False (exit Fullscreen)
+		manual can be used if you don't want to toggle it, but set it to fullscreen or exit fullscreen manually
+		Than manual has to be True (enter fullscreen) or False (exit Fullscreen)
 
 		Returns: pygame.Surface'''
-		self.Fullscreen = not self.Fullscreen
-		if type(ManualSet) is bool:
-			self.Fullscreen = ManualSet
-		if self.Fullscreen:
-			self.PygameDisplay = pygame.display.set_mode(self.Size, pygame.SCALED | pygame.NOFRAME | pygame.FULLSCREEN, self.Depth, self.Display, self.VSync)
+		self.fullscreen = not self.fullscreen
+		if type(manual) is bool:
+			self.fullscreen = manual
+		if self.fullscreen:
+			self.pygame_display = pygame.display.set_mode(self.size, pygame.SCALED | pygame.NOFRAME | pygame.FULLSCREEN, self.depth, self.display, self.vsync)
 		else:
 			pygame.display.toggle_fullscreen()
-			self.PygameDisplay = pygame.display.set_mode(self.Size, self.Flags, self.Depth, self.Display, self.VSync)
-			self.Window = Window.from_display_module()
-			self.Window.position = (self.FullscreenSize[0] / 2 - self.Window.size[0] / 2, self.FullscreenSize[1] / 2 - self.Window.size[1] / 2)
-		return self.PygameDisplay
-	#TOGGLEFULLSCREEN
+			self.pygame_display = pygame.display.set_mode(self.size, self.flags, self.depth, self.display, self.vsync)
+			self.window = Window.from_display_module()
+			self.window.position = (self.fullscreen_size[0] / 2 - self.window.size[0] / 2, self.fullscreen_size[1] / 2 - self.window.size[1] / 2)
+		return self.pygame_display
+	#TOGGLE_FULLSCREEN
 
 	#SCREENSHOT
-	def ScreenShot(self, Alpha=None):
+	def screenshot(self):
 		'''Making a screenshot of the pygame display
-		The alpha will be set with the Alpha variable
-		Only works if this class is used as the main display/screen
+		This only works if this class is used as the main display/screen
 
 		Returns: pygame.Surface'''
-		ScreenShot = self.PygameDisplay.copy()
-		ScreenShot.set_alpha(Alpha)
-		return ScreenShot
+		return self.pygame_display.copy()
 	#SCREENSHOT
 
-	#GETDISPLAY
-	def GetDisplay(self):
-		'''Used to return the display/screen
+	#GET_DISPLAY
+	def get_display(self):
+		'''Used to return the pygame display
 
 		Returns: pygame.Surface'''
-		return self.PygameDisplay
-	#GETDISPLAY
+		return self.pygame_display
+	#GET_DISPLAY
 #SCREEN
