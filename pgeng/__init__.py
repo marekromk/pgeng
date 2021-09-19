@@ -1,67 +1,67 @@
 '''Useful functions and classes for PyGame'''
 #VARIABLES
-FailedImports = []
+failed_imports = []
 #VARIABLES
 
-#COLOR
+#COLOUR
 try:
 	from .Colour import *
 except ImportError as e:
-	FailedImports.append(e.name)
-#COLOR
+	failed_imports.append(e.name)
+#COLOUR
 
 #CORE
 try:
 	from .Core import *
 except ImportError as e:
-	FailedImports.append(e.name)
+	failed_imports.append(e.name)
 #CORE
 
 #ENTITY
 try:
 	from .Entity import Entity
 except ImportError as e:
-	FailedImports.append(e.name)
+	failed_imports.append(e.name)
 #ENTITY
 
 #FONT
 try:
 	from .Font import *
 except ImportError as e:
-	FailedImports.append(e.name)
+	failed_imports.append(e.name)
 #FONT
 
 #SCREEN
 try:
 	from .Screen import Screen
 except ImportError as e:
-	FailedImports.append(e.name)
+	failed_imports.append(e.name)
 #SCREEN
 
 #TILE
 try:
 	from .Tile import *
 except ImportError as e:
-	FailedImports.append(e.name)
+	failed_imports.append(e.name)
 #TILE
 
 #SOUNDS
 try:
 	from .Sounds import Sounds
 except ImportError as e:
-	FailedImports.append(e.name)
+	failed_imports.append(e.name)
 #SOUNDS
 
-#VISUALEFFECTS
+#VISUAL_EFFECTS
 try:
-	from .VisualEffects import *
+	from .Visual_Effects import *
 except ImportError as e:
-	FailedImports.append(e.name)
-#VISUALEFFECTS
+	failed_imports.append(e.name)
+#VISUAL_EFFECTS
 
 #MESSAGES
 print('''\nDo help(pgeng.<Function>) to get the documentation of the function (or possibly class)
 Or do help(pgeng.<Package Content>) to get the documentation of the functions or classes in a file\n''')
-print(f'Failed to import {", ".join([Import.split(".")[1] for Import in FailedImports])} from pgeng') if FailedImports else None
-del FailedImports
+print(f'Failed to import {", ".join([failed_import.split(".")[1] for failed_import in failed_imports])} from pgeng') if failed_imports else None
+del failed_imports
 #MESSAGES

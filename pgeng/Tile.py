@@ -4,8 +4,8 @@ import pygame
 #IMPORTS
 
 #VARIABLES
-__all__ = ['TileSize', 'Tile']
-TileSize = 0
+__all__ = ['tile_size', 'Tile']
+tile_size = 0
 #VARIABLES
 
 #TILE
@@ -20,23 +20,23 @@ class Tile:
 
 	Attributes:
 
-	Location
+	location
 
-	Size
+	size
 
-	Ramp'''
+	ramp'''
 	#__INIT__
-	def __init__(self, Location, Size, Ramp=0):
+	def __init__(self, location, size, ramp=0):
 		'''Initialising a tile'''
-		self.Location = list(Location)
-		self.Size = Size
-		self.Ramp = Ramp
+		self.location = list(location)
+		self.size = size
+		self.ramp = ramp
 	#__INIT__
 
 	#RECT
 	@property
 	def rect(self):
 		'''Returns a pygame.Rect object of the tile'''
-		return pygame.Rect(self.Location[0], self.Location[1], self.Size, self.Size)
+		return pygame.Rect(self.location[0], self.location[1], self.size, self.size)
 	#RECT
 #TILE
