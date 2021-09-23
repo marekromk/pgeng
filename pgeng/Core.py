@@ -1,62 +1,9 @@
 '''Many core functions for pgeng'''
 #IMPORTS
-import pygame, os
+import pygame
 from collections import Counter
-from glob import glob
 from sys import exit as _sysexit #UNDERSCORE SO IT IS NOT VISIBLE AS A FUNCTION
 #IMPORTS
-
-#VARIABLES
-global animation_frames
-animation_frames = {}
-#VARIABLES
-
-#LOAD_ANIMATION
-def load_animation(path, frame_durations, colourkey=None, file_type=None):
-	'''A function for loading still images for a animation
-	It loads all images in a directory, the last character before the file type needs to be a number
-	The name of the directory it is in needs to be in the file name (directories above that don't matter),
-	The file type of the frames should be the most used file type in the directory
-	Example:
-		\'Run/Run1.png\'
-		\'Run/Run2.png\'
-
-	Or you can use file_type variable
-	Example:
-		file_type='.png'
-
-	Returns: List'''
-	if not os.path.isdir(path):
-		raise FileNotFoundError(f'Directory \'{path}\' does not exist')
-	global animation_frames
-	animation_name = path.replace('\\', '/').split('/')[-1]
-	if not file_type:
-		files = glob(f'{path}/*.*')
-		files = [os.path.splitext(file)[1] for file in files]
-		file_type = most_used(files)[0]
-	animation_frame_data = []
-	for i, frame_amount in enumerate(frame_durations):
-		animation_frame_id = f'{animation_name}{i + 1}'
-		try:
-			animation_image = load_image(f'{path}/{animation_frame_id}{file_type}', colourkey)
-		except:
-			raise pygame.error(f'Too many non image files in \'{path}\'')
-		animation_frames[animation_frame_id] = animation_image
-		for i in range(frame_amount):
-			animation_frame_data.append(animation_frame_id)
-	return animation_frame_data
-#LOAD_ANIMATION
-
-#SET_ACTION
-def set_action(action, new_action, action_frame):
-	'''Setting an action in an animation
-
-	Returns: Tuple'''
-	if action != new_action:
-		action = new_action
-		action_frame = 0
-	return action, action_frame
-#SET_ACTION
 
 #CLIP_SURFACE
 def clip_surface(surface, location, size):
@@ -70,16 +17,27 @@ def clip_surface(surface, location, size):
 #CLIP_SURFACE
 
 #LOAD_IMAGE
-def load_image(path, colourkey=None, alpha=None):
+def load_image(path, colourkey=None, alpha=255):
 	'''Load an image for pygame that will be converted
 	You can set a colourkey and alpha as well
 
 	Returns: pygame.Surface'''
 	image = pygame.image.load(path).convert()
 	image.set_colorkey(colourkey)
-	image.set_alpha(alpha)
+	if alpha != 255:
+		image.set_alpha(alpha)
 	return image
 #LOAD_IMAGE
+
+#DELTA_TIME
+def delta_time(clock, fps):
+	'''Get the time since the last frame, it needs a pygame.time.Clock object and the fps
+	It will return a number that is around 1 if the game is running at the intended speed
+	For example, if the game is running at 30 fps, but it should run at 60 fps, it would return 2.0
+
+	Returns: Float'''
+	return clock.get_time() * fps / 1000
+#DELTA_TIME
 
 #QUIT_GAME
 def quit_game():
@@ -120,12 +78,12 @@ def nearest(input, nearest, int_mode=True):
 #NEAREST
 
 #MOST_USED
-def most_used(values, amount=False):
-	'''Return the most used value in a list
+def most_used(iterable, amount=False):
+	'''Return the most used value in an iterable
 	It will return the amount used of the value in the list if amount is True
 
 	Returns: List'''
-	list_counter = Counter(values)
+	list_counter = Counter(iterable)
 	total_times = list(list_counter.values()).count(max(list(list_counter.values())))
 	return list_counter.most_common(total_times) if amount else [value[0] for value in list_counter.most_common(total_times)]
 #MOST_USED

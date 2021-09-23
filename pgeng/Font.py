@@ -20,7 +20,7 @@ def create_font(colour):
 	Returns: Tuple'''
 	if tuple(colour) == (0, 0, 0):
 		small_font_image = palette_swap(load_image(f'{path}/Font/Small_Font.png'), {(255, 0, 0): colour, tuple(colour): (255, 255, 255)})
-		large_font_image = palette_swap(load_image(f'{path}/Font/Large_Font.png'), {(255, 0, 0): Colour, tuple(colour): (255, 255, 255)})
+		large_font_image = palette_swap(load_image(f'{path}/Font/Large_Font.png'), {(255, 0, 0): colour, tuple(colour): (255, 255, 255)})
 		return Font(small_font_image, background_colour=255), Font(large_font_image, background_colour=255)
 	if tuple(colour) == (127, 127, 127):
 		small_font_image = palette_swap(load_image(f'{path}/Font/Small_Font.png'), {(255, 0, 0): colour, tuple(colour): (128, 128, 128)})
@@ -160,6 +160,8 @@ class TextButton:
 	#RENDER
 	def render(self, surface, font):
 		'''Renders the text from the button'''
+		if not isinstance(font, Font):
+			raise TypeError(f'{font} is not a Font object')
 		font.render(surface, self.text, self.rect.topleft)
 	#RENDER
 #TEXTBUTTON
