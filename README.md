@@ -11,3 +11,5 @@ Or do help(pgeng.Package Content) to get the documentation of the functions or c
 import pgeng
 help(pgeng)
 ```
+---
+Thanks to [DaFluffyPotato](https://github.com/DaFluffyPotato) for all his [tutorials](https://youtube.com/playlist?list=PLX5fBCkxJmm1fPSqgn9gyR3qih8yYLvMj)

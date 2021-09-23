@@ -1,6 +1,7 @@
 '''An Entity class'''
 #IMPORTS
 import pygame, math
+from .Animations import Animations
 #IMPORTS
 
 #COLLISION_TEST
@@ -14,10 +15,13 @@ class Entity:
 	'''An entity with usefull functions
 	It needs a position and a size for the pygame.Rect object
 	Use Entity.location[0] and Entity.location[1] instead of Entity.rect.x and Entity.rect.y
+	It has an animation class
 
 	Attributes:
 
 	alpha
+
+	animations
 
 	flips
 
@@ -38,6 +42,8 @@ class Entity:
 		self.rotation = 0
 		self.scale = [1, 1]
 		self.alpha = 255
+
+		self.animations = Animations(None)
 	#__INIT__
 
 	#CENTER
@@ -91,6 +97,16 @@ class Entity:
 		else:
 			self.scale = [scale, scale]
 	#SET_SCALE
+
+	#IMAGE
+	def current_image(self, delta_time=1):
+		'''Get the current image in the animation
+		delta_time is how much the frame should update, usually it would be 1
+		It also get transformed with transform_image
+
+		Returns: pygame.Surface'''
+		return self.transform_image(self.animations.current_image(delta_time))
+	#IMAGE
 
 	#TRANSFORM_IMAGE
 	def transform_image(self, image):

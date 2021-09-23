@@ -3,6 +3,13 @@
 failed_imports = []
 #VARIABLES
 
+#ANIMATIONS
+try:
+	from .Animations import *
+except ImportError as e:
+	failed_imports.append(e.name)
+#ANIMATIONS
+
 #COLOUR
 try:
 	from .Colour import *
@@ -52,12 +59,12 @@ except ImportError as e:
 	failed_imports.append(e.name)
 #SOUNDS
 
-#VISUAL_EFFECTS
+#VFX
 try:
-	from .Visual_Effects import *
+	from .VFX import *
 except ImportError as e:
 	failed_imports.append(e.name)
-#VISUAL_EFFECTS
+#VFX
 
 #MESSAGES
 print('''\nDo help(pgeng.<Function>) to get the documentation of the function (or possibly class)
