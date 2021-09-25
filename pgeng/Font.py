@@ -8,7 +8,7 @@ from .Colour import palette_swap
 
 #VARIALBES
 __all__ = ['create_font', 'TextButton']
-path = Path( __file__ ).parent.resolve()
+path = Path(__file__).parent.resolve()
 #VARIABLES
 
 #CREATE_FONT
@@ -19,15 +19,15 @@ def create_font(colour):
 
 	Returns: Tuple'''
 	if tuple(colour) == (0, 0, 0):
-		small_font_image = palette_swap(load_image(f'{path}/Font/Small_Font.png'), {(255, 0, 0): colour, tuple(colour): (255, 255, 255)})
-		large_font_image = palette_swap(load_image(f'{path}/Font/Large_Font.png'), {(255, 0, 0): colour, tuple(colour): (255, 255, 255)})
+		small_font_image = palette_swap(load_image(f'{path}/Font/Small.png'), {(255, 0, 0): colour, tuple(colour): (255, 255, 255)})
+		large_font_image = palette_swap(load_image(f'{path}/Font/Large.png'), {(255, 0, 0): colour, tuple(colour): (255, 255, 255)})
 		return Font(small_font_image, background_colour=255), Font(large_font_image, background_colour=255)
 	if tuple(colour) == (127, 127, 127):
-		small_font_image = palette_swap(load_image(f'{path}/Font/Small_Font.png'), {(255, 0, 0): colour, tuple(colour): (128, 128, 128)})
-		large_font_image = palette_swap(load_image(f'{path}/Font/Large_Font.png'), {(255, 0, 0): colour, tuple(colour): (128, 128, 128)})
+		small_font_image = palette_swap(load_image(f'{path}/Font/Small.png'), {(255, 0, 0): colour, tuple(colour): (128, 128, 128)})
+		large_font_image = palette_swap(load_image(f'{path}/Font/Large.png'), {(255, 0, 0): colour, tuple(colour): (128, 128, 128)})
 		return Font(small_font_image, 128), Font(large_font_image, 128)
-	small_font_image = palette_swap(load_image(f'{path}/Font/Small_Font.png'), {(255, 0, 0): colour})
-	large_font_image = palette_swap(load_image(f'{path}/Font/Large_Font.png'), {(255, 0, 0): colour})
+	small_font_image = palette_swap(load_image(f'{path}/Font/Small.png'), {(255, 0, 0): colour})
+	large_font_image = palette_swap(load_image(f'{path}/Font/Large.png'), {(255, 0, 0): colour})
 	return Font(small_font_image), Font(large_font_image)
 #CREATE_FONT
 
@@ -116,11 +116,11 @@ class TextButton:
 
 	rect
 
+	size
+
 	test_font
 
-	text
-
-	size'''
+	text'''
 	#__INIT__
 	def __init__(self, text, location, font_size):
 		if font_size != 'small' and font_size != 'large':
