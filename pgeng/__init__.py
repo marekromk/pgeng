@@ -1,6 +1,6 @@
 '''Useful functions and classes for PyGame'''
 #VARIABLES
-__version__ = '1.2'
+__version__ = '1.2.1'
 failed_imports = []
 #VARIABLES
 
