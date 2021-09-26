@@ -128,7 +128,7 @@ class TextButton:
 		if type(text) is not str:
 			raise TypeError(f'{text} is not a string')
 		self.text = text
-		self.test_font = Font(load_image(f'{path}/Font/{font_size.title()}_Font.png'))
+		self.test_font = Font(load_image(f'{path}/Font/{font_size.title()}.png'))
 		self.size = self.test_font.get_size(text)
 		self.rect = pygame.Rect(location, (self.size[0] - 1, self.size[1] + self.test_font.character_height)) #- 1 FOR THE EXTRA SPACING
 	#__INIT__

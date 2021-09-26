@@ -7,13 +7,13 @@ import pygame, math
 def circle_lighting(radius, colour, alpha=255):
 	'''Creates a surface twice as big as the given radius
 	It draws a circle with the radius on it
-	Recommended to blit with the special_flag pygame.BLEND_RGBA_ADD
+	Recommended to blit with a special flag
 
 	Returns: pygame.Surface'''
 	lighting_surface = pygame.Surface((radius * 2, radius * 2))
 	lighting_surface.set_colorkey((0, 0, 0))
 	if alpha != 255:
-		image.set_alpha(alpha)
+		lighting_surface.set_alpha(alpha)
 	pygame.draw.circle(lighting_surface, colour, (radius, radius), radius)
 	return lighting_surface
 #CIRCLE_LIGHTING
