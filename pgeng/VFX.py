@@ -21,6 +21,7 @@ def circle_lighting(radius, colour, alpha=255):
 #PARITCLE
 class Particle:
 	'''A particle to move and render
+	momentum has to be a list with how much the particle should move every frame [x, y]
 	It can also have gravity and a 'lighting' for the rendering
 
 	Attributes:
@@ -39,7 +40,7 @@ class Particle:
 	def __init__(self, location, momentum, size, colour):
 		'''Initialising a Particle object'''
 		self.location = list(location)
-		self.momentum = momentum
+		self.momentum = list(momentum)
 		self.size = size
 		self.colour = colour
 		self.alive = True
@@ -51,6 +52,7 @@ class Particle:
 		If the size is smaller or equal to 0, it will no longer be alive
 		It also has gravity (y_momentum)'''
 		self.location = list(self.location)
+		self.momentum = list(self.momentum)
 		self.momentum[1] += y_momentum * delta_time
 		self.location[0] += self.momentum[0] * delta_time
 		self.location[1] += self.momentum[1] * delta_time
