@@ -1,6 +1,7 @@
 '''A simple class for loading and playing sounds and music'''
 #IMPORTS
 import pygame
+from pathlib import Path
 #IMPORTS
 
 #SOUNDS
@@ -33,7 +34,7 @@ class Sounds:
 	def add_sound(self, path, name, volume=-1):
 		'''Adding sounds to the Sounds dictionary
 		The volume will be set by the volume variable if volume is -1'''
-		self.sounds[name] = pygame.mixer.Sound(path)
+		self.sounds[name] = pygame.mixer.Sound(Path(path).resolve())
 		self.sounds[name].set_volume(self.volume if volume == -1 else volume)
 	#ADD_SOUND
 
@@ -42,7 +43,7 @@ class Sounds:
 		'''Setting the play_sound_variable to True or False
 		It will also pause music if it is False and unpause if it is True'''
 		self.play_sound_variable = play_sound_boolean
-		if self.play_sound_variable and not pygame.mixer.get_busy() and affect_music:
+		if affect_music and self.play_sound_variable and not pygame.mixer.get_busy():
 			pygame.mixer.music.unpause()
 		elif affect_music:
 			pygame.mixer.music.pause()
@@ -56,11 +57,11 @@ class Sounds:
 		It will not change the volume of the music if music is False
 		It will set the volume of a specific sound in the dictionary if a specific_sound is given
 		Than it will not change the volume variable'''
-		if 0 > volume > 1:
+		if not 0 <= volume <= 1:
 			raise ValueError('Volume must be between 0 and 1')
 		if music:
 			pygame.mixer.music.set_volume(volume)
-		if specific_sound is not None:
+		if specific_sound is None:
 			self.volume = volume
 			for sound in self.sounds:
 				self.sounds[sound].set_volume(volume)
@@ -81,7 +82,7 @@ class Sounds:
 		The volume will be the volume variable if volume is -1
 		amount is the amount of times played, it will be indefinitely if amount is -1'''
 		if self.play_sound_variable:
-			pygame.mixer.music.load(path)
+			pygame.mixer.music.load(Path(path).resolve())
 			pygame.mixer.music.set_volume(self.volume if volume == -1 else volume)
 			pygame.mixer.music.play(amount)
 	#PLAY_MUSIC
