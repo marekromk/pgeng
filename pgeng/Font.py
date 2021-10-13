@@ -2,13 +2,13 @@
 #IMPORTS
 import pygame
 from pathlib import Path
-from .Core import clip_surface, load_image
-from .Colour import palette_swap
+from .core import clip_surface, load_image
+from .colour import palette_swap
 #IMPORTS
 
 #VARIALBES
 __all__ = ['create_font', 'TextButton']
-path = Path(__file__).parent.resolve()
+path = Path(__file__).resolve().parent
 #VARIABLES
 
 #CREATE_FONT
@@ -19,15 +19,15 @@ def create_font(colour):
 
 	Returns: Tuple'''
 	if tuple(colour) == (0, 0, 0):
-		small_font_image = palette_swap(load_image(f'{path}/Font/Small.png'), {(255, 0, 0): colour, tuple(colour): (255, 255, 255)})
-		large_font_image = palette_swap(load_image(f'{path}/Font/Large.png'), {(255, 0, 0): colour, tuple(colour): (255, 255, 255)})
+		small_font_image = palette_swap(load_image(f'{path}/font/small.png'), {(255, 0, 0): colour, tuple(colour): (255, 255, 255)})
+		large_font_image = palette_swap(load_image(f'{path}/font/large.png'), {(255, 0, 0): colour, tuple(colour): (255, 255, 255)})
 		return Font(small_font_image, background_colour=255), Font(large_font_image, background_colour=255)
 	if tuple(colour) == (127, 127, 127):
-		small_font_image = palette_swap(load_image(f'{path}/Font/Small.png'), {(255, 0, 0): colour, tuple(colour): (128, 128, 128)})
-		large_font_image = palette_swap(load_image(f'{path}/Font/Large.png'), {(255, 0, 0): colour, tuple(colour): (128, 128, 128)})
+		small_font_image = palette_swap(load_image(f'{path}/font/small.png'), {(255, 0, 0): colour, tuple(colour): (128, 128, 128)})
+		large_font_image = palette_swap(load_image(f'{path}/font/large.png'), {(255, 0, 0): colour, tuple(colour): (128, 128, 128)})
 		return Font(small_font_image, 128), Font(large_font_image, 128)
-	small_font_image = palette_swap(load_image(f'{path}/Font/Small.png'), {(255, 0, 0): colour})
-	large_font_image = palette_swap(load_image(f'{path}/Font/Large.png'), {(255, 0, 0): colour})
+	small_font_image = palette_swap(load_image(f'{path}/font/small.png'), {(255, 0, 0): colour})
+	large_font_image = palette_swap(load_image(f'{path}/font/large.png'), {(255, 0, 0): colour})
 	return Font(small_font_image), Font(large_font_image)
 #CREATE_FONT
 
@@ -111,8 +111,11 @@ class TextButton:
 	'''A string of text that is also a button
 	The collide function is to collide with the mouse and clicks
 	It also needs a font size, it has to be either 'small' or 'large'
+	Use the location variable instead of the rect values
 
 	Attributes:
+
+	location
 
 	rect
 
@@ -128,10 +131,18 @@ class TextButton:
 		if type(text) is not str:
 			raise TypeError(f'{text} is not a string')
 		self.text = text
-		self.test_font = Font(load_image(f'{path}/Font/{font_size.title()}.png'))
+		self.test_font = Font(load_image(f'{path}/font/{font_size}.png'))
 		self.size = self.test_font.get_size(text)
-		self.rect = pygame.Rect(location, (self.size[0] - 1, self.size[1] + self.test_font.character_height)) #- 1 FOR THE EXTRA SPACING
+		self.location = list(location)
 	#__INIT__
+
+	#RECT
+	@property
+	def rect(self):
+		'''Returns the rect object with the correct location'''
+		self.location = list(self.location)
+		return pygame.Rect(self.location, (self.size[0] - 1, self.size[1] + self.test_font.character_height)) #- 1 FOR THE EXTRA SPACING
+	#RECT
 
 	#SET_TEXT
 	def set_text(self, text):
@@ -141,16 +152,18 @@ class TextButton:
 			raise TypeError(f'{text} is not a string')
 		self.text = text
 		self.size = self.test_font.get_size(text)
-		self.rect = pygame.Rect(self.rect.topleft, (self.size[0] - 1, self.size[1] + self.test_font.character_height))
 	#SET_TEXT
 
 	#COLLIDE
-	def collide(self, click):
+	def collide(self, click, check_location=None):
 		'''This will check collision with the mouse location and also if click is True with it
+		A custom location can be set with location if pygame.mouse.get_pos() is not wished to be used
 		The first value returns True if the mouse has collided with the button, the second one is if the mouse clicked on it
 
 		Returns: Tuple'''
-		if self.rect.collidepoint(pygame.mouse.get_pos()):
+		if check_location is None:
+			check_location = pygame.mouse.get_pos()
+		if self.rect.collidepoint(check_location):
 			if click:
 				return True, True
 			return True, False
@@ -162,6 +175,6 @@ class TextButton:
 		'''Renders the text from the button'''
 		if not isinstance(font, Font):
 			raise TypeError(f'{font} is not a Font object')
-		font.render(surface, self.text, self.rect.topleft)
+		font.render(surface, self.text, self.location)
 	#RENDER
 #TEXTBUTTON
