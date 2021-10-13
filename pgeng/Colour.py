@@ -1,7 +1,7 @@
 '''Functions used for changing colours of surfaces'''
 #IMPORTS
 import pygame
-from .Core import nearest
+from .core import nearest
 #IMPORT
 
 #PALETTE_SWAP
