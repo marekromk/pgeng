@@ -1,6 +1,7 @@
 '''Many core functions for pgeng'''
 #IMPORTS
 import pygame
+from pathlib import Path
 from collections import Counter
 from sys import exit as _sysexit #UNDERSCORE SO IT IS NOT VISIBLE AS A FUNCTION
 #IMPORTS
@@ -17,12 +18,12 @@ def clip_surface(surface, location, size):
 #CLIP_SURFACE
 
 #LOAD_IMAGE
-def load_image(path, colourkey=None, alpha=255):
+def load_image(path, colourkey=None, alpha=255, convert_alpha=False):
 	'''Load an image for pygame that will be converted
 	You can set a colourkey and alpha as well
 
 	Returns: pygame.Surface'''
-	image = pygame.image.load(path).convert()
+	image = pygame.image.load(Path(path).resolve()).convert() if not convert_alpha else pygame.image.load(Path(path).resolve()).convert_alpha()
 	image.set_colorkey(colourkey)
 	if alpha != 255:
 		image.set_alpha(alpha)
@@ -36,7 +37,8 @@ def delta_time(clock, fps):
 	For example, if the game is running at 30 fps, but it should run at 60 fps, it would return 2.0
 
 	Returns: Float'''
-	return clock.get_time() * fps / 1000
+	delta_time = clock.get_time() * fps / 1000
+	return delta_time if delta_time else 1.0
 #DELTA_TIME
 
 #QUIT_GAME
@@ -53,7 +55,7 @@ def read_file(path):
 	'''Reads a file and returns the that's data in it
 
 	Returns: String'''
-	file = open(path)
+	file = open(Path(path).resolve())
 	data = file.read()
 	file.close()
 	return data
@@ -63,7 +65,7 @@ def read_file(path):
 def write_to_file(path, data):
 	'''Writes data to a file
 	The data has to be a string'''
-	file = open(path, 'w')
+	file = open(Path(path).resolve(), 'w')
 	file.write(data)
 	file.close()
 #WRITE_TO_FILE
@@ -85,7 +87,7 @@ def most_used(iterable, amount=False):
 	Returns: List'''
 	list_counter = Counter(iterable)
 	total_times = list(list_counter.values()).count(max(list(list_counter.values())))
-	return list_counter.most_common(total_times) if amount else [value[0] for value in list_counter.most_common(total_times)]
+	return [value[0] for value in list_counter.most_common(total_times)] if not amount else list_counter.most_common(total_times)
 #MOST_USED
 
 #STRING_NUMBER
@@ -120,6 +122,6 @@ def string_number(string, return_index=None, int_mode=False):
 			return_index = [i for i in range(len(numbers))]
 		if return_index and min(return_index) < -len(numbers) or max(return_index) > len(numbers) - 1:
 			raise IndexError('Index in return_index is not possible')
-		return [int(float(numbers[index])) for index in return_index] if int_mode else [float(numbers[index]) for index in return_index]
+		return [float(numbers[index]) for index in return_index] if not int_mode else [int(float(numbers[index])) for index in return_index]
 	return None #RETURN NONE IF THERE IS NO NUMBER FOUND IN THE STRING
 #STRING_NUMBER
