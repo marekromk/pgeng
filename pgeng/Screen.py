@@ -64,7 +64,7 @@ class Screen:
 			pygame.display.toggle_fullscreen()
 			self.pygame_display = pygame.display.set_mode(self.size, self.flags, self.depth, self.display, self.vsync)
 			self.window = Window.from_display_module()
-			self.window.position = (self.fullscreen_size[0] / 2 - self.window.size[0] / 2, self.fullscreen_size[1] / 2 - self.window.size[1] / 2)
+			self.window.position = [self.fullscreen_size[i] / 2 - self.window.size[i] / 2 for i in range(2)]
 		return self.pygame_display
 	#TOGGLE_FULLSCREEN
 
