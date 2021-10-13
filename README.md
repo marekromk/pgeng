@@ -12,4 +12,5 @@ import pgeng
 help(pgeng)
 ```
 ---
+Thanks to [tank-king](https://github.com/tank-king) for the [flame](https://github.com/Qamynn/pgeng/blob/main/pgeng/vfx/flame.py) ([tutorial](https://youtu.be/MJB3QPXUYBU))\
 Thanks to [DaFluffyPotato](https://github.com/DaFluffyPotato) for all his [tutorials](https://youtube.com/playlist?list=PLX5fBCkxJmm1fPSqgn9gyR3qih8yYLvMj)
