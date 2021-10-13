@@ -1,7 +1,7 @@
 '''An Entity class'''
 #IMPORTS
 import pygame, math
-from .Animations import Animations
+from .animations import Animations
 #IMPORTS
 
 #COLLISION_TEST
@@ -139,12 +139,12 @@ class Entity:
 		It also needs a list with Tile objects in it
 
 		It returns a dictionary with booleans to show what part of the rect collide with the tiles:
-		{'top': False, 'bottom': False, 'right': False, 'left': False}
+		{'top': False, 'bottom': False, 'right': False, 'left': False, 'ramp': False}
 
 		Returns: Dictionary'''
 		#VARIABLES
 		self.location = list(self.location)
-		collision_types = {'top': False, 'bottom': False, 'right': False, 'left': False}
+		collision_types = {'top': False, 'bottom': False, 'right': False, 'left': False, 'ramp': False}
 		normal_tiles = [tile.rect for tile in tiles if not tile.ramp]
 		ramp_tiles = [tile for tile in tiles if tile.ramp]
 		#VARIABLES
@@ -181,26 +181,28 @@ class Entity:
 			if self.rect.colliderect(ramp_hitbox):
 				delta_x = self.rect.x - ramp_hitbox.x
 				if ramp.ramp == 1 or ramp.ramp == 4:
-					height_position = ramp.size - delta_x
+					height_position = ramp_hitbox.w - delta_x
 				else:
 					height_position = delta_x + self.rect.w
 
-				height_position = min(height_position, ramp.size)
+				height_position = min(height_position, ramp_hitbox.w)
 				height_position = max(height_position, 0)
 
 				if ramp.ramp == 1 or ramp.ramp == 2:
 					y = ramp_hitbox.y + height_position
 				else:
-					y = ramp_hitbox.y + ramp.size - height_position
+					y = ramp_hitbox.bottom - height_position
 
 				if (ramp.ramp == 3 or ramp.ramp == 4) and self.rect.bottom > y:
 					self.rect.bottom = y
 					self.location[1] = self.rect.y
 					collision_types['bottom'] = True
+					collision_types['ramp'] = True
 				elif (ramp.ramp == 1 or ramp.ramp == 2) and self.rect.top < y:
 					self.rect.top = y
 					self.location[1] = self.rect.y
 					collision_types['top'] = True
+					collision_types['ramp'] = True
 		#RAMPS
 
 		return collision_types
