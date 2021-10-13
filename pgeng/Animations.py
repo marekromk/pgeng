@@ -2,14 +2,14 @@
 #IMPORTS
 import pygame
 from pathlib import Path
-from .Core import load_image, most_used
+from .core import load_image, most_used
 #IMPORTS
 
 #ANIMATIONS
 class Animations:
 	'''A class for animations
 	Not all the animations should be done in one Animations class, it is good to create one for Entities and such
-	It needs a action to begin with
+	It can set an action when being initialised, even though no animation is created yet
 
 	Attributes:
 
@@ -21,7 +21,7 @@ class Animations:
 
 	frame'''
 	#__INIT__
-	def __init__(self, action):
+	def __init__(self, action=None):
 		'''Initialising an Animations class'''
 		self.animations_data = {}
 		self.animation_frames = {}
@@ -30,7 +30,7 @@ class Animations:
 	#__INIT__
 
 	#ADD_ANIMATION
-	def load_animation(self, path, frame_durations, repeat=True, colourkey=None, file_type=None, animation_name=None):
+	def load_animation(self, path, frame_durations, repeat=True, colourkey=None, file_type=None, animation_name=None, alpha=255, convert_alpha=False):
 		'''A function for loading still images for a animation
 
 		It loads all images in a directory, the last character before the file type needs to be a number
@@ -50,19 +50,20 @@ class Animations:
 		frame_durations is a list or tuple with how long each frame should last, it has to be in order
 		repeat is if the animation should loop, if it is False, the image would stay on the last one
 		The images will be added to animation_frames'''
-		path = Path(path)
+		path = Path(path).resolve()
 		if not path.is_dir():
 			raise FileNotFoundError(f'Directory \'{path}\' does not exist')
 		animation_name = path.name if animation_name is None else animation_name
-		self.animations_data[animation_name] = ([], repeat)
+		self.animations_data[animation_name] = [[], repeat, 0]
 		if not file_type:
 			file_type = most_used([file.suffix for file in path.glob('*.*')])[0]
 		for i, frame_duration in enumerate(frame_durations):
 			if not path.joinpath(f'{path.name}{i + 1}{file_type}').is_file():
 				raise pygame.error(f'Too many non image files in \'{path}\' or the image file is not named \'{path.name}{i + 1}{file_type}\'')
 			animation_frame_id = f'{animation_name}{i + 1}'
-			self.animation_frames[animation_frame_id] = load_image(path.joinpath(f'{path.name}{i + 1}{file_type}'), colourkey)
+			self.animation_frames[animation_frame_id] = load_image(path.joinpath(f'{path.name}{i + 1}{file_type}'), colourkey, alpha, convert_alpha)
 			self.animations_data[animation_name][0].append((animation_frame_id, frame_duration))
+			self.animations_data[animation_name][2] += frame_duration
 	#ADD_ANIMATION
 
 	#ADD_IMAGE
@@ -71,10 +72,11 @@ class Animations:
 		If this name does not yes exist, it will be created
 		The image will be added to animation_frames with a number, so it has to be added in the correct order'''
 		if name not in self.animations_data:
-			self.animations_data[name] = ([], repeat)
+			self.animations_data[name] = [[], repeat, 0]
 		animation_frame_id = f'{name}{len(self.animations_data[name][0]) + 1}'
-		self.animation_frames[animation_frame_id] = image
+		self.animation_frames[animation_frame_id] = image.copy()
 		self.animations_data[name][0].append((animation_frame_id, duration))
+		self.animations_data[name][2] += duration
 	#ADD_IMAGE
 
 	#CURRENT_IMAGE
@@ -87,13 +89,13 @@ class Animations:
 			raise KeyError(f'Animation \'{action}\' is not defined')
 		animation_data = self.animations_data[self.action]
 		self.frame += delta_time
-		reset_frame = round(self.frame) > sum([frame_duration[1] for frame_duration in animation_data[0]][:len(animation_data[0])])
+		reset_frame = round(self.frame) > animation_data[2]
 		if reset_frame and animation_data[1]:
 			self.frame = 0
 		elif reset_frame and not animation_data[1]:
-			self.frame = sum([frame_duration[1] for frame_duration in animation_data[0]][:len(animation_data[0])])
+			self.frame = sum([frame_duration[1] for frame_duration in animation_data[0]])
 		for i, frame_data in enumerate(animation_data[0]):
-			if sum([frame_duration[1] for frame_duration in animation_data[0]][:i + 1]) >= round(self.frame):
+			if round(self.frame) <= sum([frame_duration[1] for frame_duration in animation_data[0]][:i + 1]):
 				return self.animation_frames[frame_data[0]]
 	#CURRENT_IMAGE
 
