@@ -10,12 +10,16 @@ def palette_swap(surface, colours):
 	colours = {old_colour: new_colour, old_colour: new_colour}
 
 	Returns: pygame.Surface'''
+	length_colour = max([len(colour) for colour in colours])
+	for colour in colours.copy():
+		if len(colour) != length_colour:
+			colours[colour + (255,)] = colours.pop(colour)
 	new_surface = surface.copy()
 	for y in range(new_surface.get_height()):
 		for x in range(new_surface.get_width()):
 			colour_value = new_surface.get_at((x, y))
-			if colour_value[:-1] in colours:
-				new_surface.set_at((x, y), colours[colour_value[:-1]])
+			if colour_value[:length_colour] in colours:
+				new_surface.set_at((x, y), colours[colour_value[:length_colour]])
 	return new_surface
 #PALETTE_SWAP
 
@@ -29,7 +33,7 @@ def gray_scale(surface):
 	for y in range(new_surface.get_height()):
 		for x in range(new_surface.get_width()):
 			colour_value = new_surface.get_at((x, y))
-			new_surface.set_at((x, y), [colour_value[0] * 0.2126 + colour_value[1] * 0.7152 + colour_value[2] * 0.0722 for i in range(3)])
+			new_surface.set_at((x, y), [colour_value.r * 0.2126 + colour_value.g * 0.7152 + colour_value.b * 0.0722 for i in range(3)])
 	return new_surface
 #GRAY_SCALE
 
@@ -47,6 +51,6 @@ def gray_shade(surface, shades=16):
 	for y in range(new_surface.get_height()):
 		for x in range(new_surface.get_width()):
 			colour_value = new_surface.get_at((x, y))
-			new_surface.set_at((x, y), [nearest((colour_value[0] + colour_value[1] + colour_value[2]) / 3, conversion) for i in range(3)])
+			new_surface.set_at((x, y), [nearest((colour_value.r + colour_value.g + colour_value.b) / 3, conversion) for i in range(3)])
 	return new_surface
 #GRAY_SHADE
