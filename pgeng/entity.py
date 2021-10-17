@@ -50,7 +50,7 @@ class Entity:
 	@property
 	def center(self):
 		'''Returns the center location of the Entity'''
-		return [self.location[0] + self.rect.w / 2, self.location[1] + self.rect.h / 2]
+		return [self.location[i] + self.rect.size[i] / 2 for i in range(2)]
 	#CENTER
 
 	#GET_ANGLE
@@ -88,14 +88,11 @@ class Entity:
 	#IN_RANGE
 
 	#SET_SCALE
-	def set_scale(self, scale):
+	def set_scale(self, scale=1):
 		'''This sets the scale for the image
 		It can be a list or tuple with the scale for the width and the scale for the height
 		If it is a number, than it will be set for the width and height'''
-		if type(scale) is list or type(scale) is tuple:
-			self.scale = list(scale)
-		else:
-			self.scale = [scale, scale]
+		self.scale = list(scale) if type(scale) is list or type(scale) is tuple else [scale, scale]
 	#SET_SCALE
 
 	#IMAGE
@@ -122,7 +119,7 @@ class Entity:
 		Returns: pygame.Surface'''
 		image = image.copy()
 		if self.scale != [1, 1]:
-			image = pygame.transform.scale(image, (int(image.get_width() * self.scale[0]), int(image.get_height() * self.scale[1])))
+			image = pygame.transform.scale(image, (round(image.get_width() * self.scale[0]), round(image.get_height() * self.scale[1])))
 		if any(self.flips):
 			image = pygame.transform.flip(image, self.flips[0], self.flips[1])
 		if self.rotation:
@@ -138,7 +135,8 @@ class Entity:
 		It needs a list that has the location change since last frame [x, y] not the actual x and y coordinates
 		It also needs a list with Tile objects in it
 
-		It returns a dictionary with booleans to show what part of the rect collide with the tiles:
+		It returns a dictionary with booleans to show what part of the rect is colliding with the Tile objects
+		It also shows the rect is colliding with a ramp
 		{'top': False, 'bottom': False, 'right': False, 'left': False, 'ramp': False}
 
 		Returns: Dictionary'''
@@ -151,7 +149,7 @@ class Entity:
 
 		#NORMAL_TILES
 		self.location[0] += momentum[0]
-		self.rect.x = self.location[0]
+		self.rect.x = round(self.location[0])
 		hit_list = collision_test(self.rect, normal_tiles)
 		for tile in hit_list:
 			if momentum[0] > 0:
@@ -163,7 +161,7 @@ class Entity:
 			self.location[0] = self.rect.x
 
 		self.location[1] += momentum[1]
-		self.rect.y = self.location[1]
+		self.rect.y = round(self.location[1])
 		hit_list = collision_test(self.rect, normal_tiles)
 		for tile in hit_list:
 			if momentum[1] > 0:
@@ -189,17 +187,17 @@ class Entity:
 				height_position = max(height_position, 0)
 
 				if ramp.ramp == 1 or ramp.ramp == 2:
-					y = ramp_hitbox.y + height_position
+					y_pos = ramp_hitbox.y + height_position
 				else:
-					y = ramp_hitbox.bottom - height_position
+					y_pos = ramp_hitbox.bottom - height_position
 
-				if (ramp.ramp == 3 or ramp.ramp == 4) and self.rect.bottom > y:
-					self.rect.bottom = y
+				if (ramp.ramp == 3 or ramp.ramp == 4) and self.rect.bottom > y_pos:
+					self.rect.bottom = y_pos
 					self.location[1] = self.rect.y
 					collision_types['bottom'] = True
 					collision_types['ramp'] = True
-				elif (ramp.ramp == 1 or ramp.ramp == 2) and self.rect.top < y:
-					self.rect.top = y
+				elif (ramp.ramp == 1 or ramp.ramp == 2) and self.rect.top < y_pos:
+					self.rect.top = y_pos
 					self.location[1] = self.rect.y
 					collision_types['top'] = True
 					collision_types['ramp'] = True
