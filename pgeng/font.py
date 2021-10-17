@@ -18,16 +18,16 @@ def create_font(colour):
 	The first value in the returned tuple is the small font and the second value is the large font
 
 	Returns: Tuple'''
-	if tuple(colour) == (0, 0, 0):
-		small_font_image = palette_swap(load_image(f'{path}/font/small.png'), {(255, 0, 0): colour, tuple(colour): (255, 255, 255)})
-		large_font_image = palette_swap(load_image(f'{path}/font/large.png'), {(255, 0, 0): colour, tuple(colour): (255, 255, 255)})
+	if tuple(colour[:3]) == (0, 0, 0):
+		small_font_image = palette_swap(load_image(path.joinpath('font/small.png')), {(255, 0, 0): colour[:3], tuple(colour[:3]): (255, 255, 255)})
+		large_font_image = palette_swap(load_image(path.joinpath('font/large.png')), {(255, 0, 0): colour[:3], tuple(colour[:3]): (255, 255, 255)})
 		return Font(small_font_image, background_colour=255), Font(large_font_image, background_colour=255)
-	if tuple(colour) == (127, 127, 127):
-		small_font_image = palette_swap(load_image(f'{path}/font/small.png'), {(255, 0, 0): colour, tuple(colour): (128, 128, 128)})
-		large_font_image = palette_swap(load_image(f'{path}/font/large.png'), {(255, 0, 0): colour, tuple(colour): (128, 128, 128)})
+	if tuple(colour[:3]) == (127, 127, 127):
+		small_font_image = palette_swap(load_image(path.joinpath('font/small.png')), {(255, 0, 0): colour[:3], tuple(colour[:3]): (128, 128, 128)})
+		large_font_image = palette_swap(load_image(path.joinpath('font/large.png')), {(255, 0, 0): colour[:3], tuple(colour[:3]): (128, 128, 128)})
 		return Font(small_font_image, 128), Font(large_font_image, 128)
-	small_font_image = palette_swap(load_image(f'{path}/font/small.png'), {(255, 0, 0): colour})
-	large_font_image = palette_swap(load_image(f'{path}/font/large.png'), {(255, 0, 0): colour})
+	small_font_image = palette_swap(load_image(path.joinpath('font/small.png')), {(255, 0, 0): colour[:3]})
+	large_font_image = palette_swap(load_image(path.joinpath('font/large.png')), {(255, 0, 0): colour[:3]})
 	return Font(small_font_image), Font(large_font_image)
 #CREATE_FONT
 
@@ -58,7 +58,7 @@ class Font:
 		character_order = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','.','-',',',':','+','\'','!','?','0','1','2','3','4','5','6','7','8','9','(',')','/','_','=','\\','[',']','*','"','<','>',';']
 		for x in range(self.font_image.get_width()):
 			colour = self.font_image.get_at((x, 0))
-			if colour[:-1] == (border_colour, border_colour, border_colour): #IF THE TEXT COLOR IS (127, 127, 127), CHANGE BORDER_COLOR
+			if colour[:3] == (border_colour, border_colour, border_colour): #IF THE TEXT COLOR IS (127, 127, 127), CHANGE BORDER_COLOR
 				character_image = clip_surface(self.font_image, (x - current_width, 0), (current_width, self.font_image.get_height())) #CLIP EVERY CHARACTER OUT OF THE FONT IMAGE
 				self.characters[character_order[character_count]] = character_image
 				character_count += 1
@@ -131,7 +131,7 @@ class TextButton:
 		if type(text) is not str:
 			raise TypeError(f'{text} is not a string')
 		self.text = text
-		self.test_font = Font(load_image(f'{path}/font/{font_size}.png'))
+		self.test_font = Font(load_image(path.joinpath(f'font/{font_size}.png')))
 		self.size = self.test_font.get_size(text)
 		self.location = list(location)
 	#__INIT__
@@ -161,8 +161,7 @@ class TextButton:
 		The first value returns True if the mouse has collided with the button, the second one is if the mouse clicked on it
 
 		Returns: Tuple'''
-		if check_location is None:
-			check_location = pygame.mouse.get_pos()
+		check_location = pygame.mouse.get_pos() if check_location is None else check_location
 		if self.rect.collidepoint(check_location):
 			if click:
 				return True, True
