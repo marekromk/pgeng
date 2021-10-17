@@ -8,9 +8,9 @@ from pygame._sdl2.video import Window
 #SCREEN
 class Screen:
 	'''A class for the display
-	It can also set the display fullscreen on all platforms
+	It can also toggle the display fullscreen on all platforms
 	The default flag is pygame.SCALED
-	Use GetDisplay to get the display from the class
+	Use get_display to get the display from the class
 
 	For more information about the parameters, go to https://www.pygame.org/docs/ref/display.html#pygame.display.set_mode
 
@@ -56,8 +56,8 @@ class Screen:
 
 		Returns: pygame.Surface'''
 		self.fullscreen = not self.fullscreen
-		if type(manual) is bool:
-			self.fullscreen = manual
+		if manual is not None:
+			self.fullscreen = bool(manual)
 		if self.fullscreen:
 			self.pygame_display = pygame.display.set_mode(self.size, pygame.SCALED | pygame.NOFRAME | pygame.FULLSCREEN, self.depth, self.display, self.vsync)
 		else:
@@ -67,15 +67,6 @@ class Screen:
 			self.window.position = [self.fullscreen_size[i] / 2 - self.window.size[i] / 2 for i in range(2)]
 		return self.pygame_display
 	#TOGGLE_FULLSCREEN
-
-	#SCREENSHOT
-	def screenshot(self):
-		'''Making a screenshot of the pygame display
-		This only works if this class is used as the main display/screen
-
-		Returns: pygame.Surface'''
-		return self.pygame_display.copy()
-	#SCREENSHOT
 
 	#GET_DISPLAY
 	def get_display(self):
