@@ -1,6 +1,6 @@
 '''Useful functions and classes for PyGame'''
 #VARIABLES
-__version__ = '1.3'
+__version__ = '1.3.1'
 failed_imports = []
 #VARIABLES
 
@@ -71,4 +71,5 @@ except ImportError as e:
 print('''\nDo help(pgeng.<Function>) to get the documentation of the function (or possibly class)
 Or do help(pgeng.<Package Content>) to get the documentation of the functions or classes in a file\n''')
 print(f'Failed to import: {", ".join([failed_import.split(".")[-1] + " from " + ".".join(failed_import.split(".")[:-1]) for failed_import in failed_imports])}') if failed_imports else None
+del failed_imports
 #MESSAGES
