@@ -67,16 +67,16 @@ class Animations:
 	#ADD_ANIMATION
 
 	#ADD_IMAGE
-	def add_image(self, image, name, duration, repeat=True):
+	def add_image(self, image, animation_name, duration, repeat=True):
 		'''Manually add an image to an animation
-		If this name does not yes exist, it will be created
+		If the animation_name does not yes exist, it will be created
 		The image will be added to animation_frames with a number, so it has to be added in the correct order'''
-		if name not in self.animations_data:
-			self.animations_data[name] = [[], repeat, 0]
-		animation_frame_id = f'{name}{len(self.animations_data[name][0]) + 1}'
+		if animation_name not in self.animations_data:
+			self.animations_data[animation_name] = [[], repeat, 0]
+		animation_frame_id = f'{animation_name}{len(self.animations_data[animation_name][0]) + 1}'
 		self.animation_frames[animation_frame_id] = image.copy()
-		self.animations_data[name][0].append((animation_frame_id, duration))
-		self.animations_data[name][2] += duration
+		self.animations_data[animation_name][0].append((animation_frame_id, duration))
+		self.animations_data[animation_name][2] += duration
 	#ADD_IMAGE
 
 	#CURRENT_IMAGE
