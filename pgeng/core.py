@@ -1,6 +1,6 @@
 '''Many core functions for pgeng'''
 #IMPORTS
-import pygame
+import pygame, gzip
 from pathlib import Path
 from collections import Counter
 from sys import exit as _sysexit #UNDERSCORE SO IT IS NOT VISIBLE AS A FUNCTION
@@ -14,7 +14,7 @@ def clip_surface(surface, location, size):
 	new_surface = surface.copy()
 	new_surface.set_clip(pygame.Rect(location, size))
 	clipped_surface = surface.subsurface(new_surface.get_clip())
-	return clipped_surface
+	return clipped_surface.copy()
 #CLIP_SURFACE
 
 #LOAD_IMAGE
@@ -51,24 +51,55 @@ def quit_game():
 #QUIT_GAME
 
 #READ_FILE
-def read_file(path):
+def read_file(path, mode='r'):
 	'''Reads a file and returns the that's data in it
+	mode is the mode in which the file should be openend
 
 	Returns: String'''
-	file = open(Path(path).resolve())
-	data = file.read()
-	file.close()
-	return data
+	with open(Path(path).resolve()) as file:
+		return file.read()
 #READ_FILE
 
 #WRITE_TO_FILE
-def write_to_file(path, data):
+def write_to_file(path, data, mode='w'):
 	'''Writes data to a file
-	The data has to be a string'''
-	file = open(Path(path).resolve(), 'w')
-	file.write(data)
-	file.close()
+	data should be a string
+	mode is the mode in which the file should be opened'''
+	with open(Path(path).resolve(), mode) as file:
+		file.write(data)
 #WRITE_TO_FILE
+
+#READ_COMPRESSED_FILE
+def read_compressed_file(path, mode='rb', encoding='utf-8'):
+	'''Reads a file with gzip compression
+	mode is the mode in which the file should be openend
+	encoding is the encoding the data that's read is decoded with, not the encoding of the file
+
+	Returns: String'''
+	with gzip.open(Path(path).resolve(), mode) as file:
+		return file.read().decode(encoding)
+#READ_COMPRESSED_FILE
+
+#WRITE_TO_COMPRESSSED_FILE
+def write_to_compressed_file(path, data, mode='wb', compresslevel=9, encoding='utf-8', gzip_extension=False):
+	'''Writes data to a file with gzip compression
+	data should be a string
+	mode is the mode in which the file should be openend
+	compresslevel is how much it should be compressed the minimum is 0, 9 is the maximum
+	encoding is the encoding that the data will be encoded with
+	gzip_extension is if it should add '.gz', it will be added behind the extension it already had
+	Example:
+		'file.txt' -> 'file.txt.gz\''''
+	if type(compresslevel) is not int:
+		raise TypeError('compresslevel has to be an integer')
+	if not -1 <= compresslevel <= 9:
+		raise ValueError('compresslevel must be between -1 and 9')
+	path = Path(path).resolve()
+	if gzip_extension:
+		path = path.with_suffix(f'{path.suffix}.gz')
+	with gzip.open(path, mode, compresslevel) as file:
+		file.write(data.encode(encoding))
+#WRITE_TO_COMPRESSSED_FILE
 
 #NEAREST
 def nearest(input, nearest, int_mode=True):
