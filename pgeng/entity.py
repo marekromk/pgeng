@@ -117,16 +117,16 @@ class Entity:
 		For more information about the rotation, go to https://www.pygame.org/docs/ref/transform.html#pygame.transform.rotate
 
 		Returns: pygame.Surface'''
-		image = image.copy()
+		transformed_image = image.copy()
 		if self.scale != [1, 1]:
-			image = pygame.transform.scale(image, (round(image.get_width() * self.scale[0]), round(image.get_height() * self.scale[1])))
+			transformed_image = pygame.transform.scale(transformed_image, (round(image.get_width() * self.scale[0]), round(image.get_height() * self.scale[1])))
 		if any(self.flips):
-			image = pygame.transform.flip(image, self.flips[0], self.flips[1])
+			transformed_image = pygame.transform.flip(transformed_image, self.flips[0], self.flips[1])
 		if self.rotation:
-			image = pygame.transform.rotate(image, self.rotation)
+			transformed_image = pygame.transform.rotate(transformed_image, self.rotation)
 		if self.alpha != 255:
-			image.set_alpha(self.alpha)
-		return image
+			transformed_image.set_alpha(self.alpha)
+		return transformed_image
 	#TRANSFORM_IMAGE
 
 	#MOVEMENT
@@ -187,17 +187,17 @@ class Entity:
 				height_position = max(height_position, 0)
 
 				if ramp.ramp == 1 or ramp.ramp == 2:
-					y_pos = ramp_hitbox.y + height_position
+					y_position = ramp_hitbox.y + height_position
 				else:
-					y_pos = ramp_hitbox.bottom - height_position
+					y_position = ramp_hitbox.bottom - height_position
 
-				if (ramp.ramp == 3 or ramp.ramp == 4) and self.rect.bottom > y_pos:
-					self.rect.bottom = y_pos
+				if (ramp.ramp == 3 or ramp.ramp == 4) and self.rect.bottom > y_position:
+					self.rect.bottom = y_position
 					self.location[1] = self.rect.y
 					collision_types['bottom'] = True
 					collision_types['ramp'] = True
-				elif (ramp.ramp == 1 or ramp.ramp == 2) and self.rect.top < y_pos:
-					self.rect.top = y_pos
+				elif (ramp.ramp == 1 or ramp.ramp == 2) and self.rect.top < y_position:
+					self.rect.top = y_position
 					self.location[1] = self.rect.y
 					collision_types['top'] = True
 					collision_types['ramp'] = True

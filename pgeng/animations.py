@@ -93,7 +93,7 @@ class Animations:
 		if reset_frame and animation_data[1]:
 			self.frame = 0
 		elif reset_frame and not animation_data[1]:
-			self.frame = sum([frame_duration[1] for frame_duration in animation_data[0]])
+			self.frame = animation_data[2]
 		for i, frame_data in enumerate(animation_data[0]):
 			if round(self.frame) <= sum([frame_duration[1] for frame_duration in animation_data[0]][:i + 1]):
 				return self.animation_frames[frame_data[0]]

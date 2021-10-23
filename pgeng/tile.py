@@ -1,6 +1,6 @@
 '''Functions and classes for tiles and physics objects'''
 #IMPORTS
-import pygame
+from pygame import Rect
 #IMPORTS
 
 #VARIABLES
@@ -39,6 +39,6 @@ class Tile:
 	@property
 	def rect(self):
 		'''Returns a pygame.Rect object of the Tile object'''
-		return pygame.Rect(self.location[0], self.location[1], self.size[0], self.size[1])
+		return Rect(self.location[0], self.location[1], self.size[0], self.size[1])
 	#RECT
 #TILE
