@@ -77,24 +77,24 @@ class Spark:
 
 			pygame.draw.polygon(surface, self.colour, [[point[i] - scroll[i] for i in range(2)] for point in points])
 			if lighting_colour:
-				lighting_position = [abs(min([point[i] for point in points]) - self.location[i] + (min([point[i] for point in points]) - max([point[i] for point in points])) * 0.5) for i in range(2)]
+				lighting_position = [abs(min(point[i] for point in points) - self.location[i] + (min(point[i] for point in points) - max(point[i] for point in points)) * 0.5) for i in range(2)]
 				surface.blit(self.lighting(points, lighting_position, lighting_colour, lighting_alpha), [self.location[i] - lighting_position[i] - scroll[i] for i in range(2)], special_flags=lighting_flag)
 	#RENDER
 
 	#LIGHTING
 	def lighting(self, points, position, colour, alpha):
 		'''A function used by render to draw a bigger polygon on top of the normal one'''
-		surface_size = [(max([point[i] for point in points]) - min(point[i] for point in points)) * 2 for i in range(2)] #DIFFERENCE BETWEEN LOWEST AND HIGHTEST POINTS
-		surface = pygame.Surface(surface_size)
-		surface.set_colorkey((0, 0, 0))
-		if alpha != 255:
-			surface.set_alpha(alpha)
-
 		#EVERYTHING * 2 FOR MAKING THE POLYGON LARGER
 		larger_points = [[position[0] + math.cos(self.angle) * self.speed * self.size * 2, position[1] + math.sin(self.angle) * self.speed * self.size * 2], #FRONT POINT
 		[position[0] + math.cos(self.angle + math.pi / 2) * self.speed * self.size * 0.8, position[1] + math.sin(self.angle + math.pi / 2) * self.speed * self.size * 0.8], #RIGHT POINT
 		[position[0] - math.cos(self.angle) * self.speed * self.size * 5, position[1] - math.sin(self.angle) * self.speed * self.size * 5], #BOTTOM POINT
 		[position[0] + math.cos(self.angle - math.pi / 2) * self.speed * self.size * 0.8, position[1] + math.sin(self.angle - math.pi / 2) * self.speed * self.size * 0.8]] #LEFT POINT
+
+		surface_size = [(math.ceil(max(point[i] for point in larger_points)) - int(min(point[i] for point in larger_points))) for i in range(2)] #DIFFERENCE BETWEEN LOWEST AND HIGHTEST POINTS
+		surface = pygame.Surface(surface_size)
+		surface.set_colorkey((0, 0, 0))
+		if alpha != 255:
+			surface.set_alpha(alpha)
 		pygame.draw.polygon(surface, colour, larger_points)
 		return surface
 		#LIGHTING
