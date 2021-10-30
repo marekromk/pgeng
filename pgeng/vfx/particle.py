@@ -1,4 +1,4 @@
-'''A Particle class'''
+'A Particle class'
 #IMPORTS
 import pygame
 from .core import circle_lighting
@@ -20,15 +20,15 @@ class Particle:
 
 	momentum
 
-	size
-	'''
+	size'''
 	#__INIT__
-	def __init__(self, location, momentum, size, colour):
-		'''Initialising a Particle object'''
+	def __init__(self, location, momentum, size, colour, width=0):
+		'Initialising a Particle object'
 		self.location = list(location)
 		self.momentum = list(momentum)
 		self.size = size
 		self.colour = colour
+		self.width = 0
 		self.alive = True
 	#__INIT__
 
@@ -53,7 +53,7 @@ class Particle:
 		scroll is position of the camera, it will render it at the location of the Particle minus the scroll
 		It can also render a lighting circle around the particle with a colour and special flag, set with lighting_flag'''
 		if self.alive:
-			pygame.draw.circle(surface, self.colour, [self.location[i] - scroll[i] for i in range(2)], self.size)
+			pygame.draw.circle(surface, self.colour, [self.location[i] - scroll[i] for i in range(2)], self.size, self.width)
 			if lighting_colour:
 				lighting_radius = self.size * 2
 				surface.blit(circle_lighting(lighting_radius, lighting_colour, lighting_alpha), [self.location[i] - lighting_radius - scroll[i] for i in range(2)], special_flags=lighting_flag)
