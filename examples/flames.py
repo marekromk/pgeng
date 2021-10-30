@@ -38,7 +38,7 @@ while True:
         if event.type == KEYDOWN:
             if event.key == K_ESCAPE:
                 pgeng.quit_game()
-            if event.key == K_f:
+            if event.key == K_F11:
                 screen.toggle_fullscreen()
             if event.key == K_w:
                 directions['up'] = True

@@ -1,8 +1,10 @@
 import pygame, pgeng
+from math import pi
 from random import uniform, randint
 from pygame.locals import *
 
 pygame.init()
+#pgeng.set_spark_attributes(side_length=0.4, back_length=2.5)# to change how it looks
 
 screen = pgeng.Screen((640, 480), SCALED | RESIZABLE, vsync=0)
 display = screen.get_display()
@@ -31,14 +33,16 @@ while True:
     else:
         turnnumber = 0
 
-    for i in range(7 - lighting * 4):
+    for i in range(6 - lighting * 4):
         sparks.append(pgeng.Spark([mouse_x, mouse_y], randint(0, 360), uniform(3.5, 5), uniform(2, 3.5), (randint(100, 255), 0, randint(0, 100)))) #BLUE COLORS: (randint(0, 255), 255, 255)
 
     for i, spark in sorted(enumerate(sparks), reverse=True):
         if gravity:
-            spark.gravity_movement(0.035, 0.15, 9.1, dt)
+            spark.gravity(0.04, 0.025, dt)
+            #spark.move(0.04, dt)
+            #spark.angle_towards(90, 0.025, dt) #these lines do the same as spark.gravity()
         else:
-            spark.normal_movement(0.035, dt, turnnumber)
+            spark.move(0.04, dt, turnnumber)
         if lighting:
             spark.render(display, lighting_colour=(255, 0, 0), lighting_flag=BLEND_RGBA_ADD)
         else:
@@ -65,7 +69,7 @@ while True:
             if event.key == K_RETURN:
                 shockwaves.append(pgeng.ShockWave([mouse_x, mouse_y], 20, 30, (255, 0, randint(86, 170))))
                 gravity = not gravity
-            if event.key == K_f:
+            if event.key == K_F11:
                 screen.toggle_fullscreen()
         if event.type == MOUSEBUTTONDOWN:
             shockwaves.append(pgeng.ShockWave([mouse_x, mouse_y], 20, 30, (255, 0, randint(0, 85))))
