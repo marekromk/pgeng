@@ -33,7 +33,7 @@ class Screen:
 	window'''
 	#__INIT__
 	def __init__(self, size, flags=pygame.SCALED, depth=0, display=0, vsync=1, fullscreen=False):
-		'''Initialising the class, it should only be done once'''
+		'Initialising the class, it should only be done once'
 		self.fullscreen_size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
 		self.size = size
 		self.flags = flags
@@ -63,10 +63,18 @@ class Screen:
 		else:
 			pygame.display.toggle_fullscreen()
 			self.pygame_display = pygame.display.set_mode(self.size, self.flags, self.depth, self.display, self.vsync)
-			self.window = Window.from_display_module()
-			self.window.position = [self.fullscreen_size[i] / 2 - self.window.size[i] / 2 for i in range(2)]
+			self.center()
 		return self.pygame_display
 	#TOGGLE_FULLSCREEN
+
+	#CENTER
+	def center(self):
+		'''Centers the window and returns the position
+
+		Returns: Tuple'''
+		self.window.position = [self.fullscreen_size[i] / 2 - self.window.size[i] / 2 for i in range(2)]
+		return self.window.position
+	#CENTER
 
 	#GET_DISPLAY
 	def get_display(self):
