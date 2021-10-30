@@ -1,4 +1,4 @@
-'''Functions used for changing colours of surfaces'''
+'Functions used for changing colours of surfaces'
 #IMPORTS
 import pygame
 from .core import nearest
@@ -10,6 +10,8 @@ def palette_swap(surface, colours):
 	colours = {old_colour: new_colour, old_colour: new_colour}
 
 	Returns: pygame.Surface'''
+	if type(colours) is not dict:
+		raise TypeError('colours must be a dictionary')
 	length_colour = max([len(colour) for colour in colours])
 	for colour in colours.copy():
 		if len(colour) != length_colour:
