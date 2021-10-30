@@ -1,4 +1,4 @@
-'''Visual effects classes and functions for pgeng'''
+'Visual effects classes and functions for pgeng'
 #IMPORTS
 from .. import failed_imports as _failed_imports #UNDERSCORE SO IT IS NOT VISIBLE AS A VARIABLE
 #IMPORTS
@@ -33,7 +33,7 @@ except ImportError as e:
 
 #SPARK
 try:
-    from .spark import Spark
+    from .spark import *
 except ImportError as e:
     _failed_imports.append(e.name)
 #SPARK
