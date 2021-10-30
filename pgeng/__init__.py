@@ -1,8 +1,15 @@
-'''Useful functions and classes for PyGame'''
+'Useful functions and classes for PyGame'
 #VARIABLES
-__version__ = '1.3.2'
+__version__ = '1.4'
 failed_imports = []
 #VARIABLES
+
+#COLLISION
+try:
+	from .collision import *
+except ImportError as e:
+	failed_imports.append(e.name)
+#COLLISION
 
 #VFX
 try:
