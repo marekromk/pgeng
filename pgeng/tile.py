@@ -1,4 +1,4 @@
-'''Functions and classes for tiles and physics objects'''
+'A class and variable for Tile objects'
 #IMPORTS
 from pygame import Rect
 #IMPORTS
@@ -24,12 +24,12 @@ class Tile:
 
 	location
 
-	size
+	ramp
 
-	ramp'''
+	size'''
 	#__INIT__
 	def __init__(self, location, size, ramp=0):
-		'''Initialising a Tile object'''
+		'Initialising a Tile object'
 		self.location = list(location)
 		self.size = list(size) if type(size) is list or type(size) is tuple else [size, size]
 		self.ramp = ramp if self.size[0] == self.size[1] else 0
@@ -38,7 +38,9 @@ class Tile:
 	#RECT
 	@property
 	def rect(self):
-		'''Returns a pygame.Rect object of the Tile object'''
+		'''Returns a pygame.Rect object of the Tile object
+
+		Returns: pygame.Rect'''
 		return Rect(self.location[0], self.location[1], self.size[0], self.size[1])
 	#RECT
 #TILE

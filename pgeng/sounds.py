@@ -1,4 +1,4 @@
-'''A simple class for loading and playing sounds and music'''
+'A simple class for loading and playing sounds and music'
 #IMPORTS
 import pygame
 from pathlib import Path
@@ -22,7 +22,7 @@ class Sounds:
 	volume'''
 	#__INIT__
 	def __init__(self, channels=64):
-		'''Initialising the class, it should only be done once'''
+		'Initialising the class, it should only be done once'
 		if pygame.mixer.get_init():
 			pygame.mixer.set_num_channels(channels)
 		self.sounds = {}
@@ -71,7 +71,7 @@ class Sounds:
 
 	#PLAY_SOUND
 	def play_sound(self, sound):
-		'''Plays the specified sound in the sounds dictionary if play_sound_variable is True'''
+		'Plays the specified sound in the sounds dictionary if play_sound_variable is True'
 		if self.play_sound_variable:
 			self.sounds[Sound].play()
 	#PLAY_SOUND

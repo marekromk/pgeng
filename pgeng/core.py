@@ -1,4 +1,4 @@
-'''Many core functions for pgeng'''
+'Many core functions for pgeng'
 #IMPORTS
 import pygame, gzip
 from pathlib import Path
