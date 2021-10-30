@@ -1,3 +1,4 @@
+'A Flame class'
 #IMPORTS
 import pygame
 from random import uniform, randint
@@ -45,7 +46,7 @@ class FlameParticle(Particle):
 
     #__INIT__
     def __init__(self, location, size, burn_rate, colour):
-        '''Initialising a FlameParticle'''
+        'Initialising a FlameParticle'
         super().__init__(location, [0, 0], size, colour)
         self.burn_rate = burn_rate
         self.alpha_layers = FlameParticle.alpha_layers
@@ -100,10 +101,10 @@ class Flame:
     particles'''
     #__INIT__
     def __init__(self, location, max_particle_size, burn_rate, colour, intensity=2):
-        '''Initialising a flame'''
+        'Initialising a flame'
         if max_particle_size <= 1:
             raise ValueError(f'max_particle_size can not be less than 1')
-        self.location = location
+        self.location = list(location)
         self.max_particle_size = max_particle_size
         self.burn_rate = burn_rate
         self.intensity = intensity

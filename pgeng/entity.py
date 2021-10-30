@@ -1,4 +1,4 @@
-'''An Entity class'''
+'An Entity class'
 #IMPORTS
 import pygame, math
 from .animations import Animations
@@ -6,7 +6,7 @@ from .animations import Animations
 
 #COLLISION_TEST
 def collision_test(rect, collision_list):
-	'''A function used by the Entity class to check collisions with tiles'''
+	'A function used by the Entity class to check collisions with tiles'
 	return [list_rect for list_rect in collision_list if rect.colliderect(list_rect)]
 #COLLISION_TEST
 
@@ -34,7 +34,7 @@ class Entity:
 	scale'''
 	#__INIT__
 	def __init__(self, location, size):
-		'''Initialising an Entity object'''
+		'Initialising an Entity object'
 		self.rect = pygame.Rect(location, size)
 		self.location = list(location)
 
@@ -49,7 +49,9 @@ class Entity:
 	#CENTER
 	@property
 	def center(self):
-		'''Returns the center location of the Entity'''
+		'''Returns the center location of the Entity
+
+		Returns: list'''
 		return [self.location[i] + self.rect.size[i] / 2 for i in range(2)]
 	#CENTER
 
@@ -132,7 +134,7 @@ class Entity:
 	#MOVEMENT
 	def movement(self, momentum, tiles):
 		'''Changing the position of the Entity object
-		It needs a list that has the location change since last frame [x, y] not the actual x and y coordinates
+		momentum must be a list/tuple with how much it should move horizontally and vertically
 		It also needs a list with Tile objects in it
 
 		It returns a dictionary with booleans to show what part of the rect is colliding with the Tile objects
@@ -140,14 +142,11 @@ class Entity:
 		{'top': False, 'bottom': False, 'right': False, 'left': False, 'ramp': False}
 
 		Returns: Dictionary'''
-		#VARIABLES
 		self.location = list(self.location)
 		collision_types = {'top': False, 'bottom': False, 'right': False, 'left': False, 'ramp': False}
 		normal_tiles = [tile.rect for tile in tiles if not tile.ramp]
 		ramp_tiles = [tile for tile in tiles if tile.ramp]
-		#VARIABLES
 
-		#NORMAL_TILES
 		self.location[0] += momentum[0]
 		self.rect.x = round(self.location[0])
 		hit_list = collision_test(self.rect, normal_tiles)
@@ -171,9 +170,7 @@ class Entity:
 				self.rect.top = tile.bottom
 				collision_types['top'] = True
 			self.location[1] = self.rect.y
-		#NORMAL_TILES
 
-		#RAMPS
 		for ramp in ramp_tiles:
 			ramp_hitbox = ramp.rect
 			if self.rect.colliderect(ramp_hitbox):
@@ -201,7 +198,6 @@ class Entity:
 					self.location[1] = self.rect.y
 					collision_types['top'] = True
 					collision_types['ramp'] = True
-		#RAMPS
 
 		return collision_types
 	#MOVEMENT

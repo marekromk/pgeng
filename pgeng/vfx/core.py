@@ -1,3 +1,4 @@
+'Core functions for pgeng.vfx'
 #IMPORTS
 import pygame
 #IMPORTS

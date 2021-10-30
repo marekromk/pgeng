@@ -1,4 +1,4 @@
-'''A class for animations'''
+'A class for animations'
 #IMPORTS
 import pygame
 from pathlib import Path
@@ -22,7 +22,7 @@ class Animations:
 	frame'''
 	#__INIT__
 	def __init__(self, action=None):
-		'''Initialising an Animations class'''
+		'Initialising an Animations class'
 		self.animations_data = {}
 		self.animation_frames = {}
 		self.action = action
@@ -56,7 +56,7 @@ class Animations:
 		animation_name = path.name if animation_name is None else animation_name
 		self.animations_data[animation_name] = [[], repeat, 0]
 		if not file_type:
-			file_type = most_used([file.suffix for file in path.glob('*.*')])[0]
+			file_type = most_used([file.suffix for file in path.iterdir() if file.is_file()])[0]
 		for i, frame_duration in enumerate(frame_durations):
 			if not path.joinpath(f'{path.name}{i + 1}{file_type}').is_file():
 				raise pygame.error(f'Too many non image files in \'{path}\' or the image file is not named \'{path.name}{i + 1}{file_type}\'')
@@ -101,7 +101,7 @@ class Animations:
 
 	#SET_ACTION
 	def set_action(self, action):
-		'''Set the current action, the frame will also be reset to 0'''
+		'Set the current action, the frame will also be reset to 0'
 		if action not in self.animations_data:
 			raise KeyError(f'Animation \'{action}\' is not defined')
 		if self.action != action:
