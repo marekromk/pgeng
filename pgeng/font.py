@@ -1,4 +1,4 @@
-'''A classes and functions for creating fonts and text buttons'''
+'Classes and functions for creating fonts and text buttons'
 #IMPORTS
 import pygame
 from pathlib import Path
@@ -50,7 +50,7 @@ class Font:
 	space_width'''
 	#__INIT__
 	def __init__(self, font_image, border_colour=127, background_colour=0):
-		'''Initialising a font object'''
+		'Initialising a font object'
 		self.font_image = font_image
 		self.font_image.set_colorkey((0, 0, 0) if not background_colour else [background_colour for i in range(3)])
 		self.characters = {}
@@ -75,7 +75,7 @@ class Font:
 
 		Returns: Tuple'''
 		if type(text) is not str:
-			raise TypeError(f'{text} is not a string')
+			raise TypeError('text has to be a string')
 		width, height = 0, 0
 		for character in text:
 			if character not in ('\n', ' ') and character in self.characters:
@@ -90,9 +90,9 @@ class Font:
 
 	#RENDER
 	def render(self, surface, text, location):
-		'''Render a string on a surface at a location'''
+		'Render a string on a surface at a location'
 		if type(text) is not str:
-			raise TypeError(f'{text} is not a string')
+			raise TypeError('text has to be a string')
 		x_offset, y_offset = 0, 0
 		for character in text:
 			if character not in ('\n', ' ') and character in self.characters:
@@ -126,10 +126,11 @@ class TextButton:
 	text'''
 	#__INIT__
 	def __init__(self, text, location, font_size):
+		'Initialising a TextButton object'
 		if font_size != 'small' and font_size != 'large':
-			raise ValueError(f'{font_size} is not \'small\' or \'large\'')
+			raise ValueError('font_size is not \'small\' or \'large\'')
 		if type(text) is not str:
-			raise TypeError(f'{text} is not a string')
+			raise TypeError('text is not a string')
 		self.text = text
 		self.test_font = Font(load_image(path.joinpath(f'font/{font_size}.png')))
 		self.size = self.test_font.get_size(text)
@@ -139,7 +140,9 @@ class TextButton:
 	#RECT
 	@property
 	def rect(self):
-		'''Returns the rect object with the correct location'''
+		'''Returns the rect of the TextButton
+
+		Returns: pygame.Rect'''
 		self.location = list(self.location)
 		return pygame.Rect(self.location, (self.size[0] - 1, self.size[1] + self.test_font.character_height)) #- 1 FOR THE EXTRA SPACING
 	#RECT
@@ -149,7 +152,7 @@ class TextButton:
 		'''Sets a new string as the text
 		All the variables will be updated, so the functions can be used the same'''
 		if type(text) is not str:
-			raise TypeError(f'{text} is not a string')
+			raise TypeError('text is not a string')
 		self.text = text
 		self.size = self.test_font.get_size(text)
 	#SET_TEXT
@@ -173,7 +176,7 @@ class TextButton:
 	def render(self, surface, font):
 		'''Renders the text from the button'''
 		if not isinstance(font, Font):
-			raise TypeError(f'{font} is not a Font object')
+			raise TypeError('font is not a Font object')
 		font.render(surface, self.text, self.location)
 	#RENDER
 #TEXTBUTTON
