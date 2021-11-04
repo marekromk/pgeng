@@ -38,7 +38,9 @@ class FlameParticle(Particle):
 
     burn_rate
 
-    surface'''
+    surface
+
+    (every Particle attribute)'''
     #VARIABLES
     alpha_layers = 2
     alpha_glow_difference_constant = 2
@@ -47,7 +49,7 @@ class FlameParticle(Particle):
     #__INIT__
     def __init__(self, location, size, burn_rate, colour):
         'Initialising a FlameParticle'
-        super().__init__(location, [0, 0], size, colour)
+        super().__init__(location, pygame.Vector2(), size, colour)
         self.burn_rate = burn_rate
         self.alpha_layers = FlameParticle.alpha_layers
         self.alpha_glow = FlameParticle.alpha_glow_difference_constant
@@ -64,7 +66,7 @@ class FlameParticle(Particle):
     #MOVE
 
     #RENDER
-    def render(self, surface, scroll=(0, 0)):
+    def render(self, surface, scroll=pygame.Vector2()):
         '''Render the FlameParticle with alpha layers on top of it
         scroll is position of the camera, it will render it at the location of the FlameParticle minus scroll'''
         if self.alive:
@@ -73,8 +75,8 @@ class FlameParticle(Particle):
             for i in range(self.alpha_layers, -1, -1):
                 alpha = max(0, 255 - i * (255 // self.alpha_layers - 5))
                 radius = round(self.size) * i ** 2 * self.alpha_glow
-                pygame.draw.circle(self.surface, (self.colour[0], self.colour[1], self.colour[2], alpha), (self.surface.get_width() / 2, self.surface.get_height() / 2), radius)
-            surface.blit(self.surface, [self.location[i] - self.surface.get_size()[i] / 2 - scroll[i] for i in range(2)])
+                pygame.draw.circle(self.surface, (self.colour[0], self.colour[1], self.colour[2], alpha), (self.surface.get_width() * 0.5, self.surface.get_height() * 0.5), radius)
+            surface.blit(self.surface, [self.location[i] - self.surface.get_size()[i] * 0.5 - scroll[i] for i in range(2)])
     #RENDER
 #FLAMEPARTICLE
 
@@ -83,7 +85,7 @@ class Flame:
     '''A flame effect
     It is basically a lot FlameParticles
     They all get created around one location
-    They are not all the same size, it is random, with the maximum size being max_particle_size and the minimum being max_particle_size / 5
+    They are not all the same size, it is random, with the maximum size being max_particle_size and the minimum being max_particle_size * 0.2
     The intensity means how many particles the flame has at once
 
     Attributes:
@@ -104,15 +106,31 @@ class Flame:
         'Initialising a flame'
         if max_particle_size <= 1:
             raise ValueError(f'max_particle_size can not be less than 1')
-        self.location = list(location)
+        self.location = pygame.Vector2(location)
         self.max_particle_size = max_particle_size
         self.burn_rate = burn_rate
         self.intensity = intensity
         self.colour = colour
         self.particles = []
         for i in range(round(intensity * 25)):
-            self.particles.append(FlameParticle([self.location[0] + randint(round(-self.max_particle_size * 2), round(self.max_particle_size * 2)), self.location[1] + randint(round(-self.max_particle_size * 2), round(self.max_particle_size * 2))], max(1, uniform(self.max_particle_size / 5, self.max_particle_size)), self.burn_rate, self.colour))
+            self.particles.append(FlameParticle([self.location.x + randint(round(-self.max_particle_size * 2), round(self.max_particle_size * 2)), self.location.y + randint(round(-self.max_particle_size * 2), round(self.max_particle_size * 2))], max(1, uniform(self.max_particle_size * 0.2, self.max_particle_size)), self.burn_rate, self.colour))
     #__INIT__
+
+    #__REPR__
+    def __repr__(self):
+        '''Returns a string representation of the object
+
+		Returns: str'''
+        return f'pgeng.Flame({tuple(self.location)})'
+    #__REPR__
+
+    #__LEN__
+    def __len__(self):
+        '''Returns the length of the particles variable
+
+        Returns: int'''
+        return len(self.particles)
+    #__LEN__
 
     #SET_INTENSITY
     def set_intensity(self, intensity=2):
@@ -121,11 +139,11 @@ class Flame:
         self.intensity = intensity
         self.particles = []
         for i in range(round(intensity * 25)):
-            self.particles.append(FlameParticle([self.location[0] + randint(round(-self.max_particle_size * 2), round(self.max_particle_size * 2)), self.location[1] + randint(round(-self.max_particle_size * 2), round(self.max_particle_size * 2))], max(1, uniform(self.max_particle_size / 5, self.max_particle_size)), self.burn_rate, self.colour))
+            self.particles.append(FlameParticle([self.location[0] + randint(round(-self.max_particle_size * 2), round(self.max_particle_size * 2)), self.location[1] + randint(round(-self.max_particle_size * 2), round(self.max_particle_size * 2))], max(1, uniform(self.max_particle_size * 0.2, self.max_particle_size)), self.burn_rate, self.colour))
     #SET_INTENSITY
 
     #RENDER
-    def render(self, surface, y_momentum, scroll=(0, 0), delta_time=1):
+    def render(self, surface, y_momentum, scroll=pygame.Vector2(), delta_time=1):
         '''Update and render the flame and every FlameParticle that it has
         y_momentum is how much each FlameParticle should move vertically
         scroll is position of the camera, it will render it at the location of the Flame minus scroll'''
@@ -134,6 +152,6 @@ class Flame:
             particle.render(surface, scroll)
             if not particle.alive:
                 self.particles.pop(i)
-                self.particles.append(FlameParticle([self.location[0] + randint(round(-self.max_particle_size * 2), round(self.max_particle_size * 2)), self.location[1] + randint(round(-self.max_particle_size), round(self.max_particle_size))], max(1, uniform(self.max_particle_size / 5, self.max_particle_size)), self.burn_rate, self.colour))
+                self.particles.append(FlameParticle([self.location[0] + randint(round(-self.max_particle_size * 2), round(self.max_particle_size * 2)), self.location[1] + randint(round(-self.max_particle_size), round(self.max_particle_size))], max(1, uniform(self.max_particle_size * 0.2, self.max_particle_size)), self.burn_rate, self.colour))
     #RENDER
 #FLAME

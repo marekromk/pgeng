@@ -17,7 +17,7 @@ def create_font(colour):
 	colour will be the colour of the text
 	The first value in the returned tuple is the small font and the second value is the large font
 
-	Returns: Tuple'''
+	Returns: tuple'''
 	if tuple(colour[:3]) == (0, 0, 0):
 		small_font_image = palette_swap(load_image(path.joinpath('font/small.png')), {(255, 0, 0): colour[:3], tuple(colour[:3]): (255, 255, 255)})
 		large_font_image = palette_swap(load_image(path.joinpath('font/large.png')), {(255, 0, 0): colour[:3], tuple(colour[:3]): (255, 255, 255)})
@@ -68,12 +68,20 @@ class Font:
 		self.space_width, self.character_height = self.characters['A'].get_size()
 	#__INIT__
 
+	#__REPR__
+	def __repr__(self):
+		'''Returns a string representation of the object
+
+		Returns: str'''
+		return 'pgeng.Font'
+	#__REPR__
+
 	#GET_SIZE
 	def get_size(self, text):
 		'''Get the size that that a rendered string would use
 		It will return the width and height
 
-		Returns: Tuple'''
+		Returns: tuple'''
 		if type(text) is not str:
 			raise TypeError('text has to be a string')
 		width, height = 0, 0
@@ -89,14 +97,14 @@ class Font:
 	#GET_SIZE
 
 	#RENDER
-	def render(self, surface, text, location):
+	def render(self, surface, text, location, scroll=pygame.Vector2()):
 		'Render a string on a surface at a location'
 		if type(text) is not str:
 			raise TypeError('text has to be a string')
 		x_offset, y_offset = 0, 0
 		for character in text:
 			if character not in ('\n', ' ') and character in self.characters:
-				surface.blit(self.characters[character], (location[0] + x_offset, location[1] + y_offset))
+				surface.blit(self.characters[character], (location[0] + x_offset - scroll[0], location[1] + y_offset - scroll[1]))
 				x_offset += self.characters[character].get_width() + 1 #+ 1 FOR SPACING
 			elif character == ' ' or character not in ['\n']:
 				x_offset += self.space_width + 1 #+ 1 FOR SPACING
@@ -132,18 +140,26 @@ class TextButton:
 		if type(text) is not str:
 			raise TypeError('text is not a string')
 		self.text = text
+		self.location = pygame.Vector2(location)
 		self.test_font = Font(load_image(path.joinpath(f'font/{font_size}.png')))
 		self.size = self.test_font.get_size(text)
-		self.location = list(location)
 	#__INIT__
+
+	#__REPR__
+	def __repr__(self):
+		'''Returns a string representation of the object
+
+		Returns: str'''
+		return f'pgeng.TextButton({tuple(self.location)})'
+	#__REPR__
 
 	#RECT
 	@property
 	def rect(self):
-		'''Returns the rect of the TextButton
+		'''Returns the pygame.Rect object of the TextButton
 
 		Returns: pygame.Rect'''
-		self.location = list(self.location)
+		self.location = pygame.Vector2(self.location)
 		return pygame.Rect(self.location, (self.size[0] - 1, self.size[1] + self.test_font.character_height)) #- 1 FOR THE EXTRA SPACING
 	#RECT
 
@@ -163,7 +179,7 @@ class TextButton:
 		A custom location can be set with location if pygame.mouse.get_pos() is not wished to be used
 		The first value returns True if the mouse has collided with the button, the second one is if the mouse clicked on it
 
-		Returns: Tuple'''
+		Returns: tuple'''
 		check_location = pygame.mouse.get_pos() if check_location is None else check_location
 		if self.rect.collidepoint(check_location):
 			if click:
@@ -173,10 +189,10 @@ class TextButton:
 	#COLLIDE
 
 	#RENDER
-	def render(self, surface, font):
-		'''Renders the text from the button'''
+	def render(self, surface, font, scroll=pygame.Vector2()):
+		'Renders the text from the button'
 		if not isinstance(font, Font):
 			raise TypeError('font is not a Font object')
-		font.render(surface, self.text, self.location)
+		font.render(surface, self.text, self.location, scroll)
 	#RENDER
 #TEXTBUTTON
