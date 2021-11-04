@@ -1,12 +1,14 @@
 'An Entity class'
 #IMPORTS
-import pygame, math
+import pygame
 from .animations import Animations
 #IMPORTS
 
 #COLLISION_TEST
 def collision_test(rect, collision_list):
-	'A function used by the Entity class to check collisions with tiles'
+	'''A function used by the Entity class to check collisions with tiles
+
+	Returns: list'''
 	return [list_rect for list_rect in collision_list if rect.colliderect(list_rect)]
 #COLLISION_TEST
 
@@ -14,7 +16,8 @@ def collision_test(rect, collision_list):
 class Entity:
 	'''An entity with usefull functions
 	It needs a position and a size for the pygame.Rect object
-	Use Entity.location[0] and Entity.location[1] instead of Entity.rect.x and Entity.rect.y
+	Use Entity.location.x and Entity.location.y instead of Entity.rect.x and Entity.rect.y
+	Entity.location is a pygame.math.Vector2 object
 	It has an animation class
 
 	Attributes:
@@ -36,7 +39,7 @@ class Entity:
 	def __init__(self, location, size):
 		'Initialising an Entity object'
 		self.rect = pygame.Rect(location, size)
-		self.location = list(location)
+		self.location = pygame.Vector2(location)
 
 		self.flips = [False, False]
 		self.rotation = 0
@@ -46,46 +49,54 @@ class Entity:
 		self.animations = Animations(None)
 	#__INIT__
 
+	#__REPR__
+	def __repr__(self):
+		'''Returns a string representation of the object
+
+		Returns: str'''
+		return f'pgeng.Entity{tuple(self.location), self.rect.size}'
+	#__REPR__
+
 	#CENTER
 	@property
 	def center(self):
 		'''Returns the center location of the Entity
 
-		Returns: list'''
-		return [self.location[i] + self.rect.size[i] / 2 for i in range(2)]
+		Returns: pygame.math.Vector2'''
+		return pygame.Vector2([self.location[i] + self.rect.size[i] * 0.5 for i in range(2)])
 	#CENTER
 
 	#GET_ANGLE
 	def get_angle(self, target):
 		'''Get the angle to a target
-		target can be an Entity object or a list or tuple with an x and y coordinate
+		target can be an Entity object, a list/tuple or pygame.math.Vector2
 		It will go from the center of the Entity
-		It will returns the angle in radians, not degrees
+		It will returns the angle in degrees
 
-		Returns: Float'''
+		Returns: float'''
 		if isinstance(target, Entity):
-			return math.atan2(target.center[1] - self.center[1], target.center[0] - self.center[0])
-		return math.atan2(target[1] - self.center[1], target[0] - self.center[0])
+			return pygame.Vector2().angle_to(target.center - self.center)
+		return pygame.Vector2().angle_to(target - self.center)
 	#GET_ANGLE
 
 	#GET_DISTANCE
 	def get_distance(self, target):
 		'''Get the distance to a target
-		target can be an Entity object or a list or tuple with an x and y coordinate
+		target can be an Entity object, a list/tuple or pygame.math.Vector2
 
-		Returns: Float'''
+		Returns: float'''
 		if isinstance(target, Entity):
-			return math.sqrt((target.location[0] - self.location[0]) ** 2 + (target.location[1] - self.location[1]) ** 2)
-		return math.sqrt((target[0] - self.location[0]) ** 2 + (target[1] - self.location[1]) ** 2)
+			return self.location.distance_to(target.location)
+		return self.location.distance_to(target)
 	#GET_DISTANCE
 
 	#IN_RANGE
 	def in_range(self, target, range):
 		'''This will check if a target is in a specified range
-		target can be an Entity object or a list or tuple with an x and y coordinate
+		target can be an Entity object, a list/tuple or pygame.math.Vector2
 		This uses get_distance
 
-		Returns: Boolean'''
+		Returns: bool'''
 		return self.get_distance(target) <= range
 	#IN_RANGE
 
@@ -142,13 +153,13 @@ class Entity:
 		{'top': False, 'bottom': False, 'right': False, 'left': False, 'ramp': False}
 
 		Returns: Dictionary'''
-		self.location = list(self.location)
+		self.location = pygame.Vector2(self.location)
 		collision_types = {'top': False, 'bottom': False, 'right': False, 'left': False, 'ramp': False}
 		normal_tiles = [tile.rect for tile in tiles if not tile.ramp]
 		ramp_tiles = [tile for tile in tiles if tile.ramp]
 
-		self.location[0] += momentum[0]
-		self.rect.x = round(self.location[0])
+		self.location.x += momentum[0]
+		self.rect.x = round(self.location.x)
 		hit_list = collision_test(self.rect, normal_tiles)
 		for tile in hit_list:
 			if momentum[0] > 0:
@@ -159,8 +170,8 @@ class Entity:
 				collision_types['left'] = True
 			self.location[0] = self.rect.x
 
-		self.location[1] += momentum[1]
-		self.rect.y = round(self.location[1])
+		self.location.y += momentum[1]
+		self.rect.y = round(self.location.y)
 		hit_list = collision_test(self.rect, normal_tiles)
 		for tile in hit_list:
 			if momentum[1] > 0:
