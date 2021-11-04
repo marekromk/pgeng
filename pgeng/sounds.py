@@ -30,6 +30,14 @@ class Sounds:
 		self.volume = 1
 	#__INIT__
 
+	#__REPR__
+	def __repr__(self):
+		'''Returns a string representation of the object
+
+		Returns: str'''
+		return f'pgeng.Sounds{pygame.mixer.get_num_channels(), self.volume}'
+	#__REPR__
+
 	#ADD_SOUND
 	def add_sound(self, path, name, volume=-1):
 		'''Adding sounds to the Sounds dictionary

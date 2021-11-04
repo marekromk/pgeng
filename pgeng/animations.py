@@ -29,6 +29,14 @@ class Animations:
 		self.frame = 0
 	#__INIT__
 
+	#__REPR__
+	def __repr__(self):
+		'''Returns a string representation of the object
+
+		Returns: str'''
+		return 'pgeng.Animations'
+	#__REPR__
+
 	#ADD_ANIMATION
 	def load_animation(self, path, frame_durations, repeat=True, colourkey=None, file_type=None, animation_name=None, alpha=255, convert_alpha=False):
 		'''A function for loading still images for a animation

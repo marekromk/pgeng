@@ -48,6 +48,14 @@ class Screen:
 		self.window = Window.from_display_module()
 	#__INIT__
 
+	#__REPR__
+	def __repr__(self):
+		'''Returns a string representation of the object
+
+		Returns: str'''
+		return f'pgeng.Screen({tuple(self.size)}, fullscreen={self.fullscreen})'
+	#__REPR__
+
 	#TOGGLE_FULLSCREEN
 	def toggle_fullscreen(self, manual=None):
 		'''Toggle the display to fullscreen or from fullscreen
@@ -71,8 +79,8 @@ class Screen:
 	def center(self):
 		'''Centers the window and returns the position
 
-		Returns: Tuple'''
-		self.window.position = [self.fullscreen_size[i] / 2 - self.window.size[i] / 2 for i in range(2)]
+		Returns: tuple'''
+		self.window.position = [(self.fullscreen_size[i] - self.window.size[i]) * 0.5 for i in range(2)]
 		return self.window.position
 	#CENTER
 
