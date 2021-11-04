@@ -1,6 +1,7 @@
 'A Spark class'
 #IMPORTS
 import pygame, math
+from ..collision import Polygon
 #IMPORTS
 
 #SET_SPARK_ATTRIBUTES
@@ -21,7 +22,7 @@ def set_spark_attributes(front_length=1, side_length=0.3, back_length=3.5):
 #SPARK
 class Spark:
 	'''A spark to draw and move
-	the given angle will be changed to radians, so give it in degrees
+	The angle should be in degrees
 	A spark is a polygon, so checking collision with it is not possible
 
 	Attributes:
@@ -36,6 +37,8 @@ class Spark:
 
 	location
 
+	points
+
 	size
 
 	speed'''
@@ -48,22 +51,41 @@ class Spark:
 	#__INIT__
 	def __init__(self, location, angle, speed, size, colour):
 		'Initialising a Spark object'
-		self.location = list(location)
-		self.angle = math.radians(angle)
+		self.location = pygame.Vector2(location)
+		self.angle = angle
 		self.speed = speed
 		self.size = size
 		self.colour = colour
-		self.lengths = [Spark.front_length, Spark.side_length, Spark.back_length]
+		self.lengths = (Spark.front_length, Spark.side_length, Spark.back_length)
 		self.alive = True
+		self.points = None
 	#__INIT__
+
+	#__REPR__
+	def __repr__(self):
+		'''Returns a string representation of the object
+
+		Returns: str'''
+		return f'pgeng.Spark({tuple(self.location)})'
+	#__REPR__
+
+	#POLYGON
+	@property
+	def polygon(self):
+		'''Returns a Polygon object of the Spark if the points are set and it is alive
+		The points are set when it has been rendered once
+
+		Returns: Polygon (or NoneType)'''
+		if self.alive and self.points is not None:
+			return Polygon(self.points, self.colour)
+	#POLYGON
 
 	#ANGLE_TOWARDS
 	def angle_towards(self, angle, change_rate, delta_time=1):
 		'''A function to change the angle slightly towards another angle
 		angle should be given in degrees
 		change_rate is how much the angle should change every frame'''
-		angle = math.radians(angle)
-		direction = (angle - self.angle + math.pi) % (math.pi * 2) - math.pi
+		direction = (angle - self.angle + 180) % 360 - 180
 		rotation = abs(direction) / direction if direction else 1
 		if abs(direction) < change_rate * delta_time:
 			self.angle = angle
@@ -76,9 +98,10 @@ class Spark:
 		'''A function to move the Spark
 		It will decrease the speed and if it is lower or equal to 0, it is no longer alive
 		angle_change will change the angle by that amount every time this function runs'''
-		self.location = list(self.location)
-		self.location[0] += math.cos(self.angle) * self.speed * delta_time
-		self.location[1] += math.sin(self.angle) * self.speed * delta_time
+		angle = math.radians(self.angle)
+		self.location = pygame.Vector2(self.location)
+		self.location.x += math.cos(angle) * self.speed * delta_time
+		self.location.y += math.sin(angle) * self.speed * delta_time
 		self.speed -= speed_change * delta_time
 		self.angle += angle_change * delta_time
 		if self.speed <= 0:
@@ -91,36 +114,39 @@ class Spark:
 		It will use angle_towards, so that's what change_rate is for
 		It will decrease the speed and if it is lower or equal to 0, it is no longer alive'''
 		self.move(speed_change, delta_time)
-		self.angle_towards(90, change_rate, delta_time)
+		if self.alive:
+			self.angle_towards(90, change_rate, delta_time)
 	#GRAVITY
 
 	#RENDER
-	def render(self, surface, scroll=(0, 0), lighting_colour=None, lighting_alpha=255, lighting_flag=0):
+	def render(self, surface, scroll=pygame.Vector2(), lighting_colour=None, lighting_alpha=255, lighting_flag=0):
 		'''A function to render the Spark if it is alive
 		It will calculate every point for the polygon (there are 4 points) that looks like a rhombus, but the back one is longer
 		scroll is position of the camera, it will render it at the location of the Spark minus scroll
 		It can also render a bigger spark around the particle with a colour and special flag, set with lighting_flag'''
 		if self.alive:
-			points = [[self.location[0] + math.cos(self.angle) * self.speed * self.size * self.lengths[0], self.location[1] + math.sin(self.angle) * self.speed * self.size * self.lengths[0]], #FRONT POINT
-			[self.location[0] + math.cos(self.angle + math.pi / 2) * self.speed * self.size * self.lengths[1], self.location[1] + math.sin(self.angle + math.pi / 2) * self.speed * self.size * self.lengths[1]], #RIGHT POINT
-			[self.location[0] - math.cos(self.angle) * self.speed * self.size * self.lengths[2], self.location[1] - math.sin(self.angle) * self.speed * self.size * self.lengths[2]], #BOTTOM POINT
-			[self.location[0] + math.cos(self.angle - math.pi / 2) * self.speed * self.size * self.lengths[1], self.location[1] + math.sin(self.angle - math.pi / 2) * self.speed * self.size * self.lengths[1]]] #LEFT POINT
+			angle = math.radians(self.angle)
+			self.points = [[self.location[0] + math.cos(angle) * self.speed * self.size * self.lengths[0], self.location[1] + math.sin(angle) * self.speed * self.size * self.lengths[0]], #FRONT POINT
+			[self.location[0] + math.cos(angle + math.pi * 0.5) * self.speed * self.size * self.lengths[1], self.location[1] + math.sin(angle + math.pi * 0.5) * self.speed * self.size * self.lengths[1]], #RIGHT POINT
+			[self.location[0] - math.cos(angle) * self.speed * self.size * self.lengths[2], self.location[1] - math.sin(angle) * self.speed * self.size * self.lengths[2]], #BOTTOM POINT
+			[self.location[0] + math.cos(angle - math.pi * 0.5) * self.speed * self.size * self.lengths[1], self.location[1] + math.sin(angle - math.pi * 0.5) * self.speed * self.size * self.lengths[1]]] #LEFT POINT
 
-			pygame.draw.polygon(surface, self.colour, [[point[i] - scroll[i] for i in range(2)] for point in points])
+			pygame.draw.polygon(surface, self.colour, [pygame.Vector2(point) - scroll for point in self.points])
 			if lighting_colour:
-				lighting_position = [abs(min(point[i] for point in points) - self.location[i] + (min(point[i] for point in points) - max(point[i] for point in points)) * 0.5) for i in range(2)]
-				surface.blit(self.lighting(points, lighting_position, lighting_colour, lighting_alpha), [self.location[i] - lighting_position[i] - scroll[i] for i in range(2)], special_flags=lighting_flag)
+				lighting_position = [abs(min(point[i] for point in self.points) - self.location[i] + (min(point[i] for point in self.points) - max(point[i] for point in self.points)) * 0.5) for i in range(2)]
+				surface.blit(self._lighting(lighting_position, lighting_colour, lighting_alpha), self.location - lighting_position - scroll, special_flags=lighting_flag)
 	#RENDER
 
-	#LIGHTING
-	def lighting(self, points, position, colour, alpha):
-		'A function used by render to draw a bigger polygon on top of the normal one'
+	#_LIGHTING
+	def _lighting(self, position, colour, alpha=255):
+		'A function used by render to render a bigger polygon on top of the normal one'
 		#EVERYTHING * 2 FOR MAKING THE POLYGON LARGER
+		angle = math.radians(self.angle)
 		lengths = [self.lengths[i] * 2 for i in range(3)]
-		larger_points = [[position[0] + math.cos(self.angle) * self.speed * self.size * lengths[0], position[1] + math.sin(self.angle) * self.speed * self.size * lengths[0]], #FRONT POINT
-		[position[0] + math.cos(self.angle + math.pi / 2) * self.speed * self.size * lengths[1], position[1] + math.sin(self.angle + math.pi / 2) * self.speed * self.size * lengths[1]], #RIGHT POINT
-		[position[0] - math.cos(self.angle) * self.speed * self.size * lengths[2], position[1] - math.sin(self.angle) * self.speed * self.size * lengths[2]], #BOTTOM POINT
-		[position[0] + math.cos(self.angle - math.pi / 2) * self.speed * self.size * lengths[1], position[1] + math.sin(self.angle - math.pi / 2) * self.speed * self.size * lengths[1]]] #LEFT POINT
+		larger_points = [[position[0] + math.cos(angle) * self.speed * self.size * lengths[0], position[1] + math.sin(angle) * self.speed * self.size * lengths[0]], #FRONT POINT
+		[position[0] + math.cos(angle + math.pi * 0.5) * self.speed * self.size * lengths[1], position[1] + math.sin(angle + math.pi * 0.5) * self.speed * self.size * lengths[1]], #RIGHT POINT
+		[position[0] - math.cos(angle) * self.speed * self.size * lengths[2], position[1] - math.sin(angle) * self.speed * self.size * lengths[2]], #BOTTOM POINT
+		[position[0] + math.cos(angle - math.pi * 0.5) * self.speed * self.size * lengths[1], position[1] + math.sin(angle - math.pi * 0.5) * self.speed * self.size * lengths[1]]] #LEFT POINT
 
 		surface_size = [math.ceil(max(point[i] for point in larger_points) - min(point[i] for point in larger_points)) for i in range(2)] #DIFFERENCE BETWEEN LOWEST AND HIGHTEST POINTS
 		surface = pygame.Surface(surface_size)
@@ -129,5 +155,5 @@ class Spark:
 			surface.set_alpha(alpha)
 		pygame.draw.polygon(surface, colour, larger_points)
 		return surface
-		#LIGHTING
+		#_LIGHTING
 #SPARK
