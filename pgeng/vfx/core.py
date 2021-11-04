@@ -10,7 +10,7 @@ def circle_lighting(radius, colour, alpha=255):
 	The surface can have an alpha
 
 	Returns: pygame.Surface'''
-	lighting_surface = pygame.Surface((radius * 2, radius * 2))
+	lighting_surface = pygame.Surface((int(radius) * 2, int(radius) * 2))
 	lighting_surface.set_colorkey((0, 0, 0))
 	if alpha != 255:
 		lighting_surface.set_alpha(alpha)
