@@ -21,21 +21,21 @@ rect_colour = (0, 0, 255)
 rotate_timer = 100
 poly_mode = True
 show_mask = False
-move = [False for i in range(4)]
 while True:
     display.fill((50, 50, 50))
     dt = pgeng.delta_time(clock, 144)
 
-    if move[0]:
+    keys = pygame.key.get_pressed()
+    if keys[K_a]:
         poly.move([-1.5, 0], dt) if poly_mode else None
         circle.center[0] -= 1.5 * dt if not poly_mode else 0
-    if move[1]:
+    if keys[K_d]:
         poly.move([1.5, 0], dt) if poly_mode else None
         circle.center[0] += 1.5 * dt if not poly_mode else 0
-    if move[2]:
+    if keys[K_s]:
         poly.move([0, 1.5], dt) if poly_mode else None
         circle.center[1] += 1.5 * dt if not poly_mode else 0
-    if move[3]:
+    if keys[K_w]:
         poly.move([0, -1.5], dt) if poly_mode else None
         circle.center[1] -= 1.5 * dt if not poly_mode else 0
 
@@ -94,28 +94,11 @@ while True:
             if event.key == K_SPACE:
                 poly_mode = not poly_mode
                 poly.set_points(original_points)
-                circle.center = original_center.copy()
+                circle.center = pygame.Vector2(original_center)
             if event.key == K_RETURN:
                 show_mask = not show_mask
             if event.key == K_r:
-                rotate_timer = 0 if poly_mode else 90
-            if event.key == K_d:
-                move[1] = True
-            if event.key == K_a:
-                move[0] = True
-            if event.key == K_s:
-                move[2] = True
-            if event.key == K_w:
-                move[3] = True
-        if event.type == KEYUP:
-            if event.key == K_d:
-                move[1] = False
-            if event.key == K_a:
-                move[0] = False
-            if event.key == K_s:
-                move[2] = False
-            if event.key == K_w:
-                move[3] = False
+                rotate_timer = 0 if poly_mode else 91
 
     small_font.render(display, f'{round(clock.get_fps())}', (1, 1))
     pygame.display.update()
