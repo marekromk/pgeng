@@ -53,6 +53,32 @@ def gray_shade(surface, shades=16):
 	for y in range(new_surface.get_height()):
 		for x in range(new_surface.get_width()):
 			colour_value = new_surface.get_at((x, y))
-			new_surface.set_at((x, y), [nearest((colour_value.r + colour_value.g + colour_value.b) / 3, conversion) for i in range(3)])
+			new_surface.set_at((x, y), [nearest(sum(colour_value[:3]) / 3, conversion) for i in range(3)])
 	return new_surface
 #GRAY_SHADE
+
+#OUTLINE
+def outline(surface, line_colour, draw_surface=True):
+	'''Create a coloured outline around a given surface with a given colour and width
+	If draw_surface is True, than it will draw te original surface on top of the outline, otherwise it will only return the outline
+
+	Returns: pygame.Surface'''
+	outline_surface = pygame.Surface([surface.get_size()[i] + 2 for i in range(2)], pygame.SRCALPHA)
+	mask_surface = pygame.mask.from_surface(surface).to_surface()
+	if tuple(line_colour[:3]) == (0, 0, 0):
+		mask_surface = palette_swap(mask_surface, {(0, 0, 0): (1, 0, 0)})
+	if tuple(line_colour[:3]) != (255, 255, 255):
+		mask_surface = palette_swap(mask_surface, {(255, 255, 255): tuple(line_colour)})
+	mask_surface.set_colorkey((0, 0, 0) if tuple(line_colour[:3]) != (0, 0, 0) else (1, 0, 0))
+	for i in (0, 2):
+		outline_surface.blit(mask_surface, (i, 1))
+		outline_surface.blit(mask_surface, (1, i))
+	if draw_surface:
+		outline_surface.blit(surface, (1, 1))
+	else:
+		colourkey = (0, 0, 0) if tuple(line_colour[:3]) != (0, 0, 0) else (1, 0, 0)
+		mask_surface = palette_swap(mask_surface, {tuple(line_colour): colourkey})
+		outline_surface.set_colorkey(colourkey)
+		outline_surface.blit(mask_surface, (1, 1))
+	return outline_surface
+#OUTLINE
