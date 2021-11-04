@@ -1,4 +1,4 @@
-'Many core functions for pgeng'
+'Core functions for pgeng'
 #IMPORTS
 import pygame, gzip
 from pathlib import Path
@@ -36,7 +36,7 @@ def delta_time(clock, fps):
 	It will return a number that is around 1 if the game is running at the intended speed
 	For example, if the game is running at 30 fps, but it should run at 60 fps, it would return 2.0
 
-	Returns: Float'''
+	Returns: float'''
 	delta_time = clock.get_time() * fps / 1000
 	return delta_time if delta_time else 1.0
 #DELTA_TIME
@@ -55,7 +55,7 @@ def read_file(path, mode='r'):
 	'''Reads a file and returns the that's data in it
 	mode is the mode in which the file should be openend
 
-	Returns: String'''
+	Returns: str'''
 	with open(Path(path).resolve()) as file:
 		return file.read()
 #READ_FILE
@@ -75,7 +75,7 @@ def read_compressed_file(path, mode='rb', encoding='utf-8'):
 	mode is the mode in which the file should be openend
 	encoding is the encoding the data that's read is decoded with, not the encoding of the file
 
-	Returns: String'''
+	Returns: str'''
 	with gzip.open(Path(path).resolve(), mode) as file:
 		return file.read().decode(encoding)
 #READ_COMPRESSED_FILE
@@ -106,7 +106,7 @@ def nearest(input, nearest, int_mode=True):
 	'''Returns a number changed to the nearest given
 	If int_mode is True, it will truncate every returned number and return an integer
 
-	Returns: Integer (or float)'''
+	Returns: int (or float)'''
 	return int(round(input / nearest) * nearest) if int_mode else round(input / nearest) * nearest
 #NEAREST
 
@@ -115,7 +115,7 @@ def most_used(iterable, amount=False):
 	'''Return the most used value in an iterable
 	It will return the amount used of the value in the list if amount is True
 
-	Returns: List'''
+	Returns: list'''
 	list_counter = Counter(iterable)
 	total_times = list(list_counter.values()).count(max(list(list_counter.values())))
 	return [value[0] for value in list_counter.most_common(total_times)] if not amount else list_counter.most_common(total_times)
@@ -130,7 +130,7 @@ def string_number(string, return_index=None, int_mode=False):
 
 	If int_mode is True, it will truncate every returned number and return an integer
 
-	Returns: List (None if no number is found)'''
+	Returns: list (or NoneType if no number is found)'''
 	if any(character.isdigit() for character in string):
 		numbers, digits = [], []
 		for i in range(len(string)):
