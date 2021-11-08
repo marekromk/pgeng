@@ -30,6 +30,8 @@ class Tile:
 	#__INIT__
 	def __init__(self, location, size, ramp=0):
 		'Initialising a Tile object'
+		if not 0 <= ramp <= 4:
+			raise ValueError('ramp must be between 0 and 4')
 		self.location = Vector2(location)
 		self.size = list(size) if type(size) is list or type(size) is tuple else [size, size]
 		self.ramp = ramp if self.size[0] == self.size[1] else 0
@@ -50,6 +52,6 @@ class Tile:
 
 		Returns: pygame.Rect'''
 		self.location = Vector2(self.location)
-		return Rect(self.location[0], self.location[1], self.size[0], self.size[1])
+		return Rect(self.location, self.size)
 	#RECT
 #TILE
