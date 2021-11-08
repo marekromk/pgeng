@@ -152,7 +152,7 @@ class Entity:
 		It also shows the rect is colliding with a ramp
 		{'top': False, 'bottom': False, 'right': False, 'left': False, 'ramp': False}
 
-		Returns: Dictionary'''
+		Returns: dict'''
 		self.location = pygame.Vector2(self.location)
 		collision_types = {'top': False, 'bottom': False, 'right': False, 'left': False, 'ramp': False}
 		normal_tiles = [tile.rect for tile in tiles if not tile.ramp]
@@ -168,7 +168,7 @@ class Entity:
 			elif momentum[0] < 0:
 				self.rect.left = tile.right
 				collision_types['left'] = True
-			self.location[0] = self.rect.x
+			self.location.x = self.rect.x
 
 		self.location.y += momentum[1]
 		self.rect.y = round(self.location.y)
@@ -180,7 +180,7 @@ class Entity:
 			elif momentum[1] < 0:
 				self.rect.top = tile.bottom
 				collision_types['top'] = True
-			self.location[1] = self.rect.y
+			self.location.y = self.rect.y
 
 		for ramp in ramp_tiles:
 			ramp_hitbox = ramp.rect
@@ -201,12 +201,12 @@ class Entity:
 
 				if (ramp.ramp == 3 or ramp.ramp == 4) and self.rect.bottom > y_position:
 					self.rect.bottom = y_position
-					self.location[1] = self.rect.y
+					self.location.y = self.rect.y
 					collision_types['bottom'] = True
 					collision_types['ramp'] = True
 				elif (ramp.ramp == 1 or ramp.ramp == 2) and self.rect.top < y_position:
 					self.rect.top = y_position
-					self.location[1] = self.rect.y
+					self.location.y = self.rect.y
 					collision_types['top'] = True
 					collision_types['ramp'] = True
 
