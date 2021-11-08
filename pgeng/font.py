@@ -17,6 +17,8 @@ def create_font(colour):
 	colour will be the colour of the text
 	The first value in the returned tuple is the small font and the second value is the large font
 
+	For help on a Font object, do help(pgeng.font.Font)
+
 	Returns: tuple'''
 	if tuple(colour[:3]) == (0, 0, 0):
 		small_font_image = palette_swap(load_image(path.joinpath('font/small.png')), {(255, 0, 0): colour[:3], tuple(colour[:3]): (255, 255, 255)})
@@ -150,7 +152,7 @@ class TextButton:
 		'''Returns a string representation of the object
 
 		Returns: str'''
-		return f'pgeng.TextButton({tuple(self.location)})'
+		return f'pgeng.TextButton{tuple(self.location), self.text}'
 	#__REPR__
 
 	#RECT
@@ -177,15 +179,17 @@ class TextButton:
 	def collide(self, click, check_location=None):
 		'''This will check collision with the mouse location and also if click is True with it
 		A custom location can be set with location if pygame.mouse.get_pos() is not wished to be used
-		The first value returns True if the mouse has collided with the button, the second one is if the mouse clicked on it
+		It returns a dictionary like this:
+			{'collided': False, 'clicked': False}
 
-		Returns: tuple'''
+		Returns: dict'''
+		collides = {'collided': False, 'clicked': False}
 		check_location = pygame.mouse.get_pos() if check_location is None else check_location
 		if self.rect.collidepoint(check_location):
+			collides['collided'] = True
 			if click:
-				return True, True
-			return True, False
-		return False, False
+				collides['clicked'] = True
+		return collides
 	#COLLIDE
 
 	#RENDER
