@@ -1,9 +1,6 @@
 'Core functions for pgeng.vfx'
-#IMPORTS
 import pygame
-#IMPORTS
 
-#CIRCLE_LIGHTING
 def circle_lighting(radius, colour, alpha=255):
 	'''Creates a surface twice as big as the given radius
 	It draws a circle with the radius on it
@@ -16,4 +13,3 @@ def circle_lighting(radius, colour, alpha=255):
 		lighting_surface.set_alpha(alpha)
 	pygame.draw.circle(lighting_surface, colour, (radius, radius), radius)
 	return lighting_surface
-#CIRCLE_LIGHTING

@@ -1,10 +1,7 @@
 'Functions used for changing colours of surfaces'
-#IMPORTS
 import pygame
 from .core import nearest
-#IMPORT
 
-#PALETTE_SWAP
 def palette_swap(surface, colours):
 	'''Swaps the colours of a pygame.Surface
 	colours = {old_colour: new_colour, old_colour: new_colour}
@@ -23,9 +20,7 @@ def palette_swap(surface, colours):
 			if colour_value[:length_colour] in colours:
 				new_surface.set_at((x, y), colours[colour_value[:length_colour]])
 	return new_surface
-#PALETTE_SWAP
 
-#GRAY_SCALE
 def gray_scale(surface):
 	'''A basic algorithm for grayscaling a surface (Luma ITU-R Recommendation BT. 709)
 	Formula: Red * 0.2126 + Green * 0.7152 + Blue * 0.0722
@@ -37,9 +32,7 @@ def gray_scale(surface):
 			colour_value = new_surface.get_at((x, y))
 			new_surface.set_at((x, y), [colour_value.r * 0.2126 + colour_value.g * 0.7152 + colour_value.b * 0.0722 for i in range(3)])
 	return new_surface
-#GRAY_SCALE
 
-#GRAY_SHADE
 def gray_shade(surface, shades=16):
 	'''A basic algorithm for grayscaling a surface with shades
 	It will change the colour to one of the shades
@@ -55,9 +48,7 @@ def gray_shade(surface, shades=16):
 			colour_value = new_surface.get_at((x, y))
 			new_surface.set_at((x, y), [nearest(sum(colour_value[:3]) / 3, conversion) for i in range(3)])
 	return new_surface
-#GRAY_SHADE
 
-#OUTLINE
 def outline(surface, line_colour, draw_surface=True):
 	'''Create a coloured outline around a given surface with a given colour and width
 	If draw_surface is True, than it will draw te original surface on top of the outline, otherwise it will only return the outline
@@ -81,4 +72,3 @@ def outline(surface, line_colour, draw_surface=True):
 		outline_surface.set_colorkey(colourkey)
 		outline_surface.blit(mask_surface, (1, 1))
 	return outline_surface
-#OUTLINE

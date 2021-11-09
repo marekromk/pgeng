@@ -1,11 +1,8 @@
 '''A class to make the dipslay/screen
 It also has functions to enter and exit fullscreen'''
-#IMPORTS
 import pygame
 from pygame._sdl2.video import Window
-#IMPORTS
 
-#SCREEN
 class Screen:
 	'''A class for the display
 	It can also toggle the display fullscreen on all platforms
@@ -31,7 +28,6 @@ class Screen:
 	vsync
 
 	window'''
-	#__INIT__
 	def __init__(self, size, flags=pygame.SCALED, depth=0, display=0, vsync=1, fullscreen=False):
 		'Initialising the class, it should only be done once'
 		self.fullscreen_size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
@@ -46,17 +42,13 @@ class Screen:
 		else:
 			self.pygame_display = pygame.display.set_mode(size, flags, depth, display, vsync)
 		self.window = Window.from_display_module()
-	#__INIT__
 
-	#__REPR__
 	def __repr__(self):
 		'''Returns a string representation of the object
 
 		Returns: str'''
 		return f'pgeng.Screen({tuple(self.size)}, fullscreen={self.fullscreen})'
-	#__REPR__
 
-	#TOGGLE_FULLSCREEN
 	def toggle_fullscreen(self, manual=None):
 		'''Toggle the display to fullscreen or from fullscreen
 		manual can be used if you don't want to toggle it, but set it to fullscreen or exit fullscreen manually
@@ -73,22 +65,16 @@ class Screen:
 			self.pygame_display = pygame.display.set_mode(self.size, self.flags, self.depth, self.display, self.vsync)
 			self.center()
 		return self.pygame_display
-	#TOGGLE_FULLSCREEN
 
-	#CENTER
 	def center(self):
 		'''Centers the window and returns the position
 
 		Returns: tuple'''
 		self.window.position = [(self.fullscreen_size[i] - self.window.size[i]) * 0.5 for i in range(2)]
 		return self.window.position
-	#CENTER
 
-	#GET_DISPLAY
 	def get_display(self):
 		'''Used to return the pygame display
 
 		Returns: pygame.Surface'''
 		return self.pygame_display
-	#GET_DISPLAY
-#SCREEN
