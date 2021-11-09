@@ -1,14 +1,8 @@
 'A Polygon class with collision functions'
-#IMPORTS
 import pygame, math
 from importlib import import_module
-#IMPORTS
-
-#VARIABLES
 cir =  import_module('.circle', __package__)
-#VARIABLES
 
-#POLYGON
 class Polygon:
 	'''A polygon to check collision with and render
 	It can check collisions with other Polygon object, pygame.Rect objects and Circle objects
@@ -27,7 +21,6 @@ class Polygon:
 	surface
 
 	zero_rotation_center'''
-	#__INIT__
 	def __init__(self, points, colour):
 		'Initialising a Polygon object'
 		if len(points) < 3:
@@ -36,34 +29,26 @@ class Polygon:
 		self.rotation = 0
 		self.surface = pygame.Surface((0, 0))
 		self.set_points(points)
-	#__INIT__
 
-	#__REPR__
 	def __repr__(self):
 		'''Returns a string representation of the object
 
 		Returns: str'''
 		return f'pgeng.Polygon({tuple(self.location)})'
-	#__REPR__
 
-	#__LEN__
 	def __len__(self):
 		'''Returns the length of the points variable
 
-		Returns: list'''
+		Returns: int'''
 		return len(self.points)
-	#__LEN__
 
-	#LOCATION
 	@property
 	def location(self):
 		'''Returns the topleft location of the Polygon
 
 		Returns: pygame.math.Vector2'''
 		return pygame.Vector2([int(min(point[i] for point in self.points)) for i in range(2)])
-	#LOCATION
 
-	#CENTER
 	@property
 	def center(self):
 		'''Returns the center location of Polygon
@@ -71,18 +56,14 @@ class Polygon:
 
 		Returns: pygame.math.Vector2'''
 		return pygame.Vector2([math.ceil(max(point[i] for point in self.points) + min(point[i] for point in self.points)) // 2 for i in range(2)])
-	#CENTER
 
-	#SIZE
 	@property
 	def size(self):
 		'''Returns the size of the Polygon
 
 		Returns: list'''
 		return [math.ceil(max([point[i] for point in self.points]) - min(point[i] for point in self.points)) for i in range(2)]
-	#SIZE
 
-	#_CREATE_MASK
 	def _create_mask(self):
 		'A function used by the class to create the mask'
 		if self.surface.get_size() != tuple([self.size[i] + 1 for i in range(2)]):
@@ -93,9 +74,7 @@ class Polygon:
 		corrected_points = [[int(point[i]) - min(int(point[i]) for point in self.points) for i in range(2)] for point in self.points]
 		pygame.draw.polygon(self.surface, (255, 255, 255), corrected_points)
 		self.mask = pygame.mask.from_surface(self.surface)
-	#_CREATE_MASK
 
-	#SET_POINTS
 	def set_points(self, points, index=None, reset_rotation=True):
 		'''Used to set the points of the Polygon object or change a single one
 		points must be a list with tuples/lists or pygame.math.Vector2 objects
@@ -110,25 +89,19 @@ class Polygon:
 		self._create_mask()
 		if reset_rotation:
 			self.rotation_as_zero()
-	#SET_POINTS
 
-	#ROTATION_AS_ZERO
 	def rotation_as_zero(self):
 		'This will reset rotation to 0 and zero_rotation_center to the current center of Polygon'
 		self.rotation = 0
 		self.zero_rotation_center = self.center
-	#ROTATION_AS_ZERO
 
-	#MOVE
 	def move(self, momentum, delta_time=1):
 		'''Move the entire Polygon
 		momentum must be a list/tuple with how much it should move horizontally and vertically'''
 		momentum = pygame.Vector2(momentum) * delta_time
 		self.points = [point + momentum for point in self.points]
 		self.zero_rotation_center += momentum
-	#MOVE
 
-	#ROTATE
 	def rotate(self, angle):
 		'''Rotates the entire Polygon a given amount of degrees clockwise
 		The Polygon gets rotated around zero_rotation_center'''
@@ -141,9 +114,7 @@ class Polygon:
 			new_angle = old_angle + angle
 			self.points[i] = self.zero_rotation_center + (math.cos(new_angle) * length, math.sin(new_angle) * length)
 		self._create_mask()
-	#ROTATE
 
-	#COLLIDE
 	def collide(self, polygon):
 		'''A function to check if the Polygon collided with another Polygon object
 
@@ -152,9 +123,7 @@ class Polygon:
 			raise TypeError('polygon is not a Polygon object')
 		offset = polygon.location - self.location
 		return bool(self.mask.overlap(polygon.mask, offset))
-	#COLLIDE
 
-	#COLLIDELIST
 	def collidelist(self, polygons):
 		'''A function to check if the Polygon collides with another Polygon object in a list
 		It returns the index of the Polygon it collided with
@@ -167,9 +136,7 @@ class Polygon:
 			if self.collide(polygon):
 				return i
 		return None
-	#COLLIDELIST
 
-	#COLLIDERECT
 	def colliderect(self, Rect):
 		'''A function to check if the Polygon collides with a pygame.Rect object
 
@@ -179,9 +146,7 @@ class Polygon:
 		offset = Rect.topleft - self.location
 		rect_mask = pygame.Mask(Rect.size, True)
 		return bool(self.mask.overlap(rect_mask, offset))
-	#COLLIDERECT
 
-	#COLLIDECIRCLE
 	def collidecircle(self, circle):
 		'''A function to check if the Polgyon collides with a Circle object
 
@@ -190,11 +155,7 @@ class Polygon:
 			raise TypeError('circle is not a Circle object')
 		offset = circle.location - self.location
 		return bool(self.mask.overlap(circle.mask, offset))
-	#COLLIDECIRCLE
 
-	#RENDER
 	def render(self, surface, scroll=pygame.Vector2(), width=0):
 		'A function to render the Polygon, it just uses pygame.draw.polygon()'
 		pygame.draw.polygon(surface, self.colour, [point - scroll for point in self.points], width)
-	#RENDER
-#POLYGON

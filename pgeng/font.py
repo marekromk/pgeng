@@ -1,17 +1,12 @@
 'Classes and functions for creating fonts and text buttons'
-#IMPORTS
 import pygame
 from pathlib import Path
-from .core import clip_surface, load_image
 from .colour import palette_swap
-#IMPORTS
+from .core import clip_surface, load_image
 
-#VARIALBES
 __all__ = ['create_font', 'TextButton']
 path = Path(__file__).resolve().parent
-#VARIABLES
 
-#CREATE_FONT
 def create_font(colour):
 	'''A function to create small and large Font objects
 	colour will be the colour of the text
@@ -31,9 +26,7 @@ def create_font(colour):
 	small_font_image = palette_swap(load_image(path.joinpath('font/small.png')), {(255, 0, 0): colour[:3]})
 	large_font_image = palette_swap(load_image(path.joinpath('font/large.png')), {(255, 0, 0): colour[:3]})
 	return Font(small_font_image), Font(large_font_image)
-#CREATE_FONT
 
-#FONT
 class Font:
 	'''A class to create a pixel art font
 	It will get all the letters out of the image and render them
@@ -50,7 +43,6 @@ class Font:
 	font_image
 
 	space_width'''
-	#__INIT__
 	def __init__(self, font_image, border_colour=127, background_colour=0):
 		'Initialising a font object'
 		self.font_image = font_image
@@ -68,17 +60,13 @@ class Font:
 			else:
 				current_width += 1
 		self.space_width, self.character_height = self.characters['A'].get_size()
-	#__INIT__
 
-	#__REPR__
 	def __repr__(self):
 		'''Returns a string representation of the object
 
 		Returns: str'''
 		return 'pgeng.Font'
-	#__REPR__
 
-	#GET_SIZE
 	def get_size(self, text):
 		'''Get the size that that a rendered string would use
 		It will return the width and height
@@ -96,9 +84,7 @@ class Font:
 				width = 0
 				height += self.character_height + 1 #+ 1 FOR SPACING
 		return width, height
-	#GET_SIZE
 
-	#RENDER
 	def render(self, surface, text, location, scroll=pygame.Vector2()):
 		'Render a string on a surface at a location'
 		if type(text) is not str:
@@ -113,10 +99,7 @@ class Font:
 			else:
 				x_offset = 0
 				y_offset += self.character_height + 1 #+ 1 FOR SPACING
-	#RENDER
-#FONT
 
-#TEXTBUTTON
 class TextButton:
 	'''A string of text that is also a button
 	The collide function is to collide with the mouse and clicks
@@ -134,7 +117,6 @@ class TextButton:
 	test_font
 
 	text'''
-	#__INIT__
 	def __init__(self, text, location, font_size):
 		'Initialising a TextButton object'
 		if font_size != 'small' and font_size != 'large':
@@ -145,17 +127,13 @@ class TextButton:
 		self.location = pygame.Vector2(location)
 		self.test_font = Font(load_image(path.joinpath(f'font/{font_size}.png')))
 		self.size = self.test_font.get_size(text)
-	#__INIT__
 
-	#__REPR__
 	def __repr__(self):
 		'''Returns a string representation of the object
 
 		Returns: str'''
 		return f'pgeng.TextButton{tuple(self.location), self.text}'
-	#__REPR__
 
-	#RECT
 	@property
 	def rect(self):
 		'''Returns the pygame.Rect object of the TextButton
@@ -163,9 +141,7 @@ class TextButton:
 		Returns: pygame.Rect'''
 		self.location = pygame.Vector2(self.location)
 		return pygame.Rect(self.location, (self.size[0] - 1, self.size[1] + self.test_font.character_height)) #- 1 FOR THE EXTRA SPACING
-	#RECT
 
-	#SET_TEXT
 	def set_text(self, text):
 		'''Sets a new string as the text
 		All the variables will be updated, so the functions can be used the same'''
@@ -173,9 +149,7 @@ class TextButton:
 			raise TypeError('text is not a string')
 		self.text = text
 		self.size = self.test_font.get_size(text)
-	#SET_TEXT
 
-	#COLLIDE
 	def collide(self, click, check_location=None):
 		'''This will check collision with the mouse location and also if click is True with it
 		A custom location can be set with location if pygame.mouse.get_pos() is not wished to be used
@@ -190,13 +164,9 @@ class TextButton:
 			if click:
 				collides['clicked'] = True
 		return collides
-	#COLLIDE
 
-	#RENDER
 	def render(self, surface, font, scroll=pygame.Vector2()):
 		'Renders the text from the button'
 		if not isinstance(font, Font):
 			raise TypeError('font is not a Font object')
 		font.render(surface, self.text, self.location, scroll)
-	#RENDER
-#TEXTBUTTON

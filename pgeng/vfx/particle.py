@@ -1,11 +1,8 @@
 'A Particle class'
-#IMPORTS
 import pygame
 from ..collision import Circle
 from .core import circle_lighting
-#IMPORTS
 
-#PARITCLE
 class Particle:
 	'''A particle to move and render
 	momentum has to be a list with how much the particle should move every frame [x, y]
@@ -22,7 +19,6 @@ class Particle:
 	momentum
 
 	size'''
-	#__INIT__
 	def __init__(self, location, momentum, size, colour, width=0):
 		'Initialising a Particle object'
 		self.location = pygame.Vector2(location)
@@ -31,17 +27,13 @@ class Particle:
 		self.colour = colour
 		self.width = 0
 		self.alive = True
-	#__INIT__
 
-	#__REPR__
 	def __repr__(self):
 		'''Returns a string representation of the object
 
 		Returns: str'''
 		return f'pgeng.Particle{tuple(self.location), tuple(self.momentum)}'
-	#__REPR__
 
-	#CIRCLE
 	@property
 	def circle(self):
 		'''Returns a Circle object of the Particle if it is alive
@@ -49,9 +41,7 @@ class Particle:
 		Returns: Circle (or NoneType)'''
 		if self.alive:
 			return Circle(self.location, self.size, self.colour)
-	#CICLE
 
-	#MOVE
 	def move(self, size_change, y_momentum=0, delta_time=1):
 		'''Move the location of the Particle and change the size
 		If the size is smaller or equal to 0, it will no longer be alive
@@ -63,9 +53,7 @@ class Particle:
 		self.size -= size_change * delta_time
 		if self.size < 1:
 			self.alive = False
-	#MOVE
 
-	#RENDER
 	def render(self, surface, scroll=pygame.Vector2(), lighting_colour=None, lighting_alpha=255, lighting_flag=0):
 		'''Render the Particle if it is alive
 		scroll is position of the camera, it will render it at the location of the Particle minus the scroll
@@ -75,5 +63,3 @@ class Particle:
 			if lighting_colour:
 				lighting_radius = self.size * 2
 				surface.blit(circle_lighting(lighting_radius, lighting_colour, lighting_alpha), [self.location[i] - lighting_radius - scroll[i] for i in range(2)], special_flags=lighting_flag)
-	#RENDER
-#PARTICLE

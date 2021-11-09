@@ -1,11 +1,8 @@
 'A class for animations'
-#IMPORTS
 import pygame
 from pathlib import Path
 from .core import load_image, most_used
-#IMPORTS
 
-#ANIMATIONS
 class Animations:
 	'''A class for animations
 	Not all the animations should be done in one Animations class, it is good to create one for Entities and such
@@ -20,24 +17,19 @@ class Animations:
 	animations_data
 
 	frame'''
-	#__INIT__
 	def __init__(self, action=None):
 		'Initialising an Animations class'
 		self.animations_data = {}
 		self.animation_frames = {}
 		self.action = action
 		self.frame = 0
-	#__INIT__
 
-	#__REPR__
 	def __repr__(self):
 		'''Returns a string representation of the object
 
 		Returns: str'''
 		return 'pgeng.Animations'
-	#__REPR__
 
-	#ADD_ANIMATION
 	def load_animation(self, path, frame_durations, repeat=True, colourkey=None, file_type=None, animation_name=None, alpha=255, convert_alpha=False):
 		'''A function for loading still images for a animation
 
@@ -72,9 +64,7 @@ class Animations:
 			self.animation_frames[animation_frame_id] = load_image(path.joinpath(f'{path.name}{i + 1}{file_type}'), colourkey, alpha, convert_alpha)
 			self.animations_data[animation_name][0].append((animation_frame_id, frame_duration))
 			self.animations_data[animation_name][2] += frame_duration
-	#ADD_ANIMATION
 
-	#ADD_IMAGE
 	def add_image(self, image, animation_name, duration, repeat=True):
 		'''Manually add an image to an animation
 		If the animation_name does not yes exist, it will be created
@@ -85,9 +75,7 @@ class Animations:
 		self.animation_frames[animation_frame_id] = image.copy()
 		self.animations_data[animation_name][0].append((animation_frame_id, duration))
 		self.animations_data[animation_name][2] += duration
-	#ADD_IMAGE
 
-	#CURRENT_IMAGE
 	def current_image(self, delta_time=1):
 		'''Get the current image in the animation
 		delta_time is how much the frame should update, usually it would be 1
@@ -105,9 +93,7 @@ class Animations:
 		for i, frame_data in enumerate(animation_data[0]):
 			if round(self.frame) <= sum([frame_duration[1] for frame_duration in animation_data[0]][:i + 1]):
 				return self.animation_frames[frame_data[0]]
-	#CURRENT_IMAGE
 
-	#SET_ACTION
 	def set_action(self, action):
 		'Set the current action, the frame will also be reset to 0'
 		if action not in self.animations_data:
@@ -115,5 +101,3 @@ class Animations:
 		if self.action != action:
 			self.action = action
 			self.frame = 0
-	#SET_ACTION
-#ANIMATIONS

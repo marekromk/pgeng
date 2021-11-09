@@ -1,12 +1,9 @@
 'Core functions for pgeng'
-#IMPORTS
 import pygame, gzip
 from pathlib import Path
 from collections import Counter
 from sys import exit as _sysexit #UNDERSCORE SO IT IS NOT VISIBLE AS A FUNCTION
-#IMPORTS
 
-#CLIP_SURFACE
 def clip_surface(surface, location, size):
 	'''Creates a new Surface from a part of another Surface
 
@@ -15,9 +12,7 @@ def clip_surface(surface, location, size):
 	new_surface.set_clip(pygame.Rect(location, size))
 	clipped_surface = surface.subsurface(new_surface.get_clip())
 	return clipped_surface.copy()
-#CLIP_SURFACE
 
-#LOAD_IMAGE
 def load_image(path, colourkey=None, alpha=255, convert_alpha=False):
 	'''Load an image for pygame that will be converted
 	You can set a colourkey and alpha as well
@@ -28,9 +23,7 @@ def load_image(path, colourkey=None, alpha=255, convert_alpha=False):
 	if alpha != 255:
 		image.set_alpha(alpha)
 	return image
-#LOAD_IMAGE
 
-#DELTA_TIME
 def delta_time(clock, fps):
 	'''Get the time since the last frame, it needs a pygame.time.Clock object and the fps
 	It will return a number that is around 1 if the game is running at the intended speed
@@ -39,18 +32,14 @@ def delta_time(clock, fps):
 	Returns: float'''
 	delta_time = clock.get_time() * fps / 1000
 	return delta_time if delta_time else 1.0
-#DELTA_TIME
 
-#QUIT_GAME
 def quit_game():
 	'''Exiting a pygame program in the correct way
 	Runs:
 		pygame.quit() and sys.exit()'''
 	pygame.quit()
 	_sysexit()
-#QUIT_GAME
 
-#READ_FILE
 def read_file(path, mode='r'):
 	'''Reads a file and returns the that's data in it
 	mode is the mode in which the file should be openend
@@ -58,18 +47,14 @@ def read_file(path, mode='r'):
 	Returns: str'''
 	with open(Path(path).resolve()) as file:
 		return file.read()
-#READ_FILE
 
-#WRITE_TO_FILE
 def write_to_file(path, data, mode='w'):
 	'''Writes data to a file
 	data should be a string
 	mode is the mode in which the file should be opened'''
 	with open(Path(path).resolve(), mode) as file:
 		file.write(data)
-#WRITE_TO_FILE
 
-#READ_COMPRESSED_FILE
 def read_compressed_file(path, mode='rb', encoding='utf-8'):
 	'''Reads a file with gzip compression
 	mode is the mode in which the file should be openend
@@ -78,9 +63,7 @@ def read_compressed_file(path, mode='rb', encoding='utf-8'):
 	Returns: str'''
 	with gzip.open(Path(path).resolve(), mode) as file:
 		return file.read().decode(encoding)
-#READ_COMPRESSED_FILE
 
-#WRITE_TO_COMPRESSSED_FILE
 def write_to_compressed_file(path, data, mode='wb', compresslevel=9, encoding='utf-8', gzip_extension=False):
 	'''Writes data to a file with gzip compression
 	data should be a string
@@ -99,18 +82,14 @@ def write_to_compressed_file(path, data, mode='wb', compresslevel=9, encoding='u
 		path = path.with_suffix(f'{path.suffix}.gz')
 	with gzip.open(path, mode, compresslevel) as file:
 		file.write(data.encode(encoding))
-#WRITE_TO_COMPRESSSED_FILE
 
-#NEAREST
 def nearest(input, nearest, int_mode=True):
 	'''Returns a number changed to the nearest given
 	If int_mode is True, it will truncate every returned number and return an integer
 
 	Returns: int (or float)'''
 	return int(round(input / nearest) * nearest) if int_mode else round(input / nearest) * nearest
-#NEAREST
 
-#MOST_USED
 def most_used(iterable, amount=False):
 	'''Return the most used value in an iterable
 	It will return the amount used of the value in the list if amount is True
@@ -119,9 +98,7 @@ def most_used(iterable, amount=False):
 	list_counter = Counter(iterable)
 	total_times = list(list_counter.values()).count(max(list(list_counter.values())))
 	return [value[0] for value in list_counter.most_common(total_times)] if not amount else list_counter.most_common(total_times)
-#MOST_USED
 
-#STRING_NUMBER
 def string_number(string, return_index=None, int_mode=False):
 	'''Return numbers from a given string
 	If return_index is None it will return everything, except if a list or tuple with the indexes gets given
@@ -154,5 +131,3 @@ def string_number(string, return_index=None, int_mode=False):
 		if return_index and min(return_index) < -len(numbers) or max(return_index) > len(numbers) - 1:
 			raise IndexError('Index in return_index is not possible')
 		return [float(numbers[index]) for index in return_index] if not int_mode else [int(float(numbers[index])) for index in return_index]
-	return None #RETURN NONE IF THERE IS NO NUMBER FOUND IN THE STRING
-#STRING_NUMBER

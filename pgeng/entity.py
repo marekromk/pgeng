@@ -1,18 +1,13 @@
 'An Entity class'
-#IMPORTS
 import pygame
 from .animations import Animations
-#IMPORTS
 
-#COLLISION_TEST
 def collision_test(rect, collision_list):
 	'''A function used by the Entity class to check collisions with tiles
 
 	Returns: list'''
 	return [list_rect for list_rect in collision_list if rect.colliderect(list_rect)]
-#COLLISION_TEST
 
-#ENTITY
 class Entity:
 	'''An entity with usefull functions
 	It needs a position and a size for the pygame.Rect object
@@ -35,7 +30,6 @@ class Entity:
 	rotation
 
 	scale'''
-	#__INIT__
 	def __init__(self, location, size):
 		'Initialising an Entity object'
 		self.rect = pygame.Rect(location, size)
@@ -47,26 +41,20 @@ class Entity:
 		self.alpha = 255
 
 		self.animations = Animations(None)
-	#__INIT__
 
-	#__REPR__
 	def __repr__(self):
 		'''Returns a string representation of the object
 
 		Returns: str'''
 		return f'pgeng.Entity{tuple(self.location), self.rect.size}'
-	#__REPR__
 
-	#CENTER
 	@property
 	def center(self):
 		'''Returns the center location of the Entity
 
 		Returns: pygame.math.Vector2'''
 		return pygame.Vector2([self.location[i] + self.rect.size[i] * 0.5 for i in range(2)])
-	#CENTER
 
-	#GET_ANGLE
 	def get_angle(self, target):
 		'''Get the angle to a target
 		target can be an Entity object, a list/tuple or pygame.math.Vector2
@@ -77,9 +65,7 @@ class Entity:
 		if isinstance(target, Entity):
 			return pygame.Vector2().angle_to(target.center - self.center)
 		return pygame.Vector2().angle_to(target - self.center)
-	#GET_ANGLE
 
-	#GET_DISTANCE
 	def get_distance(self, target):
 		'''Get the distance to a target
 		target can be an Entity object, a list/tuple or pygame.math.Vector2
@@ -88,9 +74,7 @@ class Entity:
 		if isinstance(target, Entity):
 			return self.location.distance_to(target.location)
 		return self.location.distance_to(target)
-	#GET_DISTANCE
 
-	#IN_RANGE
 	def in_range(self, target, range):
 		'''This will check if a target is in a specified range
 		target can be an Entity object, a list/tuple or pygame.math.Vector2
@@ -98,17 +82,13 @@ class Entity:
 
 		Returns: bool'''
 		return self.get_distance(target) <= range
-	#IN_RANGE
 
-	#SET_SCALE
 	def set_scale(self, scale=1):
 		'''This sets the scale for the image
 		It can be a list or tuple with the scale for the width and the scale for the height
 		If it is a number, than it will be set for the width and height'''
 		self.scale = list(scale) if type(scale) is list or type(scale) is tuple else [scale, scale]
-	#SET_SCALE
 
-	#IMAGE
 	def current_image(self, delta_time=1):
 		'''Get the current image in the animation
 		delta_time is how much the frame should update, usually it would be 1
@@ -116,9 +96,7 @@ class Entity:
 
 		Returns: pygame.Surface'''
 		return self.transform_image(self.animations.current_image(delta_time))
-	#IMAGE
 
-	#TRANSFORM_IMAGE
 	def transform_image(self, image):
 		'''This will transform the image with the current values of the variables
 
@@ -140,9 +118,7 @@ class Entity:
 		if self.alpha != 255:
 			transformed_image.set_alpha(self.alpha)
 		return transformed_image
-	#TRANSFORM_IMAGE
 
-	#MOVEMENT
 	def movement(self, momentum, tiles):
 		'''Changing the position of the Entity object
 		momentum must be a list/tuple with how much it should move horizontally and vertically
@@ -211,5 +187,3 @@ class Entity:
 					collision_types['ramp'] = True
 
 		return collision_types
-	#MOVEMENT
-#ENTITY
