@@ -20,7 +20,7 @@ class Circle:
 	surface'''
 	def __init__(self, center, radius, colour):
 		'Initialising a Circle object'
-		if not any(type(center) == option for option in [list, tuple, pygame.math.Vector2]):
+		if not any(type(center) == option for option in (list, tuple, pygame.math.Vector2)):
 			raise TypeError('center must be a list, tuple or pygame.math.Vector2')
 		self.center = pygame.Vector2(center)
 		self.colour = tuple(colour)
@@ -44,13 +44,12 @@ class Circle:
 	def size(self):
 		'''Returns the size of the Circle
 
-		Returns: list'''
-		return [int(self.radius) * 2 for i in range(2)]
+		Returns: pygame.math.Vector2'''
+		return pygame.Vector2(int(self.radius) * 2)
 
 	def _create_mask(self):
 		'A function used by the class to create the mask variable'
-		self.surface = pygame.Surface(self.size)
-		self.surface.set_colorkey((0, 0, 0))
+		self.surface = pygame.Surface(self.size, pygame.SRCALPHA)
 		pygame.draw.circle(self.surface, (255, 255, 255), (self.radius, self.radius), self.radius)
 		self.mask = pygame.mask.from_surface(self.surface)
 

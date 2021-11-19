@@ -61,16 +61,15 @@ class Polygon:
 	def size(self):
 		'''Returns the size of the Polygon
 
-		Returns: list'''
-		return [math.ceil(max([point[i] for point in self.points]) - min(point[i] for point in self.points)) for i in range(2)]
+		Returns: pygame.math.Vector2'''
+		return pygame.Vector2([math.ceil(max([point[i] for point in self.points]) - min(point[i] for point in self.points)) for i in range(2)])
 
 	def _create_mask(self):
 		'A function used by the class to create the mask'
 		if self.surface.get_size() != tuple([self.size[i] + 1 for i in range(2)]):
-			self.surface = pygame.Surface([self.size[i] + 1 for i in range(2)])
-			self.surface.set_colorkey((0, 0, 0))
+			self.surface = pygame.Surface([self.size[i] + 1 for i in range(2)], pygame.SRCALPHA)
 		else:
-			self.surface.fill((0, 0, 0))
+			self.surface.fill((0, 0, 0, 0))
 		corrected_points = [[int(point[i]) - min(int(point[i]) for point in self.points) for i in range(2)] for point in self.points]
 		pygame.draw.polygon(self.surface, (255, 255, 255), corrected_points)
 		self.mask = pygame.mask.from_surface(self.surface)
