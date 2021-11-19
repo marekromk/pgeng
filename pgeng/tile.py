@@ -27,7 +27,7 @@ class Tile:
 		if not 0 <= ramp <= 4:
 			raise ValueError('ramp must be between 0 and 4')
 		self.location = Vector2(location)
-		self.size = list(size) if type(size) is list or type(size) is tuple else [size, size]
+		self.size = Vector2(size)
 		self.ramp = ramp if self.size[0] == self.size[1] else 0
 
 	def __repr__(self):
@@ -41,5 +41,4 @@ class Tile:
 		'''Returns a pygame.Rect object of the Tile object
 
 		Returns: pygame.Rect'''
-		self.location = Vector2(self.location)
 		return Rect(self.location, self.size)
