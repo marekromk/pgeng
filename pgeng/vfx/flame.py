@@ -92,7 +92,7 @@ class Flame:
         self.max_particle_size = max_particle_size
         self.burn_rate = burn_rate
         self.intensity = intensity
-        self.colour = colour
+        self.colour = tuple(colour)
         self.particles = []
         for i in range(round(intensity * 25)):
             self.particles.append(FlameParticle([self.location.x + randint(round(-self.max_particle_size * 2), round(self.max_particle_size * 2)), self.location.y + randint(round(-self.max_particle_size * 2), round(self.max_particle_size * 2))], max(1, uniform(self.max_particle_size * 0.2, self.max_particle_size)), self.burn_rate, self.colour))

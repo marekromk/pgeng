@@ -20,7 +20,7 @@ class ShockWave:
 		self.center = pygame.Vector2(center)
 		self.radius = radius
 		self.width = width
-		self.colour = colour
+		self.colour = tuple(colour)
 		self.alive = True
 
 	def __repr__(self):
