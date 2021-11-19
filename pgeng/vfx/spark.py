@@ -47,7 +47,7 @@ class Spark:
 		self.angle = angle
 		self.speed = speed
 		self.size = size
-		self.colour = colour
+		self.colour = tuple(colour)
 		self.lengths = (Spark.front_length, Spark.side_length, Spark.back_length)
 		self.alive = True
 		self.points = None

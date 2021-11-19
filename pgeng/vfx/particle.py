@@ -24,7 +24,7 @@ class Particle:
 		self.location = pygame.Vector2(location)
 		self.momentum = pygame.Vector2(momentum)
 		self.size = size
-		self.colour = colour
+		self.colour = tuple(colour)
 		self.width = 0
 		self.alive = True
 
