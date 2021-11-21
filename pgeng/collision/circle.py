@@ -20,8 +20,6 @@ class Circle:
 	surface'''
 	def __init__(self, center, radius, colour):
 		'Initialising a Circle object'
-		if not any(type(center) == option for option in (list, tuple, pygame.math.Vector2)):
-			raise TypeError('center must be a list, tuple or pygame.math.Vector2')
 		self.center = pygame.Vector2(center)
 		self.colour = tuple(colour)
 		self.surface = pygame.Surface((0, 0))
