@@ -1,5 +1,7 @@
 'Core functions for pgeng'
 import pygame, gzip
+from os import strerror
+from errno import ENOENT
 from pathlib import Path
 from collections import Counter
 from sys import exit as _sysexit #UNDERSCORE SO IT IS NOT VISIBLE AS A FUNCTION
@@ -18,7 +20,10 @@ def load_image(path, colourkey=None, alpha=255, convert_alpha=False):
 	You can set a colourkey and alpha as well
 
 	Returns: pygame.Surface'''
-	image = pygame.image.load(Path(path).resolve()).convert() if not convert_alpha else pygame.image.load(Path(path).resolve()).convert_alpha()
+	path = Path(path).resolve()
+	if not path.is_file():
+		raise FileNotFoundError(ENOENT, strerror(ENOENT), f'{path}')
+	image = pygame.image.load(path).convert() if not convert_alpha else pygame.image.load(path).convert_alpha()
 	image.set_colorkey(colourkey)
 	if alpha != 255:
 		image.set_alpha(alpha)

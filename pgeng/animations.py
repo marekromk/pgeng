@@ -1,5 +1,7 @@
 'A class for animations'
 import pygame
+from os import strerror
+from errno import ENOENT
 from pathlib import Path
 from .core import load_image, most_used
 
@@ -52,7 +54,7 @@ class Animations:
 		The images will be added to animation_frames'''
 		path = Path(path).resolve()
 		if not path.is_dir():
-			raise FileNotFoundError(f'Directory \'{path}\' does not exist')
+			raise FileNotFoundError(ENOENT, strerror(ENOENT), f'{path}')
 		animation_name = path.name if animation_name is None else animation_name
 		self.animations_data[animation_name] = [[], repeat, 0]
 		if not file_type:

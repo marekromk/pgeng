@@ -1,5 +1,7 @@
 'A simple class for loading and playing sounds and music'
 import pygame
+from os import strerror
+from errno import ENOENT
 from pathlib import Path
 
 class Sounds:
@@ -36,7 +38,7 @@ class Sounds:
 	def add_sound(self, path, name, volume=-1):
 		'''Adding sounds to the Sounds dictionary
 		The volume will be set by the volume variable if volume is -1'''
-		self.sounds[name] = pygame.mixer.Sound(Path(path).resolve())
+		self.sounds[name] = pygame.mixer.Sound(f'{Path(path).resolve()}')
 		self.sounds[name].set_volume(self.volume if volume == -1 else volume)
 
 	def set_play_sound(self, play_sound_boolean, affect_music=True):
@@ -75,7 +77,10 @@ class Sounds:
 		'''This will play the music file if play_sound_variable is True
 		The volume will be the volume variable if volume is -1
 		amount is the amount of times played, it will be indefinitely if amount is -1'''
+		path = Path(path).resolve()
+		if not path.is_file():
+			raise FileNotFoundError(ENOENT, strerror(ENOENT), f'{path}')
 		if self.play_sound_variable:
-			pygame.mixer.music.load(Path(path).resolve())
+			pygame.mixer.music.load(path)
 			pygame.mixer.music.set_volume(self.volume if volume == -1 else volume)
 			pygame.mixer.music.play(amount)
