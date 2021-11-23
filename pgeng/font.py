@@ -74,16 +74,15 @@ class Font:
 		Returns: tuple'''
 		if type(text) is not str:
 			raise TypeError('text has to be a string')
-		width, height = 0, 0
+		size = pygame.Vector2()
 		for character in text:
 			if character not in ('\n', ' ') and character in self.characters:
-				width += self.characters[character].get_width() + 1 #+ 1 FOR SPACING
+				size.x += self.characters[character].get_width() + 1 #+ 1 FOR SPACING
 			elif character == ' ' or character not in ['\n']:
-				width += self.space_width + 1 #+ 1 FOR SPACING
+				size.x += self.space_width + 1 #+ 1 FOR SPACING
 			else:
-				width = 0
-				height += self.character_height + 1 #+ 1 FOR SPACING
-		return width, height
+				size.y += self.character_height + 1 #+ 1 FOR SPACING
+		return size
 
 	def render(self, surface, text, location, scroll=pygame.Vector2()):
 		'Render a string on a surface at a location'
