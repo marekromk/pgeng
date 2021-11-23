@@ -1,8 +1,8 @@
 'A class for animations'
 import pygame
-from os import strerror
-from errno import ENOENT
 from pathlib import Path
+from errno import ENOENT as _ENOENT
+from os import strerror as _strerror
 from .core import load_image, most_used
 
 class Animations:
@@ -54,7 +54,7 @@ class Animations:
 		The images will be added to animation_frames'''
 		path = Path(path).resolve()
 		if not path.is_dir():
-			raise FileNotFoundError(ENOENT, strerror(ENOENT), f'{path}')
+			raise FileNotFoundError(_ENOENT, _strerror(_ENOENT), f'{path}')
 		animation_name = path.name if animation_name is None else animation_name
 		self.animations_data[animation_name] = [[], repeat, 0]
 		if not file_type:
@@ -84,7 +84,7 @@ class Animations:
 
 		Returns: pygame.Surface'''
 		if self.action not in self.animations_data:
-			raise KeyError(f'Animation \'{action}\' is not defined')
+			raise KeyError(f'Animation \'{self.action}\' is not defined')
 		animation_data = self.animations_data[self.action]
 		self.frame += delta_time
 		reset_frame = round(self.frame) > animation_data[2]
