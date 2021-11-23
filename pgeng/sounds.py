@@ -1,8 +1,8 @@
 'A simple class for loading and playing sounds and music'
 import pygame
-from os import strerror
-from errno import ENOENT
 from pathlib import Path
+from errno import ENOENT as _ENOENT
+from os import strerror as _strerror
 
 class Sounds:
 	'''A class for playing sounds or music
@@ -79,7 +79,7 @@ class Sounds:
 		amount is the amount of times played, it will be indefinitely if amount is -1'''
 		path = Path(path).resolve()
 		if not path.is_file():
-			raise FileNotFoundError(ENOENT, strerror(ENOENT), f'{path}')
+			raise FileNotFoundError(_ENOENT, _strerror(_ENOENT), f'{path}')
 		if self.play_sound_variable:
 			pygame.mixer.music.load(path)
 			pygame.mixer.music.set_volume(self.volume if volume == -1 else volume)

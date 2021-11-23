@@ -1,10 +1,10 @@
 'Core functions for pgeng'
 import pygame, gzip
-from os import strerror
-from errno import ENOENT
 from pathlib import Path
 from collections import Counter
-from sys import exit as _sysexit #UNDERSCORE SO IT IS NOT VISIBLE AS A FUNCTION
+from sys import exit as _sysexit
+from errno import ENOENT as _ENOENT
+from os import strerror as _strerror
 
 def clip_surface(surface, location, size):
 	'''Creates a new Surface from a part of another Surface
@@ -22,7 +22,7 @@ def load_image(path, colourkey=None, alpha=255, convert_alpha=False):
 	Returns: pygame.Surface'''
 	path = Path(path).resolve()
 	if not path.is_file():
-		raise FileNotFoundError(ENOENT, strerror(ENOENT), f'{path}')
+		raise FileNotFoundError(_ENOENT, _strerror(_ENOENT), f'{path}')
 	image = pygame.image.load(path).convert() if not convert_alpha else pygame.image.load(path).convert_alpha()
 	image.set_colorkey(colourkey)
 	if alpha != 255:
