@@ -74,30 +74,35 @@ class Font:
 		Returns: tuple'''
 		if type(text) is not str:
 			raise TypeError('text has to be a string')
+		widths = []
 		size = pygame.Vector2(0, self.character_height + 1)
 		for character in text:
 			if character not in ('\n', ' ') and character in self.characters:
 				size.x += self.characters[character].get_width() + 1 #+ 1 FOR SPACING
-			elif character == ' ' or character not in ['\n']:
+			elif character == ' ' and character != '\n':
 				size.x += self.space_width + 1 #+ 1 FOR SPACING
 			else:
+				widths.append(size.x)
 				size.y += self.character_height + 1 #+ 1 FOR SPACING
+				size.x = 0
+		widths.append(size.x)
+		size.x = max(widths)
 		return size
 
 	def render(self, surface, text, location, scroll=pygame.Vector2()):
 		'Render a string on a surface at a location'
 		if type(text) is not str:
 			raise TypeError('text has to be a string')
-		x_offset, y_offset = 0, 0
+		offset = pygame.Vector2()
 		for character in text:
 			if character not in ('\n', ' ') and character in self.characters:
-				surface.blit(self.characters[character], (location[0] + x_offset - scroll[0], location[1] + y_offset - scroll[1]))
-				x_offset += self.characters[character].get_width() + 1 #+ 1 FOR SPACING
-			elif character == ' ' or character not in ['\n']:
-				x_offset += self.space_width + 1 #+ 1 FOR SPACING
+				surface.blit(self.characters[character], location + offset - scroll)
+				offset.x += self.characters[character].get_width() + 1 #+ 1 FOR SPACING
+			elif character == ' ' or character != '\n':
+				offset.x += self.space_width + 1 #+ 1 FOR SPACING
 			else:
-				x_offset = 0
-				y_offset += self.character_height + 1 #+ 1 FOR SPACING
+				offset.y += self.character_height + 1 #+ 1 FOR SPACING
+				offset.x = 0
 
 class TextButton:
 	'''A string of text that is also a button
