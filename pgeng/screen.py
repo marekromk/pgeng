@@ -30,8 +30,8 @@ class Screen:
 	window'''
 	def __init__(self, size, flags=pygame.SCALED, depth=0, display=0, vsync=1, fullscreen=False):
 		'Initialising the class, it should only be done once'
-		self.fullscreen_size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
-		self.size = size
+		self.fullscreen_size = pygame.Vector2(pygame.display.Info().current_w, pygame.display.Info().current_h)
+		self.size = pygame.Vector2(size)
 		self.flags = flags
 		self.depth = depth
 		self.display = display
