@@ -74,7 +74,7 @@ class Font:
 		Returns: tuple'''
 		if type(text) is not str:
 			raise TypeError('text has to be a string')
-		size = pygame.Vector2()
+		size = pygame.Vector2(0, self.character_height + 1)
 		for character in text:
 			if character not in ('\n', ' ') and character in self.characters:
 				size.x += self.characters[character].get_width() + 1 #+ 1 FOR SPACING
