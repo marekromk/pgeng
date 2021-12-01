@@ -130,7 +130,7 @@ class TextButton:
 		self.text = text
 		self.location = pygame.Vector2(location)
 		self.test_font = Font(load_image(path.joinpath(f'font/{font_size}.png')))
-		self.size = self.test_font.get_size(text)
+		self.size = pygame.Vector2([self.test_font.get_size(text)[i] - 1 for i in range(2)])
 
 	def __repr__(self):
 		'''Returns a string representation of the object
@@ -144,7 +144,7 @@ class TextButton:
 
 		Returns: pygame.Rect'''
 		self.location = pygame.Vector2(self.location)
-		return pygame.Rect(self.location, (self.size[0] - 1, self.size[1] + self.test_font.character_height)) #- 1 FOR THE EXTRA SPACING
+		return pygame.Rect(self.location, self.size)
 
 	def set_text(self, text):
 		'''Sets a new string as the text
@@ -152,7 +152,7 @@ class TextButton:
 		if type(text) is not str:
 			raise TypeError('text is not a string')
 		self.text = text
-		self.size = self.test_font.get_size(text)
+		self.size = pygame.Vector2([self.test_font.get_size(text)[i] - 1 for i in range(2)])
 
 	def collide(self, click, check_location=None):
 		'''This will check collision with the mouse location and also if click is True with it
