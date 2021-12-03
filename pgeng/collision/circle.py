@@ -31,6 +31,14 @@ class Circle:
 		Returns: str'''
 		return f'pgeng.Circle{tuple(self.center), self.radius}'
 
+	def __eq__(self, other):
+		'''Returns if it is the same as another Circle object
+		colour doesn't get included
+		If other is not a Circle object, it will return False
+
+		Returns: bool'''
+		return (tuple(self.center), self.radius) == (tuple(other.center), other.radius) if isinstance(other, Circle) else False
+
 	@property
 	def location(self):
 		'''Returns the topleft location of the Circle

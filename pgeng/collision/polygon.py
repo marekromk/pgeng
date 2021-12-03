@@ -36,6 +36,14 @@ class Polygon:
 		Returns: str'''
 		return f'pgeng.Polygon({tuple(self.location)})'
 
+	def __eq__(self, other):
+		'''Returns if it is the same as another Polygon object
+		colour doesn't get included
+		If other is not a Polygon object, it will return False
+
+		Returns: bool'''
+		return ([tuple(point) for point in self.points], self.rotation % 360) == ([tuple(point) for point in other.points], other.rotation % 360) if isinstance(other, Polygon) else False
+
 	def __len__(self):
 		'''Returns the length of the points variable
 
