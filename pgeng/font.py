@@ -6,6 +6,8 @@ from .core import clip_surface, load_image
 
 __all__ = ['create_font', 'TextButton']
 path = Path(__file__).resolve().parent
+small_image_path = path.joinpath('font/small.png')
+large_image_path = path.joinpath('font/large.png')
 
 def create_font(colour):
 	'''A function to create small and large Font objects
@@ -15,17 +17,18 @@ def create_font(colour):
 	For help on a Font object, do help(pgeng.font.Font)
 
 	Returns: tuple'''
-	if tuple(colour[:3]) == (0, 0, 0):
-		small_font_image = palette_swap(load_image(path.joinpath('font/small.png')), {(255, 0, 0): colour[:3], tuple(colour[:3]): (255, 255, 255)})
-		large_font_image = palette_swap(load_image(path.joinpath('font/large.png')), {(255, 0, 0): colour[:3], tuple(colour[:3]): (255, 255, 255)})
-		return Font(small_font_image, background_colour=255), Font(large_font_image, background_colour=255)
-	if tuple(colour[:3]) == (127, 127, 127):
-		small_font_image = palette_swap(load_image(path.joinpath('font/small.png')), {(255, 0, 0): colour[:3], tuple(colour[:3]): (128, 128, 128)})
-		large_font_image = palette_swap(load_image(path.joinpath('font/large.png')), {(255, 0, 0): colour[:3], tuple(colour[:3]): (128, 128, 128)})
-		return Font(small_font_image, 128), Font(large_font_image, 128)
-	small_font_image = palette_swap(load_image(path.joinpath('font/small.png')), {(255, 0, 0): colour[:3]})
-	large_font_image = palette_swap(load_image(path.joinpath('font/large.png')), {(255, 0, 0): colour[:3]})
-	return Font(small_font_image), Font(large_font_image)
+	colour = tuple(colour[:3])
+	if colour == (0, 0, 0):
+		small_image = palette_swap(load_image(small_image_path), {(255, 0, 0): colour, colour: (255, 255, 255)})
+		large_image = palette_swap(load_image(large_image_path), {(255, 0, 0): colour, colour: (255, 255, 255)})
+		return Font(small_image, background_colour=255), Font(large_image, background_colour=255)
+	if colour == (127, 127, 127):
+		small_image = palette_swap(load_image(small_image_path), {(255, 0, 0): colour, colour: (128, 128, 128)})
+		large_image = palette_swap(load_image(large_image_path), {(255, 0, 0): colour, colour: (128, 128, 128)})
+		return Font(small_image, 128), Font(large_image, 128)
+	small_image = palette_swap(load_image(small_image_path), {(255, 0, 0): colour})
+	large_image = palette_swap(load_image(large_image_path), {(255, 0, 0): colour})
+	return Font(small_image), Font(large_image)
 
 class Font:
 	'''A class to create a pixel art font
@@ -87,7 +90,7 @@ class Font:
 				size.x = 0
 		widths.append(size.x)
 		size.x = max(widths)
-		return size
+		return size - (1, 1)
 
 	def render(self, surface, text, location, scroll=pygame.Vector2()):
 		'Render a string on a surface at a location'
@@ -107,10 +110,11 @@ class Font:
 class TextButton:
 	'''A string of text that is also a button
 	The collide function is to collide with the mouse and clicks
-	It also needs a font size, it has to be either 'small' or 'large'
 	Use the location variable instead of the rect values
 
 	Attributes:
+
+	font
 
 	location
 
@@ -118,19 +122,17 @@ class TextButton:
 
 	size
 
-	test_font
-
 	text'''
-	def __init__(self, text, location, font_size):
+	def __init__(self, text, location, font):
 		'Initialising a TextButton object'
-		if font_size != 'small' and font_size != 'large':
-			raise ValueError('font_size is not \'small\' or \'large\'')
 		if type(text) is not str:
 			raise TypeError('text is not a string')
+		if not isinstance(font, Font):
+			raise TypeError('font is not a Font object')
 		self.text = text
+		self.font = font
 		self.location = pygame.Vector2(location)
-		self.test_font = Font(load_image(path.joinpath(f'font/{font_size}.png')))
-		self.size = pygame.Vector2([self.test_font.get_size(text)[i] - 1 for i in range(2)])
+		self.size = self.font.get_size(text)
 
 	def __repr__(self):
 		'''Returns a string representation of the object
@@ -143,7 +145,6 @@ class TextButton:
 		'''Returns the pygame.Rect object of the TextButton
 
 		Returns: pygame.Rect'''
-		self.location = pygame.Vector2(self.location)
 		return pygame.Rect(self.location, self.size)
 
 	def set_text(self, text):
@@ -152,7 +153,7 @@ class TextButton:
 		if type(text) is not str:
 			raise TypeError('text is not a string')
 		self.text = text
-		self.size = pygame.Vector2([self.test_font.get_size(text)[i] - 1 for i in range(2)])
+		self.size = self.font.get_size(text)
 
 	def collide(self, click, check_location=None):
 		'''This will check collision with the mouse location and also if click is True with it
@@ -169,8 +170,6 @@ class TextButton:
 				collides['clicked'] = True
 		return collides
 
-	def render(self, surface, font, scroll=pygame.Vector2()):
-		'Renders the text from the button'
-		if not isinstance(font, Font):
-			raise TypeError('font is not a Font object')
-		font.render(surface, self.text, self.location, scroll)
+	def render(self, surface, scroll=pygame.Vector2()):
+		'Renders the TextButton'
+		self.font.render(surface, self.text, self.location, scroll)
