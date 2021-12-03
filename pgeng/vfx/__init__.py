@@ -1,5 +1,5 @@
 'Visual effects classes and functions for pgeng'
-from .. import failed_imports as _failed_imports #UNDERSCORE SO IT IS NOT VISIBLE AS A VARIABLE
+from .. import _failed_imports
 
 try:
     from .core import circle_lighting
