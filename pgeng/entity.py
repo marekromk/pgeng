@@ -102,10 +102,10 @@ class Entity:
 
 		It will scale it according to the scale variable
 		It will flip it horizontal and vertical according to the flips variable
-		It will rotate it according to the rotation variable, pygame will rotate it in the other direction compared to degrees in math
+		It will rotate it according to the rotation variable
 		It will also set and alpha according to the alpha variable
 
-		For more information about the rotation, go to https://www.pygame.org/docs/ref/transform.html#pygame.transform.rotate
+		For more information about transforming, go to https://www.pygame.org/docs/ref/transform.html
 
 		Returns: pygame.Surface'''
 		transformed_image = image.copy()
