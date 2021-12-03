@@ -57,6 +57,8 @@ def write_to_file(path, data, mode='w'):
 	'''Writes data to a file
 	data should be a string
 	mode is the mode in which the file should be opened'''
+	if type(data) is not str:
+		raise TypeError('data should be a string')
 	with open(Path(path).resolve(), mode) as file:
 		file.write(data)
 
@@ -78,6 +80,8 @@ def write_to_compressed_file(path, data, mode='wb', compresslevel=9, encoding='u
 	gzip_extension is if it should add '.gz', it will be added behind the extension it already had
 	Example:
 		'file.txt' -> 'file.txt.gz\''''
+	if type(data) is not str:
+		raise TypeError('data should be a string')
 	if type(compresslevel) is not int:
 		raise TypeError('compresslevel has to be an integer')
 	if not -1 <= compresslevel <= 9:
