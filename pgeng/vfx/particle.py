@@ -25,7 +25,7 @@ class Particle:
 		self.momentum = pygame.Vector2(momentum)
 		self.size = size
 		self.colour = tuple(colour)
-		self.width = 0
+		self.width = width
 		self.alive = True
 
 	def __repr__(self):
@@ -59,7 +59,7 @@ class Particle:
 		scroll is position of the camera, it will render it at the location of the Particle minus the scroll
 		It can also render a lighting circle around the particle with a colour and special flag, set with lighting_flag'''
 		if self.alive:
-			pygame.draw.circle(surface, self.colour, self.location - scroll, self.size, self.width)
+			pygame.draw.circle(surface, self.colour, self.location - scroll, self.size, self.width if lighting_colour is None else 0)
 			if lighting_colour:
 				lighting_radius = self.size * 2
 				surface.blit(circle_lighting(lighting_radius, lighting_colour, lighting_alpha), [self.location[i] - lighting_radius - scroll[i] for i in range(2)], special_flags=lighting_flag)
