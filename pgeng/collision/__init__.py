@@ -1,5 +1,5 @@
 'Object classes with collision functions'
-from .. import failed_imports as _failed_imports #UNDERSCORE SO IT IS NOT VISIBLE AS A VARIABLE
+from .. import _failed_imports
 
 try:
 	from .circle import Circle
