@@ -39,7 +39,7 @@ class FlameParticle(Particle):
 
     def __init__(self, location, size, burn_rate, colour):
         'Initialising a FlameParticle'
-        super().__init__(location, pygame.Vector2(), size, colour)
+        super().__init__(location, 0, size, colour)
         self.burn_rate = burn_rate
         self.alpha_layers = FlameParticle.alpha_layers
         self.alpha_glow = FlameParticle.alpha_glow_difference_constant
