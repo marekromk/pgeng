@@ -1,5 +1,6 @@
 'A class and variable for Tile objects'
 from pygame import Vector2, Rect
+from json import loads, dumps
 
 tile_size = 0
 
@@ -36,9 +37,31 @@ class Tile:
 		Returns: str'''
 		return f'pgeng.Tile{tuple(self.location), tuple(self.size), self.ramp}'
 
+	def __eq__(self, other):
+		'''Returns if it is the same as another Tile object
+		If other is not a Tile object, it will return False
+
+		Returns: bool'''
+		return (tuple(self.location), tuple(self.size), self.ramp) == (tuple(other.location), tuple(other.size), other.ramp) if isinstance(other, Tile) else False
+
 	@property
 	def rect(self):
 		'''Returns a pygame.Rect object of the Tile object
 
 		Returns: pygame.Rect'''
 		return Rect(self.location, self.size)
+
+	@classmethod
+	def from_json(cls, json_string):
+		'''Returns a Tile object from a json string
+		The string should be from the to_json() function
+
+		Returns: Tile'''
+		json_string = loads(json_string)
+		return Tile(json_string['location'], json_string['size'], json_string['ramp'])
+
+	def to_json(self):
+		'''Returns the object as a json formatted string
+
+		Returns: str'''
+		return dumps({'location': tuple(self.location), 'size': tuple(self.size), 'ramp': self.ramp})
