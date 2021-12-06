@@ -30,7 +30,7 @@ def gray_scale(surface):
 	for y in range(new_surface.get_height()):
 		for x in range(new_surface.get_width()):
 			colour_value = new_surface.get_at((x, y))
-			new_surface.set_at((x, y), [colour_value.r * 0.2126 + colour_value.g * 0.7152 + colour_value.b * 0.0722 for i in range(3)])
+			new_surface.set_at((x, y), [colour_value.r * 0.2126 + colour_value.g * 0.7152 + colour_value.b * 0.0722 for i in range(3)] + [colour_value[3]])
 	return new_surface
 
 def gray_shade(surface, shades=16):
@@ -46,7 +46,7 @@ def gray_shade(surface, shades=16):
 	for y in range(new_surface.get_height()):
 		for x in range(new_surface.get_width()):
 			colour_value = new_surface.get_at((x, y))
-			new_surface.set_at((x, y), [nearest(sum(colour_value[:3]) / 3, conversion) for i in range(3)])
+			new_surface.set_at((x, y), [nearest(sum(colour_value[:3]) / 3, conversion) for i in range(3)] + [colour_value[3]])
 	return new_surface
 
 def outline(surface, line_colour, draw_surface=True):
