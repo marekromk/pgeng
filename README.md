@@ -2,7 +2,7 @@
 Useful functions and classes for PyGame
 
 ### Installation
-`pip3 install pgeng`
+`pip3 install pgeng -U`
 
 ### Documentation
 Do help(pgeng.Function) to get the documentation of the function (or possibly class)\
