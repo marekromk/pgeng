@@ -97,6 +97,7 @@ while True:
                 circle.center = pygame.Vector2(original_center)
             if event.key == K_RETURN:
                 show_mask = not show_mask
+                rect_colour = (0, 0, 255) if not show_mask else rect_colour
             if event.key == K_r:
                 rotate_timer = 0 if poly_mode else 91
 
