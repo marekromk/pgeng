@@ -1,5 +1,6 @@
 'A Polygon class with collision functions'
 import pygame, math
+from ..core import int_location
 from importlib import import_module
 cir =  import_module('.circle', __package__)
 
@@ -128,7 +129,7 @@ class Polygon:
 		Returns: bool'''
 		if not isinstance(polygon, Polygon):
 			raise TypeError('polygon is not a Polygon object')
-		offset = polygon.location - self.location
+		offset = int_location(polygon.location - self.location)
 		return bool(self.mask.overlap(polygon.mask, offset))
 
 	def collidelist(self, polygons):
@@ -150,7 +151,7 @@ class Polygon:
 		Returns: bool'''
 		if not isinstance(Rect, pygame.Rect):
 			raise TypeError('Rect is not a pygame.Rect object')
-		offset = Rect.topleft - self.location
+		offset = int_location(Rect.topleft - self.location)
 		rect_mask = pygame.Mask(Rect.size, True)
 		return bool(self.mask.overlap(rect_mask, offset))
 
@@ -160,7 +161,7 @@ class Polygon:
 		Returns: bool'''
 		if not isinstance(circle, cir.Circle):
 			raise TypeError('circle is not a Circle object')
-		offset = circle.location - self.location
+		offset = int_location(circle.location - self.location)
 		return bool(self.mask.overlap(circle.mask, offset))
 
 	def render(self, surface, scroll=pygame.Vector2(), width=0):
