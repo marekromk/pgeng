@@ -5,7 +5,7 @@ from pygame.locals import *
 pygame.init()
 #pgeng.set_spark_attributes(side_length=0.4, back_length=2.5)# to change how it looks
 
-screen = pgeng.Screen((640, 480), SCALED | RESIZABLE, vsync=0)
+screen = pgeng.Screen((640, 480), SCALED | RESIZABLE)
 display = screen.get_display()
 clock = pygame.time.Clock()
 pygame.mouse.set_visible(False)
