@@ -71,7 +71,7 @@ class Sounds:
 	def play_sound(self, sound):
 		'Plays the specified sound in the sounds dictionary if play_sound_variable is True'
 		if self.play_sound_variable:
-			self.sounds[Sound].play()
+			self.sounds[sound].play()
 
 	def play_music(self, path, amount=-1, volume=-1):
 		'''This will play the music file if play_sound_variable is True
