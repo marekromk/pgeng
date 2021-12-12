@@ -4,8 +4,8 @@ from pygame.locals import *
 pygame.init()
 
 clock = pygame.time.Clock()
-Screen = pgeng.Screen((320, 240), vsync=0)
-display = Screen.get_display()
+screen = pgeng.Screen((320, 240))
+display = screen.get_display()
 small_font = pgeng.create_font((255, 255, 255))[0]
 
 original_points = [(150, 180), (170, 180), (160, 200)]

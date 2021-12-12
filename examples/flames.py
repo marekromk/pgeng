@@ -4,8 +4,7 @@ from pygame.locals import *
 
 pygame.init()
 
-display_size = (500, 500)
-screen = pgeng.Screen(display_size, vsync=0)
+screen = pgeng.Screen((500, 500))
 display = screen.get_display()
 clock = pygame.time.Clock()
 large_font = pgeng.create_font((255, 255, 255))[1]
@@ -29,7 +28,7 @@ while True:
 
     rendering = 0
     for flame in flames:
-        if any([0 <= p.location.x - scroll.x <= display_size[0] and 0 <= p.location.y - scroll.y <= display_size[1] for p in flame.particles]):
+        if any([0 <= p.location.x - scroll.x <= screen.size[0] and 0 <= p.location.y - scroll.y <= screen.size[1] for p in flame.particles]):
             flame.render(display, -4, scroll, dt)
             rendering += 1
     for event in pygame.event.get():

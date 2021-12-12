@@ -4,7 +4,7 @@ from pygame.locals import *
 pygame.init()
 pgeng.tile_size = 20
 
-screen = pgeng.Screen((320, 240), vsync=0)
+screen = pgeng.Screen((320, 240))
 display = screen.get_display()
 clock = pygame.time.Clock()
 
