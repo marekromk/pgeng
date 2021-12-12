@@ -51,6 +51,34 @@ class Tile:
 		Returns: pygame.Rect'''
 		return Rect(self.location, self.size)
 
+	@property
+	def left(self):
+		'''Returns the x position of the left side of the Tile object
+
+		Returns: float'''
+		return float(self.location[0])
+
+	@property
+	def right(self):
+		'''Returns the x position of the right side of the Tile object
+
+		Returns: float'''
+		return float(self.location[0] + self.size[0])
+
+	@property
+	def top(self):
+		'''Returns the y position of the top side of the Tile object
+
+		Returns: float'''
+		return float(self.location[1])
+
+	@property
+	def bottom(self):
+		'''Returns the y position of the bottom side of the Tile object
+
+		Returns: float'''
+		return float(self.location[1] + self.size[1])
+
 	@classmethod
 	def from_json(cls, json_string):
 		'''Returns a Tile object from a json string
