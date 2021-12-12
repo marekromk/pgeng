@@ -1,10 +1,35 @@
 'Core functions for pgeng'
 import pygame, gzip
+from math import ceil
 from pathlib import Path
 from collections import Counter
 from sys import exit as _sysexit
 from errno import ENOENT as _ENOENT
 from os import strerror as _strerror
+
+def int_location(location):
+	'''Return a list with the coordinates truncated
+
+	Returns: list'''
+	if len(location) != 2:
+		raise ValueError('location must be 2 coordinates')
+	return [int(location[i]) for i in range(2)]
+
+def round_location(location):
+	'''Return a list with the coordinates rounded
+
+	Returns: list'''
+	if len(location) != 2:
+		raise ValueError('location must be 2 coordinates')
+	return [round(location[i]) for i in range(2)]
+
+def ceil_location(location):
+	'''Return a list with the coordinates ceiled
+
+	Returns: list'''
+	if len(location) != 2:
+		raise ValueError('location must be 2 coordinates')
+	return [ceil(location[i]) for i in range(2)]
 
 def clip_surface(surface, location, size):
 	'''Creates a new Surface from a part of another Surface
@@ -94,7 +119,7 @@ def write_to_compressed_file(path, data, mode='wb', compresslevel=9, encoding='u
 
 def nearest(input, nearest, int_mode=True):
 	'''Returns a number changed to the nearest given
-	If int_mode is True, it will truncate every returned number and return an integer
+	If int_mode is True, it will truncate the returned number and return an integer
 
 	Returns: int (or float)'''
 	return int(round(input / nearest) * nearest) if int_mode else round(input / nearest) * nearest
