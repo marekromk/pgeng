@@ -110,7 +110,7 @@ class Entity:
 		Returns: pygame.Surface'''
 		transformed_image = image.copy()
 		if self.scale != [1, 1]:
-			transformed_image = pygame.transform.scale(transformed_image, (round(image.get_width() * self.scale[0]), round(image.get_height() * self.scale[1])))
+			transformed_image = pygame.transform.scale(transformed_image, [round(image.get_size()[i] * self.scale[i]) for i in range(2)])
 		if any(self.flips):
 			transformed_image = pygame.transform.flip(transformed_image, self.flips[0], self.flips[1])
 		if self.rotation:
