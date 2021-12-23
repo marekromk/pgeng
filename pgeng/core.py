@@ -1,7 +1,7 @@
 'Core functions for pgeng'
 import pygame, gzip
-from math import ceil
 from pathlib import Path
+from math import ceil as _ceil
 from collections import Counter
 from sys import exit as _sysexit
 from errno import ENOENT as _ENOENT
@@ -29,7 +29,7 @@ def ceil_location(location):
 	Returns: list'''
 	if len(location) != 2:
 		raise ValueError('location must be 2 coordinates')
-	return [ceil(location[i]) for i in range(2)]
+	return [_ceil(location[i]) for i in range(2)]
 
 def clip_surface(surface, location, size):
 	'''Creates a new Surface from a part of another Surface

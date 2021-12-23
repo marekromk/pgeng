@@ -1,5 +1,5 @@
 'Useful functions and classes for pygame'
-__version__ = '1.7'
+__version__ = '1.7.1'
 _failed_imports = []
 
 try:
