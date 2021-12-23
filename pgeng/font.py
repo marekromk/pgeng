@@ -14,7 +14,7 @@ def create_font(colour):
 	colour will be the colour of the text
 	The first value in the returned tuple is the small font and the second value is the large font
 
-	For help on a Font object, do help(pgeng.font.Font)
+	For help on a Font object, run help(pgeng.font.Font)
 
 	Returns: tuple'''
 	colour = tuple(colour[:3])

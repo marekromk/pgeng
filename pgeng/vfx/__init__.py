@@ -2,7 +2,7 @@
 from .. import _failed_imports
 
 try:
-    from .core import circle_lighting
+    from .vfx_core import circle_lighting
 except ImportError as e:
     _failed_imports.append(e.name)
 
