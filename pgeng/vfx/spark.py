@@ -2,6 +2,8 @@
 import pygame, math
 from ..collision import Polygon
 
+__all__ = ['set_spark_attributes', 'Spark']
+
 def set_spark_attributes(front_length=1, side_length=0.3, back_length=3.5):
 	'''Set the attributes for the Spark
 	front_length is the length of the front point of the Spark

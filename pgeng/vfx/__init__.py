@@ -1,13 +1,16 @@
 'Visual effects classes and functions for pgeng'
 from .. import _failed_imports
 
+__all__ = ['circle_lighting', 'Particle', 'ShockWave']
+
 try:
-    from .vfx_core import circle_lighting
+    from .core import circle_lighting
 except ImportError as e:
     _failed_imports.append(e.name)
 
 try:
     from .flame import *
+    __all__ += flame.__all__
 except ImportError as e:
     _failed_imports.append(e.name)
 
@@ -23,5 +26,6 @@ except ImportError as e:
 
 try:
     from .spark import *
+    __all__ += spark.__all__
 except ImportError as e:
     _failed_imports.append(e.name)
