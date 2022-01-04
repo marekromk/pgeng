@@ -2,7 +2,7 @@
 import pygame, math
 from ..core import int_location
 from importlib import import_module
-cir =  import_module('.circle', __package__)
+cir = import_module('.circle', __package__)
 
 class Polygon:
 	'''A polygon to check collision with and render
@@ -143,7 +143,6 @@ class Polygon:
 		for i, polygon in enumerate(polygons):
 			if self.collide(polygon):
 				return i
-		return None
 
 	def colliderect(self, Rect):
 		'''A function to check if the Polygon collides with a pygame.Rect object
