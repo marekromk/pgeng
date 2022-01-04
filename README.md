@@ -6,7 +6,7 @@ Useful functions and classes for pygame
 ### Documentation
 Run `help(pgeng.<Function>)` to get the documentation of the function (or possibly class)\
 Or run `help(pgeng.<Package Content>)` to get the documentation of the functions or classes in a file
-```
+```py
 import pgeng
 help(pgeng)
 ```
