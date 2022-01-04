@@ -40,7 +40,7 @@ def gray_shade(surface, shades=16):
 
 	Returns: pygame.Surface'''
 	if not 2 < shades < 256:
-		raise ValueError(f'{shades} Shades not supported, the amount must be between 2 and 256')
+		raise ValueError(f'{shades} shades not supported, the amount must be between 2 and 256')
 	conversion = 255 / (shades - 1)
 	new_surface = surface.copy()
 	for y in range(new_surface.get_height()):

@@ -61,7 +61,7 @@ class Animations:
 			file_type = most_used([file.suffix for file in path.iterdir() if file.is_file()])[0]
 		for i, frame_duration in enumerate(frame_durations):
 			if not path.joinpath(f'{path.name}{i + 1}{file_type}').is_file():
-				raise pygame.error(f'Too many non image files in \'{path}\' or the image file is not named \'{path.name}{i + 1}{file_type}\'')
+				raise pygame.error(f'too many non image files in \'{path}\' or the image file is not named \'{path.name}{i + 1}{file_type}\'')
 			frame_id = f'{animation_name}{i + 1}'
 			self.frames[frame_id] = load_image(path.joinpath(f'{path.name}{i + 1}{file_type}'), colourkey, alpha, convert_alpha)
 			self.data[animation_name]['durations'].append({'id': frame_id, 'duration': frame_duration})
@@ -84,7 +84,7 @@ class Animations:
 
 		Returns: pygame.Surface'''
 		if self.action not in self.data:
-			raise KeyError(f'Action \'{self.action}\' is not defined')
+			raise KeyError(f'action \'{self.action}\' is not defined')
 		animation_data = self.data[self.action]
 		self.frame += delta_time
 		reset_frame = round(self.frame) > animation_data['full']
@@ -97,7 +97,7 @@ class Animations:
 	def set_action(self, action):
 		'Set the current action, the frame will also be reset to 0'
 		if action not in self.data:
-			raise KeyError(f'Action \'{action}\' is not defined')
+			raise KeyError(f'action \'{action}\' is not defined')
 		if self.action != action:
 			self.action = action
 			self.frame = 0

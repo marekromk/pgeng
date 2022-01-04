@@ -22,7 +22,7 @@ class Sounds:
 	def __init__(self, channels=64):
 		'Initialising the class, it should only be done once'
 		if channels < 0:
-			raise ValueError('channels can not be less than 0')
+			raise ValueError('channels can\'t be less than 0')
 		if pygame.mixer.get_init():
 			pygame.mixer.set_num_channels(channels)
 		self.sounds = {}
@@ -58,7 +58,7 @@ class Sounds:
 		It will set the volume of a specific sound in the dictionary if a specific_sound is given
 		Than it will not change the volume variable'''
 		if not 0 <= volume <= 1:
-			raise ValueError('Volume must be between 0 and 1')
+			raise ValueError('volume must be between 0 and 1')
 		if music:
 			pygame.mixer.music.set_volume(volume)
 		if specific_sound is None:
