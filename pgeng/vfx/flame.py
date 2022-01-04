@@ -10,7 +10,7 @@ def set_flame_attributes(alpha_layers=2, alpha_glow_difference=2):
     alpha_layers is basically how many layers a particle has
     alpha_glow_difference is how much the radius of each layer should change for every layer'''
     if type(alpha_layers) is not int or type(alpha_glow_difference) is not int:
-        raise TypeError('Attributes have to be integers')
+        raise TypeError('attributes have to be integers')
     if alpha_layers < 2:
         raise ValueError('alpha_layers can not be less than 2')
     if alpha_glow_difference < 1:
