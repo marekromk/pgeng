@@ -1,5 +1,5 @@
 'Useful functions and classes for pygame'
-__version__ = '1.7.1'
+__version__ = '1.8'
 _failed_imports = []
 
 try:
@@ -13,7 +13,7 @@ except ImportError as e:
 	_failed_imports.append(e.name)
 
 try:
-	from .animations import *
+	from .animations import Animations
 except ImportError as e:
 	_failed_imports.append(e.name)
 
