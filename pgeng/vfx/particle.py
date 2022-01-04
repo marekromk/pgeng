@@ -1,7 +1,7 @@
 'A Particle class'
 import pygame
 from ..collision import Circle
-from .vfx_core import circle_lighting
+from .core import circle_lighting
 
 class Particle:
 	'''A particle to move and render
