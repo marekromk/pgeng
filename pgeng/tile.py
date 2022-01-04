@@ -2,6 +2,7 @@
 from pygame import Vector2, Rect
 from json import loads, dumps
 
+__all__ = ['tile_size', 'Tile']
 tile_size = 0
 
 class Tile:
