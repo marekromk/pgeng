@@ -80,10 +80,12 @@ def read_file(path, mode='r'):
 
 def write_to_file(path, data, mode='w'):
 	'''Writes data to a file
-	data should be a string
+	data should be a string, except if it is in byte mode
 	mode is the mode in which the file should be opened'''
-	if type(data) is not str:
+	if not 'b' in mode and type(data) is not str:
 		raise TypeError('data should be a string')
+	if 'b' in mode and type(data) is not bytes:
+		raise TypeError(f'data should be bytes if mode is {mode}')
 	with open(_Path(path).resolve(), mode) as file:
 		file.write(data)
 
