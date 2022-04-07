@@ -87,7 +87,7 @@ class Entity:
 		'''This sets the scale for the image
 		It can be a list or tuple with the scale for the width and the scale for the height
 		If it is a number, than it will be set for the width and height'''
-		if type(scale) is list or type(scale) is tuple and len(scale) != 2:
+		if (type(scale) is list or type(scale) is tuple) and len(scale) != 2:
 			raise ValueError('scale should have 2 values')
 		self.scale = list(scale) if type(scale) is list or type(scale) is tuple else [scale, scale]
 
@@ -111,7 +111,7 @@ class Entity:
 
 		Returns: pygame.Surface'''
 		transformed_image = image.copy()
-		if type(self.scale) is list or type(self.scale) is tuple and len(self.scale) != 2:
+		if (type(self.scale) is list or type(self.scale) is tuple) and len(self.scale) != 2:
 			raise ValueError('scale should have 2 values')
 		if len(self.flips) != 2:
 			raise ValueError('flips should have 2 values')
