@@ -1,7 +1,8 @@
 'Useful functions and classes for pygame'
-__version__ = '1.8.2'
+__version__ = '1.8.3'
 _failed_imports = []
 
+#import packages first, so it also imports _failed_imports from those packages
 try:
 	from .collision import *
 except ImportError as e:
@@ -52,6 +53,7 @@ try:
 except ImportError as e:
 	_failed_imports.append(e.name)
 
+#print every failed import as a warning, use a set to remove duplicates
 print('''\nRun help(pgeng.<Function>) to get the documentation of the function (or possibly class)
 Or run help(pgeng.<Package Content>) to get the documentation of the functions or classes in a file\n''')
 print(f'Failed to import: {", ".join([failed_import.split(".")[-1] + " from " + ".".join(failed_import.split(".")[:-1]) if "pgeng" in failed_import else failed_import for failed_import in set(_failed_imports)])}') if _failed_imports else None

@@ -2,11 +2,11 @@
 import pygame
 from .animations import Animations
 
-def collision_test(rect, collision_list):
+def tiles_collision(rect, tiles):
 	'''A function used by the Entity class to check collisions with tiles
 
 	Returns: list'''
-	return [list_rect for list_rect in collision_list if rect.colliderect(list_rect)]
+	return [tile for tile in tiles if rect.colliderect(tile)]
 
 class Entity:
 	'''An entity with usefull functions
@@ -33,11 +33,11 @@ class Entity:
 	def __init__(self, location, size):
 		'Initialising an Entity object'
 		self.rect = pygame.Rect(location, size)
-		self.location = pygame.Vector2(location)
+		self.location = pygame.Vector2(location) #rect uses truncated integers, Vector2 is more precise
 
-		self.flips = [False, False]
+		self.flips = [False, False] #x, y
 		self.rotation = 0
-		self.scale = [1, 1]
+		self.scale = [1, 1] #x, y
 		self.alpha = 255
 
 		self.animations = Animations(None)
@@ -140,45 +140,48 @@ class Entity:
 		normal_tiles = [tile.rect for tile in tiles if not tile.ramp]
 		ramp_tiles = [tile for tile in tiles if tile.ramp]
 
+		#check left and right side first
 		self.location.x += momentum[0]
-		self.rect.x = round(self.location.x)
-		hit_list = collision_test(self.rect, normal_tiles)
+		self.rect.x = round(self.location.x) #round it, because a rect normally truncates
+		hit_list = tiles_collision(self.rect, normal_tiles)
 		for tile in hit_list:
-			if momentum[0] > 0:
+			if momentum[0] > 0: #going to the right
 				self.rect.right = tile.left
 				collision_types['right'] = True
-			elif momentum[0] < 0:
+			elif momentum[0] < 0: #going to the left
 				self.rect.left = tile.right
 				collision_types['left'] = True
 			self.location.x = self.rect.x
 
+		#check top and bottom second
 		self.location.y += momentum[1]
-		self.rect.y = round(self.location.y)
-		hit_list = collision_test(self.rect, normal_tiles)
+		self.rect.y = round(self.location.y) #round it, because a rect normally truncates
+		hit_list = tiles_collision(self.rect, normal_tiles)
 		for tile in hit_list:
-			if momentum[1] > 0:
+			if momentum[1] > 0: #going down
 				self.rect.bottom = tile.top
 				collision_types['bottom'] = True
-			elif momentum[1] < 0:
+			elif momentum[1] < 0: #going up
 				self.rect.top = tile.bottom
 				collision_types['top'] = True
 			self.location.y = self.rect.y
 
+		#check ramps last
 		for ramp in ramp_tiles:
 			ramp_hitbox = ramp.rect
 			if self.rect.colliderect(ramp_hitbox):
-				delta_x = self.rect.x - ramp_hitbox.x
-				if ramp.ramp == 1 or ramp.ramp == 4:
+				delta_x = self.rect.x - ramp_hitbox.x #difference between entity's and ramp's x
+				if ramp.ramp == 1 or ramp.ramp == 4: #left side of the entity touches the ramp
 					height_position = ramp_hitbox.w - delta_x
-				else:
+				else: #right side of the entity touches the ramp
 					height_position = delta_x + self.rect.w
 
-				height_position = min(height_position, ramp_hitbox.w)
-				height_position = max(height_position, 0)
+				height_position = min(height_position, ramp_hitbox.w) #horizontal position should not be more than width of ramp
+				height_position = max(height_position, 0) #horizontal position should not be less that 0 compared to the ramp
 
-				if ramp.ramp == 1 or ramp.ramp == 2:
+				if ramp.ramp == 1 or ramp.ramp == 2: #top of the entity touches the ramp
 					y_position = ramp_hitbox.y + height_position
-				else:
+				else: #bottom of the entity touches the ramp
 					y_position = ramp_hitbox.bottom - height_position
 
 				if (ramp.ramp == 3 or ramp.ramp == 4) and self.rect.bottom > y_position:

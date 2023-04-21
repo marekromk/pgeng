@@ -1,5 +1,6 @@
 '''A class to make the dipslay/screen
 It also has functions to enter and exit fullscreen'''
+#import functions with underscore so it doesn't get imported by pgeng itself
 import pygame
 from os import name as _name
 from .core import round_location
@@ -47,7 +48,7 @@ class Screen:
 			self.toggle_fullscreen(manual=fullscreen)
 		else:
 			self.pygame_display = pygame.display.set_mode(self.size, flags, depth, display, vsync)
-		self.window = Window.from_display_module()
+		self.window = Window.from_display_module() #sdl2 documentation for more info: import pygame._sdl2;help(pygame._sdl2.video.Window)
 
 	def __repr__(self):
 		'''Returns a string representation of the object

@@ -2,7 +2,7 @@
 import pygame
 from ..core import int_location
 from importlib import import_module
-poly = import_module('.polygon', __package__)
+poly = import_module('.polygon', __package__) #import_module because otherwise there is an "circular import" error
 
 class Circle:
 	'''A circle to check collisions with and render
@@ -23,7 +23,7 @@ class Circle:
 		'Initialising a Circle object'
 		self.center = pygame.Vector2(center)
 		self.colour = tuple(colour)
-		self.surface = pygame.Surface((0, 0))
+		self.surface = pygame.Surface((0, 0)) #set_radius needs the self.surface variable to exist
 		self.set_radius(radius)
 
 	def __repr__(self):
@@ -97,7 +97,7 @@ class Circle:
 		if not isinstance(Rect, pygame.Rect):
 			raise TypeError('Rect is not a pygame.Rect object')
 		offset = int_location(Rect.topleft - self.location)
-		rect_mask = pygame.Mask(Rect.size, True)
+		rect_mask = pygame.Mask(Rect.size, True) #the mask should be filled for it to check with
 		return bool(self.mask.overlap(rect_mask, offset))
 
 	def collidepolygon(self, polygon):

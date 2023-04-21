@@ -1,4 +1,5 @@
 'A simple class for loading and playing sounds and music'
+#import functions with underscore so it doesn't get imported by pgeng itself
 import pygame
 from pathlib import Path
 from errno import ENOENT as _ENOENT
@@ -19,7 +20,7 @@ class Sounds:
 	sounds
 
 	volume'''
-	def __init__(self, channels=64):
+	def __init__(self, channels=64): #normally channels is 8, that is not enough for multiple sounds
 		'Initialising the class, it should only be done once'
 		if channels < 0:
 			raise ValueError('channels can\'t be less than 0')

@@ -1,4 +1,5 @@
 'Object classes with collision functions'
+#import functions with underscore so it doesn't get imported by pgeng itself
 from .. import _failed_imports
 
 __all__ = ['Circle', 'Polygon']

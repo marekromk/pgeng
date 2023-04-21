@@ -30,7 +30,7 @@ class Tile:
 			raise ValueError('ramp must be between 0 and 4')
 		self.location = Vector2(location)
 		self.size = Vector2(size)
-		self.ramp = ramp if self.size[0] == self.size[1] else 0
+		self.ramp = ramp if self.size[0] == self.size[1] else 0 #both sizes need to be the same, it only supports 45 degrees
 
 	def __repr__(self):
 		'''Returns a string representation of the object
@@ -81,7 +81,7 @@ class Tile:
 		return float(self.location[1] + self.size[1])
 
 	@classmethod
-	def from_json(cls, json_string):
+	def from_json(cls, json_string): #this means you don't initialise the class for this function, it is Tile.from_json(json_string)
 		'''Returns a Tile object from a json string
 		The string should be from the to_json() function
 
