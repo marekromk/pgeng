@@ -4,6 +4,7 @@ from ..collision import Polygon
 
 __all__ = ['set_spark_attributes', 'Spark']
 
+#for an indepth explanation: https://youtu.be/wNMRq_uoWM0
 def set_spark_attributes(front_length=1, side_length=0.3, back_length=3.5):
 	'''Set the attributes for the Spark
 	front_length is the length of the front point of the Spark
@@ -73,9 +74,9 @@ class Spark:
 		'''A function to change the angle slightly towards another angle
 		angle should be given in degrees
 		change_rate is how much the angle should change every frame'''
-		direction = (angle - self.angle + 180) % 360 - 180
+		direction = (angle - self.angle + 180) % 360 - 180 #- 180 because the y axis is flipped in pygame
 		rotation = abs(direction) / direction if direction else 1
-		if abs(direction) < change_rate * delta_time:
+		if abs(direction) < change_rate * delta_time: #this means it is already there, it has to rotate less degrees than the change_rate
 			self.angle = angle
 		else:
 			self.angle += rotation * change_rate * delta_time
@@ -84,14 +85,16 @@ class Spark:
 		'''A function to move the Spark
 		It will decrease the speed and if it is lower or equal to 0, it is no longer alive
 		angle_change will change the angle by that amount every time this function runs'''
-		angle = math.radians(self.angle)
-		self.location = pygame.Vector2(self.location)
-		self.location.x += math.cos(angle) * self.speed * delta_time
-		self.location.y += math.sin(angle) * self.speed * delta_time
-		self.speed -= speed_change * delta_time
-		self.angle += angle_change * delta_time
-		if self.speed <= 0:
+		new_speed = self.speed - speed_change * delta_time
+		if new_speed <= 0:
 			self.alive = False
+		else:
+			angle = math.radians(self.angle) #Vector2 objects use radians instead of degrees
+			self.location = pygame.Vector2(self.location)
+			self.location.x += math.cos(angle) * self.speed * delta_time
+			self.location.y += math.sin(angle) * self.speed * delta_time
+			self.speed = new_speed
+			self.angle += angle_change * delta_time
 
 	def gravity(self, speed_change, change_rate, delta_time=1):
 		'''A function to move the Spark, but it also includes gravity
@@ -106,12 +109,13 @@ class Spark:
 		It will calculate every point for the polygon (there are 4 points) that looks like a rhombus, but the back one is longer
 		scroll is position of the camera, it will render it at the location of the Spark minus scroll
 		It can also render a bigger spark around the particle with a colour and special flag, set with lighting_flag'''
+		#for an indepth explanation: https://youtu.be/wNMRq_uoWM0
 		if self.alive:
 			angle = math.radians(self.angle)
-			self.points = [[self.location[0] + math.cos(angle) * self.speed * self.size * self.lengths[0], self.location[1] + math.sin(angle) * self.speed * self.size * self.lengths[0]], #FRONT POINT
-			[self.location[0] + math.cos(angle + math.pi * 0.5) * self.speed * self.size * self.lengths[1], self.location[1] + math.sin(angle + math.pi * 0.5) * self.speed * self.size * self.lengths[1]], #RIGHT POINT
-			[self.location[0] - math.cos(angle) * self.speed * self.size * self.lengths[2], self.location[1] - math.sin(angle) * self.speed * self.size * self.lengths[2]], #BOTTOM POINT
-			[self.location[0] + math.cos(angle - math.pi * 0.5) * self.speed * self.size * self.lengths[1], self.location[1] + math.sin(angle - math.pi * 0.5) * self.speed * self.size * self.lengths[1]]] #LEFT POINT
+			self.points = [[self.location[0] + math.cos(angle) * self.speed * self.size * self.lengths[0], self.location[1] + math.sin(angle) * self.speed * self.size * self.lengths[0]], #the front point
+			[self.location[0] + math.cos(angle + math.pi * 0.5) * self.speed * self.size * self.lengths[1], self.location[1] + math.sin(angle + math.pi * 0.5) * self.speed * self.size * self.lengths[1]], #the right point
+			[self.location[0] - math.cos(angle) * self.speed * self.size * self.lengths[2], self.location[1] - math.sin(angle) * self.speed * self.size * self.lengths[2]], #the bottom point
+			[self.location[0] + math.cos(angle - math.pi * 0.5) * self.speed * self.size * self.lengths[1], self.location[1] + math.sin(angle - math.pi * 0.5) * self.speed * self.size * self.lengths[1]]] #the left point
 
 			pygame.draw.polygon(surface, self.colour, [pygame.Vector2(point) - scroll for point in self.points])
 			if lighting_colour:
@@ -120,17 +124,20 @@ class Spark:
 
 	def _lighting(self, position, colour, alpha=255):
 		'A function used by render to render a bigger polygon on top of the normal one'
-		#EVERYTHING * 2 FOR MAKING THE POLYGON LARGER
+		#everything * 2 for making the polygon larger
 		angle = math.radians(self.angle)
+		tuple_colour = tuple(colour[:3])
 		lengths = [self.lengths[i] * 2 for i in range(3)]
-		larger_points = [[position[0] + math.cos(angle) * self.speed * self.size * lengths[0], position[1] + math.sin(angle) * self.speed * self.size * lengths[0]], #FRONT POINT
-		[position[0] + math.cos(angle + math.pi * 0.5) * self.speed * self.size * lengths[1], position[1] + math.sin(angle + math.pi * 0.5) * self.speed * self.size * lengths[1]], #RIGHT POINT
-		[position[0] - math.cos(angle) * self.speed * self.size * lengths[2], position[1] - math.sin(angle) * self.speed * self.size * lengths[2]], #BOTTOM POINT
-		[position[0] + math.cos(angle - math.pi * 0.5) * self.speed * self.size * lengths[1], position[1] + math.sin(angle - math.pi * 0.5) * self.speed * self.size * lengths[1]]] #LEFT POINT
+		larger_points = [[position[0] + math.cos(angle) * self.speed * self.size * lengths[0], position[1] + math.sin(angle) * self.speed * self.size * lengths[0]], #the front point
+		[position[0] + math.cos(angle + math.pi * 0.5) * self.speed * self.size * lengths[1], position[1] + math.sin(angle + math.pi * 0.5) * self.speed * self.size * lengths[1]], #the right point
+		[position[0] - math.cos(angle) * self.speed * self.size * lengths[2], position[1] - math.sin(angle) * self.speed * self.size * lengths[2]], #the bottom point
+		[position[0] + math.cos(angle - math.pi * 0.5) * self.speed * self.size * lengths[1], position[1] + math.sin(angle - math.pi * 0.5) * self.speed * self.size * lengths[1]]] #the left point
 
-		surface_size = [math.ceil(max(point[i] for point in larger_points) - min(point[i] for point in larger_points)) for i in range(2)] #DIFFERENCE BETWEEN LOWEST AND HIGHTEST POINTS
+		surface_size = [math.ceil(max(point[i] for point in larger_points) - min(point[i] for point in larger_points)) for i in range(2)] #the difference between lowest and hightest points
 		surface = pygame.Surface(surface_size)
-		surface.set_colorkey((0, 0, 0))
+		surface.set_colorkey((0, 0, 0) if tuple_colour != (0, 0, 0) else (1, 0, 0)) #there should be no background
+		if tuple_colour == (0, 0, 0):
+			surface.fill((1, 0, 0))
 		if alpha != 255:
 			surface.set_alpha(alpha)
 		pygame.draw.polygon(surface, colour, larger_points)
