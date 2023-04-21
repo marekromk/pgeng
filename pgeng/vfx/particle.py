@@ -46,13 +46,15 @@ class Particle:
 		'''Move the location of the Particle and change the size
 		If the size is smaller or equal to 0, it will no longer be alive
 		It also has gravity (y_momentum)'''
-		self.location = pygame.Vector2(self.location)
-		self.momentum = pygame.Vector2(self.momentum)
-		self.momentum.y += y_momentum * delta_time
-		self.location += self.momentum * delta_time
-		self.size -= size_change * delta_time
-		if self.size < 1:
+		new_size = self.size - size_change * delta_time
+		if new_size < 1:
 			self.alive = False
+		else:
+			self.location = pygame.Vector2(self.location)
+			self.momentum = pygame.Vector2(self.momentum)
+			self.momentum.y += y_momentum * delta_time
+			self.location += self.momentum * delta_time
+			self.size = new_size
 
 	def render(self, surface, scroll=pygame.Vector2(), lighting_colour=None, lighting_alpha=255, lighting_flag=0):
 		'''Render the Particle if it is alive
