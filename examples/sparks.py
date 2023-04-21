@@ -3,7 +3,7 @@ from random import uniform, randint
 from pygame.locals import *
 
 pygame.init()
-#pgeng.set_spark_attributes(side_length=0.4, back_length=2.5)# to change how it looks
+#pgeng.set_spark_attributes(side_length=0.4, back_length=2.5) #to change how it looks
 
 screen = pgeng.Screen((640, 480), SCALED | RESIZABLE)
 display = screen.get_display()
@@ -33,7 +33,7 @@ while True:
         turnnumber = 0
 
     for i in range(6 - lighting * 4):
-        sparks.append(pgeng.Spark(mouse, randint(0, 360), uniform(3.5, 5), uniform(2, 3.5), (randint(100, 255), 0, randint(0, 100)))) #BLUE COLORS: (randint(0, 255), 255, 255)
+        sparks.append(pgeng.Spark(mouse, randint(0, 360), uniform(3.5, 5), uniform(2, 3.5), (randint(100, 255), 0, randint(0, 100)))) #blue colors: (randint(0, 255), 255, 255)
 
     for i, spark in sorted(enumerate(sparks), reverse=True):
         if gravity:
@@ -79,6 +79,7 @@ while True:
                 turn = True
         if event.type == MOUSEBUTTONUP:
             turn = False
+
     large_font.render(display, f'{round(clock.get_fps())}', (1, 1))
     pygame.display.update()
     clock.tick(144)
