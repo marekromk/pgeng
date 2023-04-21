@@ -33,11 +33,13 @@ class ShockWave:
 		'''The move function of the Shockwave
 		If the width is smaller or the same as 1, it will no longer be alive
 		The radius will become bigger and the width will become smaller (by default)'''
-		self.center = pygame.Vector2(self.center)
-		self.radius += radius_change * delta_time
-		self.width -= width_change * delta_time
-		if round(self.width) <= 1:
+		new_width = self.width - width_change * delta_time
+		if round(new_width) <= 1:
 			self.alive = False
+		else:
+			self.center = pygame.Vector2(self.center)
+			self.radius += radius_change * delta_time
+			self.width = new_width
 
 	def render(self, surface, scroll=pygame.Vector2()):
 		'''It will only render it if it is still alive
