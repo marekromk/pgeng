@@ -5,6 +5,7 @@ from .particle import Particle
 
 __all__ = ['set_flame_attributes', 'Flame']
 
+#for an indepth explanation: https://youtu.be/MJB3QPXUYBU
 def set_flame_attributes(alpha_layers=2, alpha_glow_difference=2):
     '''Set the attributes for the FlameParticle
     alpha_layers is basically how many layers a particle has
@@ -34,12 +35,13 @@ class FlameParticle(Particle):
     surface
 
     (every Particle attribute)'''
+    #these are constants, but it is possible to change them
     alpha_layers = 2
     alpha_glow_difference_constant = 2
 
     def __init__(self, location, size, burn_rate, colour):
         'Initialising a FlameParticle'
-        super().__init__(location, 0, size, colour)
+        super().__init__(location, 0, size, colour) #init the Particle class
         self.burn_rate = burn_rate
         self.alpha_layers = FlameParticle.alpha_layers
         self.alpha_glow = FlameParticle.alpha_glow_difference_constant
@@ -49,12 +51,13 @@ class FlameParticle(Particle):
     def move(self, y_momentum, delta_time=1):
         '''Move the FlameParticle
         y_momentum is how much it should move vertically'''
-        self.momentum = [uniform(round(-self.size), round(self.size)) / delta_time, y_momentum]
-        super().move(self.burn_rate, delta_time=delta_time)
+        self.momentum = [uniform(round(-self.size), round(self.size)) / delta_time, y_momentum] #the x location has to be a little bit randomised
+        super().move(self.burn_rate, delta_time=delta_time) #use the Particle.move function
 
     def render(self, surface, scroll=pygame.Vector2()):
         '''Render the FlameParticle with alpha layers on top of it
         scroll is position of the camera, it will render it at the location of the FlameParticle minus scroll'''
+        #for an indepth explanation: https://youtu.be/MJB3QPXUYBU
         if self.alive:
             surface_size = round(self.size) * 2 * self.alpha_layers ** 2 * self.alpha_glow
             self.surface = pygame.Surface((surface_size, surface_size), pygame.SRCALPHA)
@@ -93,8 +96,9 @@ class Flame:
         self.burn_rate = burn_rate
         self.intensity = intensity
         self.colour = tuple(colour)
-        self.particles = []
+        self.particles = [] #list of FlameParticle objects
         for i in range(round(intensity * 25)):
+            #create a FlameParticle object with a pseudorandom location and size
             self.particles.append(FlameParticle([self.location.x + randint(round(-self.max_particle_size * 2), round(self.max_particle_size * 2)), self.location.y + randint(round(-self.max_particle_size * 2), round(self.max_particle_size * 2))], max(1, uniform(self.max_particle_size * 0.2, self.max_particle_size)), self.burn_rate, self.colour))
 
     def __repr__(self):
@@ -124,6 +128,6 @@ class Flame:
         for i, particle in sorted(enumerate(self.particles), reverse=True):
             particle.move(y_momentum, delta_time)
             particle.render(surface, scroll)
-            if not particle.alive:
+            if not particle.alive: #remove this FlameParticle object from the list and create a new one
                 self.particles.pop(i)
                 self.particles.append(FlameParticle([self.location[0] + randint(round(-self.max_particle_size * 2), round(self.max_particle_size * 2)), self.location[1] + randint(round(-self.max_particle_size), round(self.max_particle_size))], max(1, uniform(self.max_particle_size * 0.2, self.max_particle_size)), self.burn_rate, self.colour))

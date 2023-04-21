@@ -1,4 +1,5 @@
 'A class for animations'
+#import functions with underscore so it doesn't get imported by pgeng itself
 import pygame
 from pathlib import Path
 from errno import ENOENT as _ENOENT
@@ -55,16 +56,16 @@ class Animations:
 		path = Path(path).resolve()
 		if not path.is_dir():
 			raise FileNotFoundError(_ENOENT, _strerror(_ENOENT), f'{path}')
-		animation_name = path.name if animation_name is None else animation_name
-		self.data[animation_name] = {'durations': [], 'repeat': repeat, 'full': 0}
+		animation_name = path.name if animation_name is None else animation_name #get animation name from path
+		self.data[animation_name] = {'durations': [], 'repeat': repeat, 'full': 0} #single durations of frames in a list, the repeat variable, amount of frames of full animation
 		if not file_type:
-			file_type = most_used([file.suffix for file in path.iterdir() if file.is_file()])[0]
+			file_type = most_used([file.suffix for file in path.iterdir() if file.is_file()])[0] #check what the most used file type in the given folder is
 		for i, frame_duration in enumerate(frame_durations):
 			if not path.joinpath(f'{path.name}{i + 1}{file_type}').is_file():
 				raise pygame.error(f'too many non image files in \'{path}\' or the image file is not named \'{path.name}{i + 1}{file_type}\'')
-			frame_id = f'{animation_name}{i + 1}'
-			self.frames[frame_id] = load_image(path.joinpath(f'{path.name}{i + 1}{file_type}'), colourkey, alpha, convert_alpha)
-			self.data[animation_name]['durations'].append({'id': frame_id, 'duration': frame_duration})
+			frame_id = f'{animation_name}{i + 1}' #name of frame in self.frames
+			self.frames[frame_id] = load_image(path.joinpath(f'{path.name}{i + 1}{file_type}'), colourkey, alpha, convert_alpha) #load the image from it's path
+			self.data[animation_name]['durations'].append({'id': frame_id, 'duration': frame_duration}) #add image name and the specific duration to self.data
 			self.data[animation_name]['full'] += frame_duration
 
 	def add_image(self, image, animation_name, duration, repeat=True):
@@ -72,10 +73,10 @@ class Animations:
 		If the animation_name does not yes exist, it will be created
 		The image will be added to frames with a number, so it has to be added in the correct order'''
 		if animation_name not in self.data:
-			self.data[animation_name] = {'durations': [], 'repeat': repeat, 'full': 0}
-		frame_id = f'{animation_name}{len(self.data[animation_name]["durations"]) + 1}'
+			self.data[animation_name] = {'durations': [], 'repeat': repeat, 'full': 0} #single durations of frames in a list, the repeat variable, amount of frames of full animation
+		frame_id = f'{animation_name}{len(self.data[animation_name]["durations"]) + 1}' #name of frame in self.frames
 		self.frames[frame_id] = image.copy()
-		self.data[animation_name]['durations'].append({'id': frame_id, 'duration': duration})
+		self.data[animation_name]['durations'].append({'id': frame_id, 'duration': duration}) #add image name and the specific duration to self.data
 		self.data[animation_name]['full'] += duration
 
 	def current_image(self, delta_time=1):
@@ -87,11 +88,11 @@ class Animations:
 			raise KeyError(f'action \'{self.action}\' is not defined')
 		animation_data = self.data[self.action]
 		self.frame += delta_time
-		reset_frame = round(self.frame) > animation_data['full']
+		reset_frame = round(self.frame) > animation_data['full'] #check if it's current frame longer than the full animation
 		if reset_frame:
 			self.frame = animation_data['full'] if not animation_data['repeat'] else 0
 		for i, frame_data in enumerate(animation_data['durations']):
-			if round(self.frame) <= sum([frame_duration['duration'] for frame_duration in animation_data['durations']][:i + 1]): #SUM EVERY FRAME DURATION OF ALL THE FRAMES BEFORE I TO CHECK WHAT THE CURRENT FRAME IT IS
+			if round(self.frame) <= sum([frame_duration['duration'] for frame_duration in animation_data['durations']][:i + 1]): #sum every duration up until this iteration to see if frame duration is between the start and end of that frame
 				return self.frames[frame_data['id']]
 
 	def set_action(self, action):

@@ -1,4 +1,5 @@
 'Core functions for pgeng'
+#import functions with underscore so it doesn't get imported by pgeng itself
 import pygame, gzip
 from math import ceil as _ceil
 from sys import exit as _sysexit
@@ -60,7 +61,7 @@ def delta_time(clock, fps):
 	For example, if the game is running at 30 fps, but it should run at 60 fps, it would return 2.0
 
 	Returns: float'''
-	delta_time = clock.get_time() * fps / 1000
+	delta_time = clock.get_time() * fps / 1000 #divide by 1000, becuase it is in millisecond, but it needs to be seconds
 	return delta_time if delta_time else 1.0
 
 def quit_game():

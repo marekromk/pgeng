@@ -5,7 +5,7 @@ from .colour import palette_swap
 from .core import clip_surface, load_image
 
 __all__ = ['create_font', 'TextButton']
-path = Path(__file__).resolve().parent
+path = Path(__file__).resolve().parent #path needs to be from the font file, it should always be in the same directory
 small_image_path = path.joinpath('font/small.png')
 large_image_path = path.joinpath('font/large.png')
 
@@ -17,17 +17,17 @@ def create_font(colour):
 	For help on a Font object, run help(pgeng.font.Font)
 
 	Returns: tuple'''
-	colour = tuple(colour[:3])
-	if colour == (0, 0, 0):
+	colour = tuple(colour[:3]) #remove alpha value from colour
+	if colour == (0, 0, 0): #(0, 0, 0) is the background colour
 		small_image = palette_swap(load_image(small_image_path), {(255, 0, 0): colour, colour: (255, 255, 255)})
 		large_image = palette_swap(load_image(large_image_path), {(255, 0, 0): colour, colour: (255, 255, 255)})
 		return Font(small_image, background_colour=255), Font(large_image, background_colour=255)
-	if colour == (127, 127, 127):
+	if colour == (127, 127, 127): #(127, 127, 127) is the border colour between letters
 		small_image = palette_swap(load_image(small_image_path), {(255, 0, 0): colour, colour: (128, 128, 128)})
 		large_image = palette_swap(load_image(large_image_path), {(255, 0, 0): colour, colour: (128, 128, 128)})
 		return Font(small_image, 128), Font(large_image, 128)
-	small_image = palette_swap(load_image(small_image_path), {(255, 0, 0): colour})
-	large_image = palette_swap(load_image(large_image_path), {(255, 0, 0): colour})
+	small_image = palette_swap(load_image(small_image_path), {(255, 0, 0): colour}) #change red letters to the colour
+	large_image = palette_swap(load_image(large_image_path), {(255, 0, 0): colour}) #change red letters to the colour
 	return Font(small_image), Font(large_image)
 
 class Font:
@@ -55,8 +55,8 @@ class Font:
 		character_order = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','.','-',',',':','+','\'','!','?','0','1','2','3','4','5','6','7','8','9','(',')','/','_','=','\\','[',']','*','"','<','>',';']
 		for x in range(self.font_image.get_width()):
 			colour = self.font_image.get_at((x, 0))
-			if colour[:3] == (border_colour, border_colour, border_colour): #IF THE TEXT COLOR IS (127, 127, 127), CHANGE BORDER_COLOR
-				character_image = clip_surface(self.font_image, (x - current_width, 0), (current_width, self.font_image.get_height())) #CLIP EVERY CHARACTER OUT OF THE FONT IMAGE
+			if colour[:3] == (border_colour, border_colour, border_colour): #finds the border between letters
+				character_image = clip_surface(self.font_image, (x - current_width, 0), (current_width, self.font_image.get_height())) #clip every character out of the font image
 				self.characters[character_order[character_count]] = character_image
 				character_count += 1
 				current_width = 0
@@ -81,16 +81,16 @@ class Font:
 		size = pygame.Vector2(0, self.character_height + 1)
 		for character in text:
 			if character not in ('\n', ' ') and character in self.characters:
-				size.x += self.characters[character].get_width() + 1 #+ 1 FOR SPACING
+				size.x += self.characters[character].get_width() + 1 #+ 1 for spacing
 			elif character == ' ' and character != '\n':
-				size.x += self.space_width + 1 #+ 1 FOR SPACING
-			else:
+				size.x += self.space_width + 1 #+ 1 for spacing
+			else: #character is \n
 				widths.append(size.x)
-				size.y += self.character_height + 1 #+ 1 FOR SPACING
+				size.y += self.character_height + 1 #+ 1 for spacing
 				size.x = 0
 		widths.append(size.x)
 		size.x = max(widths)
-		return size - (1, 1)
+		return size - (1, 1) #- (1, 1), because of the extra spacing
 
 	def render(self, surface, text, location, scroll=pygame.Vector2()):
 		'Render a string on a surface at a location'
@@ -100,11 +100,11 @@ class Font:
 		for character in text:
 			if character not in ('\n', ' ') and character in self.characters:
 				surface.blit(self.characters[character], location + offset - scroll)
-				offset.x += self.characters[character].get_width() + 1 #+ 1 FOR SPACING
+				offset.x += self.characters[character].get_width() + 1 #+ 1 for spacing
 			elif character == ' ' or character != '\n':
-				offset.x += self.space_width + 1 #+ 1 FOR SPACING
-			else:
-				offset.y += self.character_height + 1 #+ 1 FOR SPACING
+				offset.x += self.space_width + 1 #+ 1 for spacing
+			else: #character is \n
+				offset.y += self.character_height + 1 #+ 1 for spacing
 				offset.x = 0
 
 class TextButton:

@@ -2,7 +2,7 @@
 import pygame, math
 from ..core import int_location
 from importlib import import_module
-cir = import_module('.circle', __package__)
+cir = import_module('.circle', __package__) #import_module because otherwise there is an "circular import" error
 
 class Polygon:
 	'''A polygon to check collision with and render
@@ -28,7 +28,7 @@ class Polygon:
 			raise ValueError('Polygon must have 3 or more points')
 		self.colour = tuple(colour)
 		self.rotation = 0
-		self.surface = pygame.Surface((0, 0))
+		self.surface = pygame.Surface((0, 0)) #set_points needs the self.surface variable to exist
 		self.set_points(points)
 
 	def __repr__(self):
@@ -64,7 +64,7 @@ class Polygon:
 		It doesn't return the middle of the drawn polygon, but of the rectangle the outer points create
 
 		Returns: pygame.math.Vector2'''
-		return pygame.Vector2([math.ceil(max(point[i] for point in self.points) + min(point[i] for point in self.points)) // 2 for i in range(2)])
+		return pygame.Vector2([math.ceil(max(point[i] for point in self.points) + min(point[i] for point in self.points)) // 2 for i in range(2)]) #// 2 so it is an integer, for odd numbers
 
 	@property
 	def size(self):
@@ -75,8 +75,8 @@ class Polygon:
 
 	def _create_mask(self):
 		'A function used by the class to create the mask'
-		if self.surface.get_size() != tuple([self.size[i] + 1 for i in range(2)]):
-			self.surface = pygame.Surface([self.size[i] + 1 for i in range(2)], pygame.SRCALPHA)
+		if self.surface.get_size() != tuple([self.size[i] + 1 for i in range(2)]): #+ 1 so the entire polygon fits in the surface
+			self.surface = pygame.Surface([self.size[i] + 1 for i in range(2)], pygame.SRCALPHA) #+ 1 so the entire polygon fits in the surface
 		else:
 			self.surface.fill((0, 0, 0, 0))
 		corrected_points = [[int(point[i]) - min(int(point[i]) for point in self.points) for i in range(2)] for point in self.points]
@@ -113,8 +113,8 @@ class Polygon:
 	def rotate(self, angle):
 		'''Rotates the entire Polygon a given amount of degrees clockwise
 		The Polygon gets rotated around zero_rotation_center'''
-		self.rotation = (self.rotation + angle) % 360
-		angle = math.radians(angle)
+		self.rotation = (self.rotation + angle) % 360 #% 360, because the given angle is in degrees
+		angle = math.radians(angle) #Vector2 objects use radians instead of degrees
 		for i, point in enumerate(self.points):
 			old_distance = point - self.zero_rotation_center
 			old_angle = math.radians(pygame.Vector2().angle_to(old_distance))
@@ -151,7 +151,7 @@ class Polygon:
 		if not isinstance(Rect, pygame.Rect):
 			raise TypeError('Rect is not a pygame.Rect object')
 		offset = int_location(Rect.topleft - self.location)
-		rect_mask = pygame.Mask(Rect.size, True)
+		rect_mask = pygame.Mask(Rect.size, True) #the mask should be filled for it to check with
 		return bool(self.mask.overlap(rect_mask, offset))
 
 	def collidecircle(self, circle):
