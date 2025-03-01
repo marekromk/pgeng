@@ -12,9 +12,9 @@ help(pgeng)
 ```
 ---
 ### Credits
-Thanks to [tank-king](https://github.com/tank-king) for the [flame](https://github.com/Qamynn/pgeng/blob/main/pgeng/vfx/flame.py) ([tutorial](https://youtu.be/MJB3QPXUYBU))\
+Thanks to [tank-king](https://github.com/tank-king) for the [flame](https://github.com/marekromk/pgeng/blob/main/pgeng/vfx/flame.py) ([tutorial](https://youtu.be/MJB3QPXUYBU))\
 Thanks to [DaFluffyPotato](https://github.com/DaFluffyPotato) for all his [tutorials](https://youtube.com/playlist?list=PLX5fBCkxJmm1fPSqgn9gyR3qih8yYLvMj)
 
 ### License
 This project is licensed under the terms of the MIT license.\
-For reference, see [LICENSE](https://github.com/Qamynn/pgeng/blob/main/LICENSE)
+For reference, see [LICENSE](https://github.com/marekromk/pgeng/blob/main/LICENSE)

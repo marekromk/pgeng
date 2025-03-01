@@ -2,7 +2,6 @@
 It also has functions to enter and exit fullscreen'''
 #import functions with underscore so it doesn't get imported by pgeng itself
 import pygame
-from os import name as _name
 from .core import round_location
 from pygame._sdl2.video import Window
 
@@ -31,7 +30,7 @@ class Screen:
 	vsync
 
 	window'''
-	def __init__(self, size, flags=pygame.SCALED, depth=0, display=0, vsync=1 if _name != 'nt' else 0, fullscreen=False):
+	def __init__(self, size, flags=pygame.SCALED, depth=0, display=0, vsync=0, fullscreen=False):
 		'Initialising the class, it should only be done once'
 		if type(fullscreen) is not bool:
 			raise TypeError('fullscreen must be a bool')

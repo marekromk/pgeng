@@ -1,5 +1,5 @@
 'Useful functions and classes for pygame'
-__version__ = '1.8.3'
+__version__ = '1.8.4'
 _failed_imports = []
 
 #import packages first, so it also imports _failed_imports from those packages
